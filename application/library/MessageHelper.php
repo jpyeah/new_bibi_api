@@ -1,0 +1,109 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: huanghaitao
+ * Date: 16/6/27
+ * Time: 00:21
+ */
+
+class MessageHelper{
+
+    public $handler;
+
+    const SYSTEM_TYPE = 1;
+    const COMMENT_TYPE = 2;
+    const LIKE_TYPE = 3;
+
+    const RCLOUD_APP_KEY='sfci50a7c23ei';
+    const RCLOUD_APP_SECRET='rTdKRNXsuO';
+
+    public function __construct(){
+
+        $this->handler = new RcloudServerAPI(self::RCLOUD_APP_KEY, self::RCLOUD_APP_SECRET);
+
+    }
+
+    public function commentNotify($toId,$content){
+
+        $data['content'] = $content;
+        $data = json_encode($data);
+
+        $rs = $this->handler->messagePublish(self::COMMENT_TYPE, array($toId),"RC:TxtMsg",$data,$content);
+
+        return $rs;
+    }
+
+    public function likeNotify($toId,$content){
+
+        $data['content'] = $content;
+        $data = json_encode($data);
+
+        $rs = $this->handler->messagePublish(self::LIKE_TYPE, array($toId),"RC:TxtMsg",$data,$content);
+
+        return $rs;
+    }
+
+    public function recommendNotify($toId, $carId){
+        
+
+        if(!is_array($toId)){
+             $toId=array($toId);
+        }
+        $carModel = new CarSellingModel();
+        $carInfo = $carModel->GetCarInfoById($carId);
+
+        $imgUrl = $carInfo['files'][0]['file_url'];
+        $content['title'] = '车辆推荐';
+        $content['content'] = $carInfo['car_name'];
+        $content['imageUri'] = $imgUrl;
+        $content['url'] = 'bibicar://gotoCar?car_id='.$carInfo['car_id'];
+        $content = json_encode($content);
+        $pushContent="你有新的车辆推荐";
+        
+        $rs = $this->handler->messagePublish(self::SYSTEM_TYPE,array(544,545),"RC:ImgTextMsg",$content,$pushContent);
+
+        return $rs;
+    }
+
+    public function systemNotify($toId,$content){
+       
+        $data['content'] = $content;
+        $data = json_encode($data);
+        $rs = $this->handler->messagePublish(self::SYSTEM_TYPE, array($toId),"RC:TxtMsg",$data,'你有新的消息');
+        return $rs;
+    }
+
+    public function refreshNotify($toId,$content){
+       
+        $json = array('content'=>$content , 'extra'=>'fresh');
+
+        $json = json_encode($json);
+
+        $rs = $this->handler->messagePublish(self::SYSTEM_TYPE , array($toId),"RC:TxtMsg",$json,'你有新的消息');
+
+        return $rs;
+    }
+
+    public function wzNotify($toId, $info){
+
+       $info = '{
+			"date":"2013-12-29 11:57:29",
+			"area":"316省道53KM+200M",
+			"act":"16362 : 驾驶中型以上载客载货汽车、校车、危险物品运输车辆以外的其他机动车在高速公路以外的道路上行驶超过规定时速20%以上未达50%的",
+			"code":"",
+			"fen":"6",
+			"money":"100",
+			"handled":"0"
+			}';
+
+        $content = json_decode($info,true);
+
+        $json = array('content'=>$content , 'extra'=>'');
+
+        $json = json_encode($json);
+
+        $rs = $this->handler->messagePublish(self::SYSTEM_TYPE , array($toId),"BBMsg",$json,'你有新的违章消息');
+
+        return $rs;
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "require": {
+        "php-curl-class/php-curl-class": "^4.8",
+    	"predis/predis": "*",
+        "qiniu/php-sdk": "*",
+	"elasticsearch/elasticsearch": "~2.0",
+	 "sunra/php-simple-html-dom-parser": "v1.5.0",
+        "overtrue/wechat": "~3.1",
+        "latrell/alipay": "dev-master",
+        "riverslei/payment": "~3.1",
+        "chan/alipay": "dev-master"
+    }
+}

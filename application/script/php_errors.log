@@ -1,0 +1,2 @@
+[27-Dec-2016 09:48:08 PRC] PHP Warning:  curl_setopt(): You must pass either an object or an array with the CURLOPT_HTTPHEADER argument in /usr/local/var/www/bibi-api/application/script/test_xml.php on line 27
+[27-Dec-2016 09:55:49 PRC] PHP Warning:  curl_setopt(): You must pass either an object or an array with the CURLOPT_HTTPHEADER argument in /usr/local/var/www/bibi-api/application/script/test_xml.php on line 27
