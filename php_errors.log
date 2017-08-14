@@ -151,3 +151,29 @@ Stack trace:
 [26-Jul-2017 13:23:26 PRC] PHP Notice:  Undefined index: source in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 506
 [26-Jul-2017 13:23:26 PRC] PHP Notice:  Undefined index: city_id in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 551
 [26-Jul-2017 13:23:26 PRC] PHP Notice:  Undefined index: keyword in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 560
+[09-Aug-2017 09:04:28 PRC] PHP Fatal error:  Uncaught exception 'Yaf_Exception' with message 'There is no section 'develop' in '/usr/local/var/www/bibi-api/conf/application.ini'' in /usr/local/var/www/bibi-api/index.php:8
+Stack trace:
+#0 /usr/local/var/www/bibi-api/index.php(8): Yaf_Application->__construct('/usr/local/var/...')
+#1 {main}
+
+Next exception 'Yaf_Exception_StartupError' with message 'Initialization of application config failed' in /usr/local/var/www/bibi-api/index.php:8
+Stack trace:
+#0 /usr/local/var/www/bibi-api/index.php(0): Yaf_Application::__construct()
+#1 {main}
+  thrown in /usr/local/var/www/bibi-api/index.php on line 8
+[09-Aug-2017 09:04:28 PRC] PHP Fatal error:  Uncaught exception 'Yaf_Exception' with message 'There is no section 'develop' in '/usr/local/var/www/bibi-api/conf/application.ini'' in /usr/local/var/www/bibi-api/index.php:8
+Stack trace:
+#0 /usr/local/var/www/bibi-api/index.php(8): Yaf_Application->__construct('/usr/local/var/...')
+#1 {main}
+
+Next exception 'Yaf_Exception_StartupError' with message 'Initialization of application config failed' in /usr/local/var/www/bibi-api/index.php:8
+Stack trace:
+#0 /usr/local/var/www/bibi-api/index.php(0): Yaf_Application::__construct()
+#1 {main}
+  thrown in /usr/local/var/www/bibi-api/index.php on line 8
+[09-Aug-2017 09:34:27 PRC] PHP Fatal error:  Cannot use object of type stdClass as array in /usr/local/var/www/bibi-api/application/models/Feed.php on line 677
+[09-Aug-2017 09:57:58 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[09-Aug-2017 10:19:10 PRC] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in /usr/local/var/www/bibi-api/application/models/ThemeUser.php on line 83
+[09-Aug-2017 10:24:23 PRC] PHP Notice:  Undefined variable: themeuserM in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Theme.php on line 471
+[09-Aug-2017 10:24:23 PRC] PHP Fatal error:  Call to a member function getTheme() on null in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Theme.php on line 471
+[09-Aug-2017 11:19:27 PRC] PHP Notice:  Array to string conversion in /usr/local/var/www/bibi-api/application/models/Themelist.php on line 155

@@ -139,6 +139,25 @@ class ThemelistModel extends PdoDb
                 $sql .= 'AND theme LIKE "%'.$this->keyword.'%"';
                 $sqlNearByCnt .= 'AND theme LIKE "%'.$this->keyword.'%"';
                 break;
+            case 3 :
+                //推荐话题
+                $sqlHot = '
+                        SELECT
+                        theme_id,
+                        count(*)
+                        FROM
+                        `bibi_themelist_user`
+                        GROUP BY theme_id
+                        LIMIT 10
+                    ';
+
+                $result = @$this->query($sqlHot);
+                $result = $this->implodeArrayByKey('theme_id', $result);
+                $sql .= ' AND id in (' . $result . ') ORDER BY `created` DESC'; //ORDER BY t3.comment_id DESC
+                break;
+            case 4 :
+
+                break;
 
         }
 

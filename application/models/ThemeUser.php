@@ -49,5 +49,41 @@ class ThemeUserModel extends PdoDb
         return $info;
     }
 
+    public function getThemeUser($theme_id){
+
+        $sql='
+        SELECT 
+        t1.*,
+        t2.avatar,t2.nickname
+        FROM
+        `bibi_themelist_user` as t1
+        LEFT JOIN `bibi_user_profile` as t2 
+        ON t2.user_id = t1.user_id 
+        WHERE
+        t1.theme_id ='.$theme_id.'
+        limit 10
+        ';
+
+        $sqlCnt='
+        SELECT 
+        count(*) as total
+        FROM
+        `bibi_themelist_user` as t1
+        LEFT JOIN `bibi_user_profile` as t2 
+        ON t2.user_id = t1.user_id 
+        WHERE
+        t1.theme_id ='.$theme_id.'
+        ';
+
+        $user=$this->query($sql);
+        $count=$this->query($sqlCnt)[0];
+
+        $list['users']=$user;
+        $list['total']=$count['total'];
+
+        return $list;
+
+    }
+
 
 }

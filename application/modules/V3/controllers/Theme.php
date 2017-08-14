@@ -64,6 +64,57 @@ class ThemeController extends ApiYafControllerAbstract {
     }
 
     /**
+     * @api {POST} /v3/theme/themehome 大厅
+     * @apiName Theme  themehome
+     * @apiGroup Theme
+     * @apiDescription 大厅
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_identifier device_identifier
+     * @apiParam {string} session_id session_id
+     *
+     *
+     * @apiSuccess {json} theme_recommend 推荐话题
+     * @apiSuccess {json} theme_join 加入的话题
+     * @apiSuccess {json} feed_list  最热话题动态列表
+     *
+     */
+
+    //大厅
+    public  function themehomeAction(){
+
+        $this->required_fields = array_merge($this->required_fields,array('session_id','page'));
+
+        $data = $this->get_request_data();
+
+        $sess = new SessionModel();
+
+        $userId = $sess->Get($data);
+
+        $data['page']  = $data['page'] ? ($data['page']+1) : 1;
+
+        $themeM= new ThemelistModel();
+
+        $theme_recommend=$themeM->getThemes(1,$userId,1,3);
+
+        $response['theme_recommend'] = $theme_recommend['theme_list'];//推荐话题
+
+        $theme_join=$themeM->getThemes(1,$userId,1,1);
+
+        $response['theme_join']=$theme_join['theme_list'];//我加入的话题
+
+        $FeedThemeM = new FeedThemeModel();
+
+        $feeds = $FeedThemeM->getFeeds(0,8,0,$data['page']);
+
+        $response['feed_list']=$feeds['feed_list'];//本周最热
+
+        return $this->send($response);
+
+    }
+
+    /**
      * @api {POST} /v3/theme/searchtheme 话题搜索
      * @apiName Theme  search
      * @apiGroup Theme
@@ -136,7 +187,6 @@ class ThemeController extends ApiYafControllerAbstract {
      *       "device_identifier":"85e8c1b3a7e2b3a64296892bf56b3b42",
      *       "session_id":"session578614120f571",
      *       "theme_id":"39",
-     *
      *
      *     }
      *   }
@@ -430,19 +480,10 @@ class ThemeController extends ApiYafControllerAbstract {
      * @apiParam {number} theme_id 话题Id
      * @apiParam {number} page 页码
      *
-     *
-     * @apiParamExample {json} 请求样例
-     *   POST  /v3/theme/themeindex
-     *   {
-     *     "data": {
-     *       "device_identifier":"85e8c1b3a7e2b3a64296892bf56b3b42",
-     *       "session_id":"session578614120f571",
-     *       "page":"0",
-     *       "theme_id":"39",
-     *
-     *
-     *     }
-     *   }
+     * @apiSuccess {json} theme_user 加入话题的用户
+     * @apiSuccess {json} theme_info 话题详情
+     * @apiSuccess {json} feed_list  话题动态列表
+     * @apiSuccess {string} is_join  是否加入(1:已加入话题 0:未加入)
      *
      */
 
@@ -459,36 +500,21 @@ class ThemeController extends ApiYafControllerAbstract {
         $data['post_type'] = 7;
         $data['page']     = $data['page'] ? ($data['page']+1) : 1;
        
-        $feedM = new FeedModel();
+        $feedM = new FeedThemeModel();
         $themeM= new ThemelistModel();
+        $themeUserM = new ThemeUserModel();
         $theme= $themeM->getTheme($data['theme_id']);
-
         $feedM->currentUser = $userId;
- 
         $feedM->currenttheme= $theme["theme"];
-
         $response = $feedM->getFeeds(0,$data['post_type'],$userId,$data['page']);
-
-
-
-        if($response['feed_list']){
-
-            foreach($response['feed_list'] as $key => $list){
-                   //相关的人 start
-                   $feedrelatedM = new FeedrelatedModel();
-                   $date['feed_id']=$response['feed_list'][$key]['feed_id'];
-                  // $feedrelatedM->currentUser = $userId;
-                   $feeds =$feedrelatedM->getFeeds($date);
-                   $response['feed_list'][$key]['feeds']=$feeds;
-
-                if($response['feed_list'][$key]['forward_id'] > 0){
-
-                    $response['feed_list'][$key] = $feedM->forwardHandler($response['feed_list'][$key]);
-                }
-            }
-        }
-
+        $response['theme_user']=$themeUserM->getThemeUser($data['theme_id']);
         $response['theme_info']=$theme;
+        $theme= $themeUserM->getTheme($data['theme_id'],$userId);
+        if($theme){
+           $response['is_join'] = 1;
+        }else{
+            $response['is_join'] = 0;
+        }
         $this->send($response);
 
     }
@@ -509,7 +535,6 @@ class ThemeController extends ApiYafControllerAbstract {
         $this->send();
 
     }
-
     //首页
     public  function getNewHomePage($userId){
         //轮播图
@@ -552,9 +577,27 @@ class ThemeController extends ApiYafControllerAbstract {
     }
 
 
+    /**
+     * @api {POST} /v3/theme/myfocus 我的关注
+     * @apiName Theme  myfocus
+     * @apiGroup Theme
+     * @apiDescription 我的关注
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_identifier device_identifier
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} page 页码
+     *
+     * @apiSuccess {json} type 类型 1:车辆 2:发布状态 3:加入话题
+     * @apiSuccess {json} id 话题详情
+     * @apiSuccess {json} feed_list  话题动态列表
+     *
+     */
+
     //我的关注
 
-    public function getUserFocus(){
+    public function MyFocusAction(){
 
 
 
