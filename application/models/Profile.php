@@ -32,7 +32,7 @@ class ProfileModel extends PdoDb{
 
     public function getProfile($user_id){
         $table = self::$table;
-        $sql = "SELECT avatar, signature, age, constellation, nickname, gender, bibi_no,type,company,balance FROM {$table} WHERE `user_id` = :user_id";
+        $sql = "SELECT avatar, signature, age, constellation, nickname, gender, sort,bibi_no,type,company,balance FROM {$table} WHERE `user_id` = :user_id";
         $profile = $this->query($sql, array(':user_id'=>$user_id));
         @$profile = $profile[0];
 
@@ -336,6 +336,86 @@ class ProfileModel extends PdoDb{
 
         return $list;
 
+
+    }
+
+
+
+    /*
+    *  获取车行v2.0.0
+    */
+    public function getCompanylistV1($page=1){
+
+        if(@$this->pageSize){
+            $pageSize=$this->pageSize;
+        }else{
+            $pageSize=20;
+        }
+
+        $number = ($page-1) *$pageSize;
+
+
+        $sql ="SELECT user_id,nickname,avatar,sort,signature,type,tag,intro FROM `bibi_user_profile` WHERE type = 2 order by sort desc";
+
+        $sqlCnt = 'SELECT count(user_id) AS total FROM `bibi_user_profile` WHERE type =2 order by sort desc';
+
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+        $users = $this->query($sql);
+
+        $count =count($users);
+        foreach($users as $k => $val){
+
+            $carM = new CarSellingV1Model();
+            $carM->pageSize=5;
+            $carM->page =1;
+            $sale=$carM->getUserPublishCar($val['user_id']);
+
+            $sold_num=$carM->countUserCarNum($val['user_id'],4);
+            $saling_num=$carM->countUserCarNum($val['user_id'],11);
+
+            $company= new CompanyUserModel();
+            $info=$company->getInfoById($val['user_id']);
+            if($info){
+                $users[$k]['phone']=$info['telenumber'];
+                $users[$k]['address']=$info['address'];
+
+            }
+
+            $users[$k]['saling_num']=$saling_num;
+            $users[$k]['sold_num']=$sold_num;
+            $users[$k]['car_list']=$sale;
+
+        }
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+
+        $list['user_list'] = $users ;
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] = $total;
+
+
+        return $list;
+
+
+    }
+
+
+    public function updateSortNum($userId, $action='add'){
+
+        $condition = $action == 'add' ? 'sort = sort + 1' : 'sort = sort - 1';
+
+        $sql = '
+            UPDATE
+            `bibi_user_profile`
+            SET
+            '.$condition.'
+            WHERE
+            `user_id` = '.$userId.'
+            ;
+        ';
+
+        $this->exec($sql);
 
     }
 

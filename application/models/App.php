@@ -33,15 +33,11 @@ class AppModel extends PdoDb{
         $di = RedisDb::getValue('di_'.$device_identifier.'');
 
         if(!$di){
-
             $table = self::$table;
             //查找是否有该device_identifier
             $sql = "SELECT id FROM {$table} WHERE `device_identifier` = :device_identifier";
-
             $result = $this->query($sql, array(':device_identifier'=>$device_identifier));
-
             return $result;
-
         }
         else{
 
@@ -49,6 +45,38 @@ class AppModel extends PdoDb{
         }
 
 
+    }
+
+    public function getIdentifierInfo($device_identifier){
+            $table = self::$table;
+            //查找是否有该device_identifier
+            $sql = "SELECT device_resolution FROM {$table} WHERE `device_identifier` = :device_identifier ORDER BY id DESC LIMIT 1";
+            $result = $this->query($sql, array(':device_identifier'=>$device_identifier));
+
+            $str = $result[0]['device_resolution'];
+            $num = strlen($str);
+            switch($num ){
+                case  7:
+                      $size = explode('*',$str)[0];
+
+                      if($size == 320){
+                          $num = 1;
+                      }elseif( $size == 375) {
+                          $num = 2;
+                      }elseif($size == 414){
+                          $num = 3;
+                      }
+                      break;
+                case  8:
+                      $num = 3;
+                    //$size = explode('*',$str)[0];
+                      break;
+                case  9:
+                      $num = 3;
+                      $size = explode('*',$str)[0];
+                      break;
+            }
+            return  $num;
     }
 
 

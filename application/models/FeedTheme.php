@@ -421,7 +421,6 @@ class FeedThemeModel extends PdoDb
             $list['feed_list'] = $feeds;
             $list['has_more'] = (($number + $count) < $total) ? 1 : 2;
             $list['total'] = $total;
-
             return $list;
         }
         else{
@@ -643,6 +642,8 @@ class FeedThemeModel extends PdoDb
             return array();
         }
     }
+
+
 
     public function getFeedLike($feed)
     {

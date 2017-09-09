@@ -177,3 +177,144 @@ Stack trace:
 [09-Aug-2017 10:24:23 PRC] PHP Notice:  Undefined variable: themeuserM in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Theme.php on line 471
 [09-Aug-2017 10:24:23 PRC] PHP Fatal error:  Call to a member function getTheme() on null in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Theme.php on line 471
 [09-Aug-2017 11:19:27 PRC] PHP Notice:  Array to string conversion in /usr/local/var/www/bibi-api/application/models/Themelist.php on line 155
+[14-Aug-2017 13:16:06 PRC] PHP Fatal error:  Uncaught exception 'Yaf_Exception_StartupError' with message 'Initialization of application config failed' in /usr/local/var/www/bibi-api/index.php:8
+Stack trace:
+#0 /usr/local/var/www/bibi-api/index.php(0): Yaf_Application::__construct()
+#1 {main}
+  thrown in /usr/local/var/www/bibi-api/index.php on line 8
+[14-Aug-2017 13:16:06 PRC] PHP Fatal error:  Uncaught exception 'Yaf_Exception_StartupError' with message 'Initialization of application config failed' in /usr/local/var/www/bibi-api/index.php:8
+Stack trace:
+#0 /usr/local/var/www/bibi-api/index.php(0): Yaf_Application::__construct()
+#1 {main}
+  thrown in /usr/local/var/www/bibi-api/index.php on line 8
+[14-Aug-2017 13:35:18 PRC] PHP Fatal error:  Uncaught exception 'Yaf_Exception_StartupError' with message 'Initialization of application config failed' in /usr/local/var/www/bibi-api/index.php:8
+Stack trace:
+#0 /usr/local/var/www/bibi-api/index.php(0): Yaf_Application::__construct()
+#1 {main}
+  thrown in /usr/local/var/www/bibi-api/index.php on line 8
+[14-Aug-2017 13:37:12 PRC] PHP Notice:  Undefined variable: page in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Theme.php on line 555
+[14-Aug-2017 13:37:12 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Aug-2017 13:58:13 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Aug-2017 14:24:05 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Aug-2017 14:33:36 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Aug-2017 14:42:01 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Aug-2017 15:01:28 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Aug-2017 16:07:45 PRC] PHP Warning:  Missing argument 2 for MyFocusModel::getFocusTypeInfo(), called in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 69 and defined in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 75
+[14-Aug-2017 16:07:45 PRC] PHP Notice:  Undefined variable: info in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 96
+[14-Aug-2017 16:07:45 PRC] PHP Notice:  Undefined variable: Key in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 69
+[14-Aug-2017 16:07:45 PRC] PHP Warning:  Missing argument 2 for MyFocusModel::getFocusTypeInfo(), called in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 69 and defined in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 75
+[14-Aug-2017 16:07:45 PRC] PHP Notice:  Undefined variable: info in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 96
+[14-Aug-2017 16:07:45 PRC] PHP Notice:  Undefined variable: Key in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 69
+[14-Aug-2017 16:08:18 PRC] PHP Warning:  Missing argument 2 for MyFocusModel::getFocusTypeInfo(), called in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 69 and defined in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 77
+[14-Aug-2017 16:08:18 PRC] PHP Notice:  Undefined variable: info in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 98
+[14-Aug-2017 16:08:18 PRC] PHP Warning:  Missing argument 2 for MyFocusModel::getFocusTypeInfo(), called in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 69 and defined in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 77
+[14-Aug-2017 16:08:18 PRC] PHP Notice:  Undefined variable: info in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 98
+[14-Aug-2017 16:08:46 PRC] PHP Warning:  Missing argument 2 for MyFocusModel::getFocusTypeInfo(), called in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 69 and defined in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 77
+[14-Aug-2017 16:08:46 PRC] PHP Notice:  Undefined variable: info in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 98
+[14-Aug-2017 16:08:46 PRC] PHP Warning:  Missing argument 2 for MyFocusModel::getFocusTypeInfo(), called in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 69 and defined in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 77
+[14-Aug-2017 16:08:46 PRC] PHP Notice:  Undefined variable: info in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 98
+[14-Aug-2017 16:10:50 PRC] PHP Warning:  print_r() expects at least 1 parameter, 0 given in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 113
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:04 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 128
+[14-Aug-2017 16:11:59 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 129
+[14-Aug-2017 16:25:56 PRC] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 182
+[14-Aug-2017 17:44:51 PRC] PHP Notice:  Undefined property: MyFocusModel::$user_id in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 21
+[14-Aug-2017 17:44:51 PRC] PHP Warning:  Missing argument 1 for PdoDb::instance(), called in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 179 and defined in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 72
+[14-Aug-2017 17:44:51 PRC] PHP Notice:  Undefined variable: sql in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 78
+[14-Aug-2017 17:44:51 PRC] PHP Notice:  Undefined variable: sql in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 78
+[14-Aug-2017 17:45:19 PRC] PHP Warning:  Missing argument 1 for PdoDb::instance(), called in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 179 and defined in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 72
+[14-Aug-2017 17:45:19 PRC] PHP Notice:  Undefined variable: sql in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 78
+[14-Aug-2017 17:45:19 PRC] PHP Notice:  Undefined variable: sql in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 78
+[14-Aug-2017 17:48:56 PRC] PHP Warning:  Missing argument 1 for PdoDb::instance(), called in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 183 and defined in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 72
+[14-Aug-2017 17:48:56 PRC] PHP Notice:  Undefined variable: sql in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 78
+[14-Aug-2017 17:48:56 PRC] PHP Notice:  Undefined variable: sql in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 78
+[24-Aug-2017 16:14:03 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 300
+[24-Aug-2017 16:14:03 PRC] PHP Notice:  Undefined index: brand_info in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 305
+[24-Aug-2017 16:14:03 PRC] PHP Notice:  Undefined index: series_info in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 306
+[24-Aug-2017 16:14:03 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[24-Aug-2017 16:14:24 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 300
+[24-Aug-2017 16:14:24 PRC] PHP Notice:  Undefined index: brand_info in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 305
+[24-Aug-2017 16:14:24 PRC] PHP Notice:  Undefined index: series_info in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 306
+[24-Aug-2017 16:14:24 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[24-Aug-2017 16:15:39 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 74
+[24-Aug-2017 16:16:14 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 300
+[24-Aug-2017 16:16:14 PRC] PHP Notice:  Undefined index: brand_info in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 305
+[24-Aug-2017 16:16:14 PRC] PHP Notice:  Undefined index: series_info in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 306
+[24-Aug-2017 16:16:14 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[24-Aug-2017 16:20:40 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 300
+[24-Aug-2017 16:20:40 PRC] PHP Notice:  Undefined index: brand_info in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 305
+[24-Aug-2017 16:20:40 PRC] PHP Notice:  Undefined index: series_info in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Car.php on line 306
+[24-Aug-2017 16:20:40 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[29-Aug-2017 15:23:34 PRC] PHP Notice:  Undefined variable: FeedM in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Video.php on line 596
+[29-Aug-2017 15:23:34 PRC] PHP Fatal error:  Call to a member function updateByPrimaryKey() on null in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Video.php on line 596
+[29-Aug-2017 15:24:33 PRC] PHP Notice:  Undefined variable: feedMTable in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Video.php on line 596
+[01-Sep-2017 10:31:59 PRC] PHP Fatal error:  Uncaught exception 'Yaf_Exception_StartupError' with message 'Initialization of application config failed' in /usr/local/var/www/bibi-api/index.php:8
+Stack trace:
+#0 /usr/local/var/www/bibi-api/index.php(0): Yaf_Application::__construct()
+#1 {main}
+  thrown in /usr/local/var/www/bibi-api/index.php on line 8
+[04-Sep-2017 09:35:05 PRC] PHP Fatal error:  Uncaught exception 'Yaf_Exception_StartupError' with message 'Initialization of application config failed' in /usr/local/var/www/bibi-api/index.php:8
+Stack trace:
+#0 /usr/local/var/www/bibi-api/index.php(0): Yaf_Application::__construct()
+#1 {main}
+  thrown in /usr/local/var/www/bibi-api/index.php on line 8
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:45:56 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRental.php on line 132
+[07-Sep-2017 09:47:17 PRC] PHP Strict Standards:  Yaf_Loader::autoload(): Could not find class CarRentalV1Model in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Rentalcar.php on line 193
+[07-Sep-2017 09:47:17 PRC] PHP Fatal error:  Class 'CarRentalV1Model' not found in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Rentalcar.php on line 193
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Notice:  Undefined index: subscription in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 115
+[07-Sep-2017 09:47:39 PRC] PHP Fatal error:  Cannot use object of type stdClass as array in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Rentalcar.php on line 207
+[07-Sep-2017 09:52:22 PRC] PHP Fatal error:  Cannot use object of type stdClass as array in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Rentalcar.php on line 207
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: avatar in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 231
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: nickname in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 233
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: avatar in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 231
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: nickname in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 233
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: avatar in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 231
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: nickname in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 233
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: avatar in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 231
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: nickname in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 233
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: avatar in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 231
+[07-Sep-2017 09:54:58 PRC] PHP Notice:  Undefined index: nickname in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 233
+[07-Sep-2017 09:54:59 PRC] PHP Notice:  Undefined index: avatar in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 231
+[07-Sep-2017 09:54:59 PRC] PHP Notice:  Undefined index: nickname in /usr/local/var/www/bibi-api/application/models/CarRentalV1.php on line 233
+[07-Sep-2017 13:24:30 PRC] PHP Notice:  Array to string conversion in /usr/local/var/www/bibi-api/application/models/Commentv1.php on line 463
+[07-Sep-2017 13:24:30 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[07-Sep-2017 13:25:19 PRC] PHP Notice:  Array to string conversion in /usr/local/var/www/bibi-api/application/models/Commentv1.php on line 463
+[07-Sep-2017 13:25:19 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[07-Sep-2017 13:53:19 PRC] PHP Notice:  Undefined index: tag in /usr/local/var/www/bibi-api/application/modules/V3/controllers/Theme.php on line 523
+[07-Sep-2017 17:00:39 PRC] PHP Warning:  Illegal string offset 'apply_id' in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 145
+[07-Sep-2017 17:19:39 PRC] PHP Notice:  Undefined index: reposr_sn in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 201
+[07-Sep-2017 17:19:39 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[09-Sep-2017 11:32:41 PRC] PHP Warning:  unserialize() expects parameter 1 to be string, array given in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 375
+[09-Sep-2017 11:33:23 PRC] PHP Notice:  unserialize(): Error at offset 0 of 3743 bytes in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 375
+[09-Sep-2017 13:28:23 PRC] PHP Warning:  json_decode() expects parameter 1 to be string, array given in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 334
+[09-Sep-2017 14:08:55 PRC] PHP Notice:  Undefined variable: code in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 77
+[09-Sep-2017 14:11:02 PRC] PHP Notice:  A non well formed numeric value encountered in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 67

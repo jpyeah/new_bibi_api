@@ -14,12 +14,13 @@ class RentalcarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v3/rentalcar/index 车辆详情
+     * @api {POST} /v4/rentalcar/index 车辆详情
      * @apiName rentalcar index
      * @apiGroup RentalCar
      * @apiDescription 车辆详情
      * @apiPermission anyone
      * @apiSampleRequest http://www.testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
@@ -27,7 +28,7 @@ class RentalcarController extends ApiYafControllerAbstract
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/rentalcar/index
+     *   POST /v4/rentalcar/index
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -76,7 +77,7 @@ class RentalcarController extends ApiYafControllerAbstract
             $userId = 0;
         }
 
-        $carModel = new CarRentalModel();
+        $carModel = new CarRentalV1Model();
 
         $RentalUserModel=new CarRentalUserModel();
 
@@ -93,6 +94,7 @@ class RentalcarController extends ApiYafControllerAbstract
         $response['recommon_cars'] = $carModel->relatedRecommonCars();
 
         $Rental_user =$RentalUserModel->getRentalUserById($userId);
+
 
         if($Rental_user){
             $response['is_auth'] = 1;
@@ -143,18 +145,19 @@ class RentalcarController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v3/rentalcar/list 可租车辆列表
+     * @api {POST} /v4/rentalcar/list 可租车辆列表
      * @apiName rentalcar list
      * @apiGroup RentalCar
      * @apiDescription 租车车辆列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {number} page 设备唯一标识
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v3/rentalcar/list
+     *    POST  /v4/rentalcar/list
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -175,7 +178,6 @@ class RentalcarController extends ApiYafControllerAbstract
     //session_id=session58ede340f1394&device_identifier=1d7c030c120f467e58e832cde18a4f4a&car_id=578315da9b1cd
     public function listAction(){
 
-
         $this->required_fields = array_merge($this->required_fields,array('page'));
 
         $data = $this->get_request_data();
@@ -188,7 +190,7 @@ class RentalcarController extends ApiYafControllerAbstract
             $userId = 0;
         }
 
-        $carModel = new CarRentalModel();
+        $carModel = new CarRentalV1Model();
 
         $carModel->page = $data['page'] ? ($data['page']+1) : 1;
 
@@ -198,16 +200,6 @@ class RentalcarController extends ApiYafControllerAbstract
 
         //$lists = $carM->getCarList($userId);
 
-        if($lists['car_list']){
-
-            foreach($lists['car_list'] as $key => $list){
-
-                $file = isset($list['car_info']['files'][0]) ?  $list['car_info']['files'][0] : array();
-
-                $lists['car_list'][$key]['car_info']['files'] = array();
-                $lists['car_list'][$key]['car_info']['files'][] = $file;
-            }
-        }
         $response = $lists;
 
         $this->send($response);
@@ -216,12 +208,13 @@ class RentalcarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v3/rentalcar/uploadfile 提交租车资料
+     * @api {POST} /v4/rentalcar/uploadfile 提交租车资料
      * @apiName rentalcar uploadfile
      * @apiGroup RentalCar
      * @apiDescription 提交租车资料
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} contact_name 租车用户名称
@@ -233,7 +226,7 @@ class RentalcarController extends ApiYafControllerAbstract
      * @apiParam {string} drive_opp 驾驶证反面
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v3/rentalcar/uploadfile
+     *    POST  /v4/rentalcar/uploadfile
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -249,7 +242,6 @@ class RentalcarController extends ApiYafControllerAbstract
      *   }
      *
      */
-//session_id=session58ede340f1394&device_identifier=1d7c030c120f467e58e832cde18a4f4a&card_no=440881199001072271&contact_name=baody&card_cur=1234dsfgdsfgsdfgdsf&card_opp=1234dsfgdsfgsdfgdsf&drive_cur=1234dsfgdsfgsdfgdsf&drive_opp=1234dsfgdsfgsdfgdsf
 
     public function UploadfileAction(){
 
@@ -307,12 +299,13 @@ class RentalcarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v3/rentalcar/createrentalorder 创建租车订单
+     * @api {POST} /v4/rentalcar/createrentalorder 创建租车订单
      * @apiName rentalcar createrentalorder
      * @apiGroup RentalCar
      * @apiDescription 创建租车订单
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id 用户session
@@ -322,7 +315,7 @@ class RentalcarController extends ApiYafControllerAbstract
      * @apiParam {string} mobile 联系人电话
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v3/rentalcar/uploadfile
+     *    POST  /v4/rentalcar/uploadfile
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -363,7 +356,7 @@ class RentalcarController extends ApiYafControllerAbstract
         $user_update['mobile']=$data['mobile'];
         $CarRentalUserM->update($where,$user_update);
 
-        $CarRentalM= new CarRentalModel;
+        $CarRentalM= new CarRentalV1Model;
 
         $res = $CarRentalM ->getCarRetalStatus($data['car_id']);
 
@@ -390,10 +383,6 @@ class RentalcarController extends ApiYafControllerAbstract
 
             if($id){
 
-//                $update['status'] = 2;
-//
-//                $CarRentalM->updateByHash($data['car_id'],2);
-
                 $result=$CarRentalOrder->getRentalOrderInfo($properties['order_sn'],$data['car_id']);
 
                 $this->send($result);
@@ -413,12 +402,13 @@ class RentalcarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v3/rentalcar/rentalorderpay 创建租车支付
+     * @api {POST} /v4/rentalcar/rentalorderpay 创建租车支付
      * @apiName rentalcar rentalorderpay
      * @apiGroup RentalCar
      * @apiDescription 创建租车支付
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id 用户session
@@ -426,7 +416,7 @@ class RentalcarController extends ApiYafControllerAbstract
      * @apiParam {number} order_sn 订单号
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v3/rentalcar/uploadfile
+     *    POST  /v4/rentalcar/uploadfile
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -480,7 +470,7 @@ class RentalcarController extends ApiYafControllerAbstract
                     'detail'           => '吡吡汽车租车押金',
                     'out_trade_no'     => $order['order_info']['order_sn'],
                     'total_fee'        => $order['order_info']['total_price']*100, // 单位：分
-                    'notify_url'       => 'http://api.bibicar.cn/v3/rentalcar/wxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+                    'notify_url'       => 'http://api.bibicar.cn/v4/rentalcar/wxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
                     // 'sub_openid'        => '当前用户的 openid', // 如果传入sub_openid, 请在实例化Application时, 同时传入$sub_app_id, $sub_merchant_id
                     // ...
                 ];
@@ -503,7 +493,7 @@ class RentalcarController extends ApiYafControllerAbstract
 
             }else{
 
-                $notifyUrl="https://api.bibicar.cn/v3/rentalcar/alinotify";
+                $notifyUrl="https://api.bibicar.cn/v4/rentalcar/alinotify";
                 $alipayM=new Alipay();
                 $order_sn=$order['order_info']['order_sn'];
                 $order_amount=$order['order_info']['total_price'];
@@ -533,22 +523,21 @@ class RentalcarController extends ApiYafControllerAbstract
 
     }
 
-
-
     /**
-     * @api {POST} /v3/rentalcar/rentalorderlist 我的租车
+     * @api {POST} /v4/rentalcar/rentalorderlist 我的租车
      * @apiName rentalcar rentalorderlist
      * @apiGroup RentalCar
      * @apiDescription 我的租车
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id 用户session
      * @apiParam {number} page 页数
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v3/rentalcar/rentalorderlist
+     *    POST  /v4/rentalcar/rentalorderlist
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -578,28 +567,27 @@ class RentalcarController extends ApiYafControllerAbstract
 
         $CarRentalOrder->currentUser = $userId;
 
-        $order=$CarRentalOrder->getRentalOrderList();
+        $order=$CarRentalOrder->getRentalOrderListV1();
         $this->send($order);
 
 
     }
 
-
-
     /**
-     * @api {POST} /v3/rentalcar/rentalorderindex 订单详情
+     * @api {POST} /v4/rentalcar/rentalorderindex 订单详情
      * @apiName rentalcar rentalorderindex
      * @apiGroup RentalCar
      * @apiDescription 订单详情
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id 用户session
      * @apiParam {number} order_sn 订单号
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v3/rentalcar/rentalorderlist
+     *    POST  /v4/rentalcar/rentalorderlist
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -634,8 +622,6 @@ class RentalcarController extends ApiYafControllerAbstract
         $this->send($order);
         
     }
-
-
 
     /**
      *
@@ -676,7 +662,7 @@ class RentalcarController extends ApiYafControllerAbstract
                 $update['status']= 3;
                 $CarRentalOrder->update($where,$update);
 
-                $CarRentalM= new CarRentalModel;
+                $CarRentalM= new CarRentalV1Model;
                 $CarRentalM->updateByHash( $order['order_info']['car_id'],2);
 
             } else { // 用户支付失败
@@ -745,67 +731,6 @@ class RentalcarController extends ApiYafControllerAbstract
         }
 
     }
-
-
-
-    public function TestWxAction(){
-
-        $wechat = new Wechat();
-
-        $app    = $wechat->getWechat();
-
-        $payment = $app->payment;
-
-        $attributes = [
-            'trade_type'       => 'APP', // JSAPI，NATIVE，APP...
-            'body'             => 'iPad mini 16G 白色',
-            'detail'           => 'iPad mini 16G 白色',
-            'out_trade_no'     => time(),
-            'total_fee'        => 5388, // 单位：分
-            'notify_url'       => 'http://api.bibicar.com/v3/rentalcar/order-notify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
-           // 'sub_openid'        => '当前用户的 openid', // 如果传入sub_openid, 请在实例化Application时, 同时传入$sub_app_id, $sub_merchant_id
-            // ...
-        ];
-        $order = new Order($attributes);
-        $result = $payment->prepare($order);
-        if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS'){
-            $prepayId = $result->prepay_id;
-            $config = $payment->configForAppPayment($prepayId);
-
-            return $this->send($config);
-
-        }
-
-    }
-
-
-    public function TestAliAction(){
-
-        $notifyUrl="https://api.bibicar.cn/v3/usercarpact/alinotify";
-        $alipayM=new Alipay();
-        $order_sn=123345556633;
-        $order_amount=0.01;
-        $goods_name='吡吡汽车租车押金';
-        $result=$alipayM->alipay($order_sn,$order_amount,$goods_name,$notifyUrl);
-        $response['orderstr']=$result;
-        $response['type']="Alipay";
-        $this->send($response);
-
-    }
-
-
-    public function TestRentalAction(){
-
-        $car_id = "576bb220c300c";
-        $carrentalOrder = new CarRentalOrderModel();
-
-        $info =$carrentalOrder->getRentalOrderInfoByCarId($car_id);
-
-        print_r($info);exit;
-
-
-    }
-
 
 
 

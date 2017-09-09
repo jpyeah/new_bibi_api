@@ -93,7 +93,8 @@ class AppController extends ApiYafControllerAbstract {
     public function getimgAction(){
 
         //$response['url']=['http://img.bibicar.cn/bling.png','http://img.bibicar.cn/qiuyue.png','http://img.bibicar.cn/yub.png'];http://img.bibicar.cn/chezhuzhaoweijia.jpeg
-        $response['url']=['http://img.bibicar.cn/chezhuzhaoweijia.jpeg','http://img.bibicar.cn/chezhustory002.jpeg','http://img.bibicar.cn/chezhustory003.jpeg'];
+       // $response['url']=['http://img.bibicar.cn/bibichepaidang.jpg','http://img.bibicar.cn/chezhuzhaoweijia.jpeg','http://img.bibicar.cn/chezhustory002.jpeg','http://img.bibicar.cn/chezhustory003.jpeg'];
+        $response['url']=['http://img.bibicar.cn/bibichepaidang.jpg','http://img.bibicar.cn/bibichepaidang1.jpg','http://img.bibicar.cn/bibichepaidang2.jpg'];
         $this->send($response);
          
     }

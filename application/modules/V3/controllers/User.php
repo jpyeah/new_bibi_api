@@ -29,6 +29,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 用户注册
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [mobile] 手机号码
@@ -178,6 +179,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 企业注册
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [mobile] 手机号码
@@ -418,6 +420,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 修改密码
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [mobile] 手机号码
@@ -509,6 +512,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 发送验证码
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [mobile] 手机号码
@@ -558,6 +562,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 用户登录
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [mobile] 手机号码
@@ -636,6 +641,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 用户资料更新
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
@@ -744,6 +750,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 用户资料更新
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
@@ -889,11 +896,11 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 用户信息
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
      *
-     * @apiParam {json} data object
      * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
      *   POST /v3/User/profile
@@ -947,11 +954,11 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 个人中心
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} [user_id]  别人Uid
      *
-     * @apiParam {string} [device_identifier] 设备唯一标识
-     * @apiParam {string} [session_id] session_id
-     *
-     * @apiParam {json} data object
      * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
      *   POST /v3/User/homepage
@@ -1114,7 +1121,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 用户资料更新
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
-     *
+     * @apiVersion 1.0.0
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
      * @apiParam {string} [nickname] 昵称
@@ -1257,7 +1264,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 用户资料更新
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
-     *
+     * @apiVersion 1.0.0
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
      *
@@ -1300,7 +1307,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 搜索用户
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
-     *
+     * @apiVersion 1.0.0
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
      * @apiParam {string} [nickname] 昵称
@@ -1344,9 +1351,23 @@ class UserController extends ApiYafControllerAbstract
         $sql = 'SELECT 
                   t2.user_id,t2.nickname,t2.avatar FROM `bibi_user_profile` AS t2 
                   LEFT JOIN `bibi_user` AS t1 ON t1.user_id = t2.user_id
-                  WHERE t2.`nickname` LIKE "%'.$nickname.'%" OR t2.`bibi_no`="'.$nickname.'" LIMIT ' . $number . ' , ' . $pageSize . '';
+                  WHERE t2.`nickname` LIKE "%'.$nickname.'%" OR t2.`bibi_no`="'.$nickname.'" LIMIT ' . $number . ' , ' . $pageSize;
+
+        $sqlCnt = 'SELECT 
+                  count(*) as total
+                   FROM `bibi_user_profile` AS t2 
+                  LEFT JOIN `bibi_user` AS t1 ON t1.user_id = t2.user_id
+                  WHERE t2.`nickname` LIKE "%'.$nickname.'%" OR t2.`bibi_no`='."'".$nickname."'" ;
 
         $users = $userModel->query($sql);
+
+        $total = $userModel->query($sqlCnt)[0]["total"];
+
+        $count=count($users);
+
+        $response['has_more'] = (($number+$count) < $total) ? 1 : 2;
+
+        $response['total'] =  $total;
 
 
         foreach($users as $key =>$value){
@@ -1378,6 +1399,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 搜索用户
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
@@ -1439,6 +1461,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 通讯录邀请好友
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
@@ -1547,7 +1570,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 大咖－娱乐－职业用户列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     *
+     * @apiVersion 1.0.0
      * @apiParam {string} [device_identifier] device_identifier
      * @apiParam {string} [session_id] session_id
      * @apiParam {number} [page] 页码
@@ -1611,7 +1634,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 销售顾问列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     *
+     * @apiVersion 1.0.0
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      * @apiParam {string}  company_id 当前公司的user_id
@@ -1662,7 +1685,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription  绑定手机号
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     *
+     * @apiVersion 1.0.0
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      * @apiParam {string}  mobile 手机号码
@@ -1742,7 +1765,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 用户登录(手机验证码)
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     *
+     * @apiVersion 1.0.0
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [mobile] 手机号码
      * @apiParam {string} [code] 验证码

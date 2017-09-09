@@ -171,6 +171,7 @@ class PublishcarController extends ApiYafControllerAbstract
  * @apiDescription 发布朋友圈
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
@@ -267,6 +268,7 @@ class PublishcarController extends ApiYafControllerAbstract
  * @apiDescription 发布朋友圈
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
@@ -386,6 +388,7 @@ class PublishcarController extends ApiYafControllerAbstract
  * @apiDescription 发布朋友圈
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
@@ -522,6 +525,7 @@ class PublishcarController extends ApiYafControllerAbstract
  * @apiDescription 我的售车
  * @apiPermission anyone
  * @apiSampleRequest http://testapi.bibicar.cn
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} device_identifier 设备唯一标识
  * @apiParam {string} session_id session_id
@@ -622,6 +626,7 @@ public function listAction()
      * @apiDescription 车行列表接口
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id

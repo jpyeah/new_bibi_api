@@ -507,7 +507,7 @@ class Feedv1Model extends PdoDb
                     if($content){
                         foreach($content as $key => $value){
                             if($value["type"] == 1 ){
-                                $items[$k]['title'] = $value["content"];
+                                $items[$k]['title'] = @$value["content"];
                                 break;
                             }
                         }
@@ -518,10 +518,6 @@ class Feedv1Model extends PdoDb
 
             }
 
-
-
-
-            
 
                 $collectKey = 'collect_'.$userId.'_'.$feed['feed_id'].'';
 
@@ -601,7 +597,6 @@ class Feedv1Model extends PdoDb
 
         $feeds = $this->query($sql);
 
-
         $feeds=$this->handleFeeds($feeds,$userId);
 
         $total = @$this->query($sqlCnt)[0]['total'];
@@ -622,6 +617,32 @@ class Feedv1Model extends PdoDb
 
         $pageSize = 10;
 
+        $number = ($this->page - 1) * $pageSize;
+
+        $sqlVisit = '
+                        SELECT
+                        feed_id
+                        FROM
+                        `bibi_feeds_visit` 
+                        WHERE user_id = '.$userId.'
+                        ORDER BY created DESC
+                        LIMIT ' . $number . ' , ' . $pageSize .'
+                    ';
+
+        $sqlCnt = '
+                        SELECT
+                        COUNT(feed_id) AS total
+                        FROM
+                         `bibi_feeds_visit` 
+                        WHERE user_id = '.$userId.'
+                    ';
+
+        $total = $this->query($sqlCnt)[0]['total'];
+
+        $result = @$this->query($sqlVisit);
+
+        $result = $this->implodeArrayByKey('feed_id', $result);
+
         $sql = '
             SELECT
                 t1.*,
@@ -631,49 +652,27 @@ class Feedv1Model extends PdoDb
                 ON t1.user_id = t2.user_id
                 LEFT JOIN `bibi_user_profile` AS t3
                 ON t2.user_id = t3.user_id
-                LEFT JOIN `bibi_feeds_visit` AS t4
-                ON t1.feed_id = t4.feed_id
-            WHERE t4.user_id = '.$userId.'
-            ORDER BY t4.created DESC
+                
         ';
 
-        $number = ($this->page-1)*$pageSize;
-
-        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
-
-        $sqlCnt = '
-            SELECT
-            count(*) AS total
-            FROM `bibi_feeds` AS t1
-            LEFT JOIN `bibi_user` AS t2
-            ON t1.user_id = t2.user_id
-            LEFT JOIN `bibi_user_profile` AS t3
-            ON t2.user_id = t3.user_id
-            LEFT JOIN `bibi_feeds_visit` AS t4
-            ON t1.feed_id = t4.feed_id
-            WHERE t4.user_id = '.$userId.'
-            ORDER BY t4.created DESC
-        ';
+        $sql .= ' WHERE (t1.feed_type = 3 OR  t1.feed_type = 6 OR t1.feed_type = 4 ) AND t1.feed_id in (' . $result . ') ORDER BY t1.created DESC'; //ORDER BY t3.comment_id DESC
 
         $feeds = $this->query($sql);
 
-
         $feeds=$this->handleFeeds($feeds);
 
-        $total = @$this->query($sqlCnt)[0]['total'];
-
+        $coun=count($feeds);
 
         if(!$feeds){
 
              return isset($feeds[0]) ? $feeds[0] : array() ;
         }
         else{
-             $count = count($feeds);
+            $count = count($feeds);
             $list['feed_list']=array();
             $list['feed_list'] = $feeds;
             $list['has_more'] = (($number + $count) < $total) ? 1 : 2;
             $list['total'] = $total;
-
             return $list;
            
         }

@@ -263,6 +263,56 @@ class YouxinController extends ApiYafControllerAbstract {
    }
 
 
+   public function getchedangbrandAction(){
+
+       exit;
+       $this->required_fields = array_merge($this->required_fields, array());
+       $data = $this->get_request_data();
+
+       $str='number=ip46a71&key=81f6ed334a34150fe78de9d376be899c7a512709';
+
+       $secret_key =md5($str);
+
+       //print_r($secret_key);exit;
+
+       // $secret_key='81f6ed334a34150fe78de9d376be899c7a512709';
+
+       //品牌列表
+       $url ='http://120.24.3.137/outapi/v1/brands?secret_key='.$secret_key."&partner_number=ip46a71";
+
+       //品牌检查
+
+       //$url ='http://120.24.3.137/outapi/v1/check_brand?secret_key='.$secret_key."&partner_number=ip46a71&vin=LGBP12E21DY196239";
+
+       //vin码查询接口
+
+       // $url ='http://120.24.3.137/outapi/v1/vin_search?secret_key='.$secret_key."&partner_number=ip46a71&vin=LGBP12E21DY196239&brand_id=4";
+
+       //详细报告
+
+       // $url ='http://120.24.3.137/outapi/v1/get_report?secret_key='.$secret_key."&partner_number=ip46a71&apply_id=15900";
+
+
+       $html=file_get_contents($url);
+       $data=json_decode($html,true)['data'];
+
+
+       foreach($data as $k){
+
+           $arr=array();
+
+           $arr['brand_id']=$k['brand_id'];
+           $arr['name']=$k['name'];
+           $arr['logo']=$k['logo'];
+           $pdo = new PdoDb;
+           $pdo->insert('bibi_chedang_brand_list',$arr);
+
+       }
+
+
+   }
+
+
 
 
 

@@ -77,131 +77,6 @@ class CarSellingV1Model extends PdoDb
 
     }
 
-    public function handlerCar($car,$userId=0){
-
-        $car['car_id'] = $car['hash'];
-
-//        $brandM = new BrandModel();
-//
-//        $car['brand_info']  = $brandM->getBrandModel($car['brand_id']);
-//        $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);
-//        $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
-//        $car['model_detail']= $brandM->getModelDetail($car['model_id']);
-
-        unset($car['brand_id']);
-        unset($car['series_id']);
-        unset($car['model_id']);
-        unset($car['brand_name']);
-        unset($car['series_name']);
-        unset($car['model_name']);
-        unset($car['baidu_brand_id']);
-        unset($car['baidu_series_id']);
-        unset($car['image']);
-        unset($car['thumbnail']);
-
-        unset($car['avatar']);
-        unset($car['user_id']);
-        unset($car['nickname']);
-
-        unset($car['car_no']);
-        unset($car['vin_no']);
-        unset($car['engine_no']);
-        unset($car['vin_file']);
-        unset($car['car_intro']);
-        unset($car['verify_status']);
-       // unset($car['price']);
-        unset($car['guide_price']);
-        unset($car['board_time']);
-        unset($car['mileage']);
-        unset($car['displacement']);
-        unset($car['gearbox']);
-        unset($car['style']);
-        unset($car['contact_name']);
-        unset($car['contact_phone']);
-        unset($car['contact_address']);
-        unset($car['exchange_time']);
-        unset($car['maintain']);
-        unset($car['insurance_due_time']);
-        unset($car['is_transfer']);
-        unset($car['check_expiration_time']);
-
-
-        $images = unserialize($car['files']);
-        $items = array();
-
-        if($images){
-
-            foreach ($images as $k => $image) {
-
-                if ($image['hash']) {
-
-                        if($k == 1){
-                        $item = array();
-                        $item['file_id'] = $image['hash'];
-                        if($car['car_type']==2){
-                            $item['file_url'] = "http://thirtimg.bibicar.cn/". $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                        }else{
-                            $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                        }
-
-                        $item['file_type'] = $image['type'] ? $image['type'] : 0;
-                        $items[] = $item;
-
-                        break;
-
-                    }
-
-                }
-
-            }
-        }
-
-        unset($car['id']);
-        $car['car_id'] = $car['hash'];
-        unset($car['hash']);
-
-        $car['city_info'] = array(
-            'city_id' =>   93,//$car['city_id'],
-            'city_name' => '深圳',   //$car['city_name'],
-            'city_lng' => 360,
-            'city_lat' => 360,
-        );
-
-        if ($car['platform_id']) {
-
-            $car['platform_info'] = array('platform_id' => $car['platform_id'], 'platform_location' => $car['platform_location'], 'platform_name' => $car['platform_name']);
-        } else {
-
-            $car['platform_info'] = new stdClass();
-        }
-
-        $car['files'] = $items;
-
-        unset($car['city_id']);
-        unset($car['city_name']);
-        unset($car['user_id']);
-        unset($car['platform_id']);
-        unset($car['platform_location']);
-        unset($car['platform_name']);
-        unset($car['platform_url']);
-        unset($car['avatar']);
-        unset($car['nickname']);
-
-        //print_r($car);exit;
-        $favCarM = new FavoriteCarModel();
-        $favCarM->user_id = self::$visit_user_id;
-        $favCarM->car_id  = $car['car_id'];
-        $favId = $favCarM->get();
-
-        $car['is_fav'] = $favId ? 1 : 2;
-        $car['car_time'] = Common::getBeforeTime($car['created']);
-        //$car['visit_num'] = $car['visit_num'];
-
-        return $car;
-
-    }
-
-
     public function handlerCarByOne($car,$userId=0){
 
         $car['car_id'] = $car['hash'];
@@ -252,32 +127,30 @@ class CarSellingV1Model extends PdoDb
         unset($car['vin_no']);
         unset($car['engine_no']);
         unset($car['vin_file']);
-        unset($car['car_intro']);
-        unset($car['verify_status']);
+//        unset($car['car_intro']);
+//        unset($car['verify_status']);
         // unset($car['price']);
-        unset($car['guide_price']);
-        unset($car['board_time']);
-        unset($car['mileage']);
-        unset($car['displacement']);
-        unset($car['gearbox']);
-        unset($car['style']);
-        unset($car['contact_name']);
-        unset($car['contact_phone']);
-        unset($car['contact_address']);
-        unset($car['exchange_time']);
-        unset($car['maintain']);
-        unset($car['insurance_due_time']);
-        unset($car['is_transfer']);
-        unset($car['check_expiration_time']);
+//        unset($car['guide_price']);
+//        unset($car['board_time']);
+//        unset($car['mileage']);
+//        unset($car['displacement']);
+//        unset($car['gearbox']);
+//        unset($car['style']);
+//        unset($car['contact_name']);
+//        unset($car['contact_phone']);
+//        unset($car['contact_address']);
+//        unset($car['exchange_time']);
+//        unset($car['maintain']);
+//        unset($car['insurance_due_time']);
+//        unset($car['is_transfer']);
+//        unset($car['check_expiration_time']);
 
         $images = unserialize($car['files']);
-        $items = array();
-
+        $car['files'] = array();
         $items1=array();
         $items2=array();
         $items3=array();
         $items4=array();
-
         if($images){
 
             foreach ($images as $k => $image) {
@@ -355,41 +228,17 @@ class CarSellingV1Model extends PdoDb
 
             }
         }
-        $car['files2']['type1'] = $items1;
-        $car['files2']['type2'] = $items2;
-        $car['files2']['type3'] = $items3;
-        $car['files2']['type4'] = $items4;
-
-//        if($images){
-//
-//            foreach ($images as $k => $image) {
-//
-//                if ($image['hash']) {
-//
-//                        $item = array();
-//                        $item['file_id'] = $image['hash'];
-//                        if($car['car_type']==2){
-//                            $item['file_url'] = "http://thirtimg.bibicar.cn/". $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-//                        }else{
-//                            $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-//                        }
-//
-//                        $item['file_type'] = $image['type'] ? $image['type'] : 0;
-//                        $items[] = $item;
-//
-//                }
-//
-//            }
-//        }
+        $car['files']['type1'] = $items1;
+        $car['files']['type2'] = $items2;
+        $car['files']['type3'] = $items3;
+        $car['files']['type4'] = $items4;
 
         unset($car['id']);
         unset($car['hash']);
 
-
-        $car['files'] = $items;
-
-        unset($car['city_id']);
-        unset($car['city_name']);
+       // $car['files'] = $items;
+//        unset($car['city_id']);
+//        unset($car['city_name']);
         unset($car['user_id']);
         unset($car['platform_id']);
         unset($car['platform_location']);
@@ -404,7 +253,104 @@ class CarSellingV1Model extends PdoDb
     }
 
 
+    public function handlerCarByList($car,$userId=0){
 
+        $car['car_id'] = $car['hash'];
+
+        $brandM = new BrandModel();
+
+        $car['brand_info']  = $brandM->getBrandModel($car['brand_id']);
+        $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);
+        $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
+        $car['model_detail']= $brandM->getModelDetail($car['model_id']);
+
+        unset($car['brand_id']);
+        unset($car['series_id']);
+        unset($car['model_id']);
+        unset($car['brand_name']);
+        unset($car['series_name']);
+        unset($car['model_name']);
+        unset($car['baidu_brand_id']);
+        unset($car['baidu_series_id']);
+        unset($car['image']);
+        unset($car['thumbnail']);
+
+
+        if($car['user_id']){
+
+            $car['user_info'] = array();
+            $car['user_info']['user_id']  = $car['user_id'];
+            unset($car['user_id']);
+            $car['user_info']['username'] = '';
+            $car['user_info']['mobile']   = '';
+            $car['user_info']['created']  = 0;
+            //$car['user_info']['is_auth']  = 1;
+            $car['user_info']['profile']['avatar']  = $car['avatar'];
+            unset($car['avatar']);
+            $car['user_info']['profile']['nickname']  = $car['nickname'];
+            unset($car['nickname']);
+            $car['user_info']['profile']['signature']  = '';
+            $car['user_info']['profile']['age']  = 0;
+            $car['user_info']['profile']['constellation']  = '';
+            $car['user_info']['profile']['gender']  = 0;
+        }
+        else{
+
+            $car['user_info'] = new stdClass();
+        }
+
+        unset($car['car_no']);
+        unset($car['vin_no']);
+        unset($car['engine_no']);
+        unset($car['vin_file']);
+      //  unset($car['car_intro']);
+        unset($car['verify_status']);
+        // unset($car['price']);
+        unset($car['guide_price']);
+//        unset($car['board_time']);
+//        unset($car['mileage']);
+        unset($car['displacement']);
+        unset($car['gearbox']);
+        unset($car['style']);
+//        unset($car['contact_name']);
+//        unset($car['contact_phone']);
+//        unset($car['contact_address']);
+        unset($car['exchange_time']);
+        unset($car['maintain']);
+        unset($car['insurance_due_time']);
+        unset($car['is_transfer']);
+        unset($car['check_expiration_time']);
+
+        $images = unserialize($car['files']);
+        $car['files'] = new stdClass();
+        $items1=array();
+        $items2=array();
+        $items3=array();
+        $items4=array();
+
+        if($car['car_type']==2){
+            $car['file_img'] = "http://thirtimg.bibicar.cn/". $images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+        }else{
+            $car['file_img'] = IMAGE_DOMAIN.$images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+        }
+
+        unset($car['id']);
+        unset($car['hash']);
+        unset($car['files']);
+        unset($car['city_id']);
+        unset($car['city_name']);
+        unset($car['user_id']);
+        unset($car['platform_id']);
+        unset($car['platform_location']);
+        unset($car['platform_name']);
+        unset($car['platform_url']);
+        unset($car['avatar']);
+        unset($car['nickname']);
+        unset($car['type']);
+
+        return $car;
+
+    }
     public function dealFilesWithString($files_id, $files_type)
     {
 
@@ -470,7 +416,7 @@ class CarSellingV1Model extends PdoDb
         foreach($cars as $k => $car){
 
             $brand_id = $car['brand_id'];
-            $item = $this->handlerCar($car,$userId);
+            $item = $this->handlerCarByList($car,$userId);
 
             $items[$k]['car_info'] = $item;
        //     $items[$k]['car_users'] = $this->getSameBrandUsers($brand_id);
@@ -564,7 +510,7 @@ class CarSellingV1Model extends PdoDb
 
             foreach($cars as $k => $car){
 
-                $item = $this->handlerCar($car);
+                $item = $this->handlerCarByList($car);
                 $items[$k] = $item;
             }
         }
@@ -602,7 +548,7 @@ class CarSellingV1Model extends PdoDb
 
             foreach($cars as $k => $car){
 
-                $item = $this->handlerCar($car);
+                $item = $this->handlerCarByOne($car);
                 $items[$k] = $item;
             }
         }
@@ -634,6 +580,426 @@ class CarSellingV1Model extends PdoDb
         $result = $this->updateByPrimaryKey(self::$table, $where, $data);
         return $result;
     }
+
+
+    public function getUserCars($userId){
+
+        $sql = '
+            SELECT
+            t1.*,
+            t3.avatar,t3.nickname,t3.type
+            FROM `' . self::$table . '`
+            AS t1
+            LEFT JOIN `bibi_user` AS t2
+            ON t1.user_id = t2.user_id
+            LEFT JOIN `bibi_user_profile` AS t3
+            ON t2.user_id = t3.user_id
+            WHERE t1.user_id = "' . $userId . '" limit 0 ,3
+        ';
+
+        $sqlCnt = '
+            SELECT
+            count(*) as total
+            FROM `' . self::$table . '`
+            AS t1
+            LEFT JOIN `bibi_user` AS t2
+            ON t1.user_id = t2.user_id
+            LEFT JOIN `bibi_user_profile` AS t3
+            ON t2.user_id = t3.user_id
+            WHERE t1.user_id = "' . $userId . '" limit 0 ,3
+        ';
+
+        $cars = $this->query($sql);
+        $total = $this->query($sqlCnt)['0']['total'];
+
+        $price = $this->getUserCarTotalPrice($userId);
+
+        $userId=$this->currentUser;
+
+        $items = array();
+
+        if($cars){
+
+            foreach($cars as $k => $car){
+                $item = $this->handlerCarByList($car,$userId);
+                $items[$k] = $item;
+            }
+        }
+
+        $result['car_list']=$items;
+        $result['total']=$total;
+        $result['total_price']=$price;
+
+        return $result;
+
+    }
+
+
+    public function getUserCarTotal($userId){
+
+           $sql='
+               SELECT COUNT(*) as total 
+               FROM `bibi_car_selling_list` 
+               WHERE ( verify_status = 2 OR verify_status = 11 ) AND 
+               user_id = '.$userId;
+
+           $total = $this->query($sql)[0]['total'];
+
+           return $total;
+
+    }
+
+    public function getUserCarTotalPrice($userId){
+        $sql ='
+            SELECT
+            t1.hash,t1.model_id,
+            t3.CarReferPrice
+            FROM `' . self::$table . '` AS t1
+            LEFT JOIN `bibi_user` AS t2
+            ON t1.user_id = t2.user_id
+            LEFT JOIN `bibi_car_model_detail` AS t3
+            ON t3.model_id = t1.model_id
+            WHERE t1.user_id = '.$userId;
+        $res = $this->query($sql);
+
+        $total_price = 0;
+
+        if($res){
+            foreach($res as $k ){
+                $price = explode('万',$k["CarReferPrice"])[0];
+                $total_price = $total_price + (float)$price ;
+            }
+        }
+
+        return  round($total_price,2);
+
+
+    }
+
+
+    public function getUserCarTotalPriceList(){
+
+        $pageSize = 10;
+
+        $number = ($this->page-1)*$pageSize;
+
+        if($this->page >5){
+
+            $list['list'] = array();
+            $list['user_info'] = $this->getUserPrice($this->currenuser);
+            $list['has_more'] =  2;
+            $list['total'] = 50;
+
+            return $list;
+
+        }
+        $sql =  '
+            SELECT
+            sum( t3.CarReferPrice) as total_money,
+            t1.type,t1.user_id,t1.nickname,t1.avatar,t1.sort
+            FROM bibi_user_profile AS t1
+            LEFT JOIN `bibi_car_selling_list` AS t2
+            ON t2.user_id = t1.user_id
+            LEFT JOIN `bibi_car_model_detail` AS t3
+            ON t3.model_id = t2.model_id
+            WHERE t1.type = 1
+            GROUP BY t1.user_id
+            ORDER BY total_money DESC 
+        ';
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+
+        $items = $this->query($sql);
+
+        foreach($items  as $k => $val){
+
+            $key = 'rich_like_'.$val['user_id'].'_'.$this->currenuser.'';
+
+            $likevalue= RedisDb::getValue($key);
+
+            if($likevalue){
+                $items[$k]['is_like']=1;
+            }else{
+                $items[$k]['is_like']=2;
+            }
+
+
+        }
+
+        $total =50;
+
+        $count = count($items);
+
+        $list['list'] = $items;
+        $list['user_info'] = $this->getUserPrice($this->currenuser);
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] = 50;
+
+        return $list;
+    }
+
+
+    public function getUserPrice($userId){
+
+        $sql='
+        SELECT  *
+           FROM (
+            SELECT
+            sum( t3.CarReferPrice) as total_money,
+            t1.type,t1.user_id,t1.nickname,t1.avatar
+            FROM bibi_user_profile AS t1
+            LEFT JOIN `bibi_car_selling_list` AS t2
+            ON t2.user_id = t1.user_id
+            LEFT JOIN `bibi_car_model_detail` AS t3
+           ON t3.model_id = t2.model_id
+           WHERE t1.type = 1
+            GROUP BY t1.user_id
+            ORDER BY total_money DESC 
+           ) as A where A.user_id = '.$userId.'
+        ';
+
+        $res = $this->query($sql);
+
+        return $res;
+    }
+
+
+    public function getUserVisitCars($userId){
+
+        $pageSize = 10;
+
+        $number = ($this->page - 1) * $pageSize;
+
+        $sqlVisit = '
+                        SELECT
+                        car_id
+                        FROM
+                        `bibi_visit_car` 
+                        WHERE user_id = '.$userId.'
+                        ORDER BY created DESC
+                        LIMIT ' . $number . ' , ' . $pageSize .'
+                    ';
+
+        $sqlCnt = '
+                        SELECT
+                        COUNT(car_id) AS total
+                        FROM
+                         `bibi_visit_car`
+                        WHERE user_id = '.$userId.'
+                    ';
+
+        $total = $this->query($sqlCnt)[0]['total'];
+
+        $result = @$this->query($sqlVisit);
+
+        $result = $this->implodeArrayByKey('car_id', $result);
+
+        $inStr = "'".str_replace(",","','",$result)."'";
+
+        $sql = '
+            SELECT
+            t1.*,
+            t3.avatar,t3.nickname,t3.type
+            FROM `' . self::$table . '`
+            AS t1
+            LEFT JOIN `bibi_user` AS t2
+            ON t1.user_id = t2.user_id
+            LEFT JOIN `bibi_user_profile` AS t3
+            ON t2.user_id = t3.user_id
+        ';
+
+        $sql .= ' WHERE t1.hash in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
+
+        $cars = $this->query($sql);
+
+        $count=count($cars);
+
+        $items = array();
+
+        if($cars){
+            foreach($cars as $k => $car){
+                $item = $this->handlerCarByList($car,$userId);
+                $items[$k] = $item;
+            }
+        }
+
+        $res['car_list']=$items;
+        $res['total']=$total;
+        $res['has_more'] = (($number + $count) < $total) ? 1 : 2;
+
+        return $res;
+
+    }
+
+
+    public function getUserPublishCar($userId){
+
+        if(@$this->pageSize){
+            $pageSize = $this->pageSize;
+        }else{
+            $pageSize = 25;
+        }
+
+        $sql = '
+            SELECT
+                t1.*,
+                t3.avatar,t3.nickname,t3.type
+                FROM `bibi_car_selling_list` AS t1
+                LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+            WHERE
+               
+        ';
+
+        $sqlCnt = '
+            SELECT
+                count(*) AS total
+                FROM `bibi_car_selling_list` AS t1
+                LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+            WHERE  ';
+
+
+        $profileModel = new \ProfileModel;
+        $userInfo = $profileModel->getProfile($userId);
+
+        $user_type=@$userInfo['type'];
+
+        if($user_type == 2){
+
+            $lists=$profileModel->getcompanyuserlist(1,$userId);
+
+            $result = $this->implodeArrayByKey('user_id', $lists['user_list']);
+
+            $result = $userId . "," .$result;
+
+            $str = ' t2.user_id in (' . $result . ') ';
+
+            $sql .= $str;
+            $sqlCnt .= $str;
+
+        }else{
+
+            $sql .= ' t2.user_id ='.$userId;
+            $sqlCnt .= ' t2.user_id ='.$userId;
+        }
+
+        $sql .='  AND (t1.car_type = '.PLATFORM_USER_SELLING_CAR.' OR t1.car_type = '.PLATFORM_USER_NEW_CAR.')';
+        $sqlCnt .='  AND (t1.car_type = '.PLATFORM_USER_SELLING_CAR.' OR t1.car_type = '.PLATFORM_USER_NEW_CAR.')';
+
+        if(@$this->brand_id){
+            $sql.= ' AND t1.brand_id = '.$this->brand_id;
+        }
+        if(@$this->series_id){
+            $sql.= ' AND t1.series_id ='.$this->series_id;
+        }
+        if(@$this->verify_status){
+            $sql.= ' AND t1.verify_status ='.$this->verify_status;
+        }else{
+            $sql.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.')';
+        }
+
+        if(@$this->is_pacted){
+            $sql.=' AND is_pacted ='.$this->is_pacted;
+        }
+
+        $number = ($this->page-1)*$pageSize;
+
+        $sql .= ' ORDER BY  t1.updated DESC LIMIT '.$number.' , '.$pageSize.' ';
+
+        if(@$this->brand_id){
+            $sqlCnt.= ' AND t1.brand_id ='.$this->brand_id;
+        }
+        if(@$this->series_id){
+            $sqlCnt.= ' AND t1.series_id ='.$this->series_id;
+        }
+
+        if(@$this->verify_status){
+            $sqlCnt.= ' AND t1.verify_status ='.$this->verify_status;
+        }else{
+            $sqlCnt.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.')';
+        }
+
+        if(@$this->is_pacted){
+            $sqlCnt.=' AND is_pacted ='.$this->is_pacted;
+        }
+
+
+        $cars = $this->query($sql);
+
+
+        $items = array();
+
+
+        foreach($cars as $k => $car){
+
+            $item = $this->handlerCarByList($car);
+
+            $items[$k]['car_info'] = $item;
+           // $items[$k]['car_users'] = $this->getSameBrandUsers($car['brand_id']);
+        }
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+        $count = count($items);
+
+        $list['car_list'] = $items;
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] = $total;
+        //$list['number'] = $number;
+
+        return $list;
+
+
+    }
+
+    public function countUserCarNum($userId,$verity){
+
+
+        $profileModel = new \ProfileModel;
+        $userInfo = $profileModel->getProfile($userId);
+
+        $user_type=@$userInfo['type'];
+
+        if($user_type == 2){
+
+            $list=$profileModel->getcompanyuserlist(1,$userId);
+
+            $result = $this->implodeArrayByKey('user_id', $list['user_list']);
+
+            $result = $userId . "," .$result;
+
+            $str = ' user_id in (' . $result . ') ';
+
+        }else{
+            $str = ' user_id ='.$userId;
+        }
+
+        $sqlCnt = '
+            SELECT
+                count(*) AS total
+                FROM `bibi_car_selling_list` 
+            WHERE '.$str.' AND (car_type = '.PLATFORM_USER_SELLING_CAR.' OR car_type = '.PLATFORM_USER_NEW_CAR .')';
+
+        if($verity == 11){
+            $sqlCnt .= ' AND ( verify_status =2  OR verify_status = 11 )';
+        }else{
+            $sqlCnt .= ' AND verify_status ='.$verity;
+        }
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+        return $total;
+    }
+
+
+
+
+
+
 
 
 

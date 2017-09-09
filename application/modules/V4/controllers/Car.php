@@ -6,6 +6,8 @@
  * Date: 15/11/13
  * Time: 下午6:09
  */
+use EasyWeChat\Foundation\Application;
+use EasyWeChat\Payment\Order;
 class CarController extends ApiYafControllerAbstract
 {
 
@@ -13,10 +15,11 @@ class CarController extends ApiYafControllerAbstract
     /**
      * @api {POST} /v4/car/index 车辆详情
      * @apiName car detail
-     * @apiGroup Car_V4
+     * @apiGroup Car
      * @apiDescription 车辆详情
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
@@ -80,12 +83,10 @@ class CarController extends ApiYafControllerAbstract
         $id = $visitCarM->get();
 
         if(!$id){
-
             $properties = array();
             $properties['created'] = time();
             $properties['user_id'] = $userId;
             $properties['car_id']  = $carId;
-
             $carModel->updateByPrimaryKey(
                 $carT,
                 array('hash'=>$carId),
@@ -103,7 +104,7 @@ class CarController extends ApiYafControllerAbstract
         //http://m.bibicar.cn/post/index?device_identifier='.$data['device_identifier'].'&fcar_id='.$carId.'
         $response['share_url'] = 'http://wap.bibicar.cn/car/'.$carId.'?identity='.base64_encode($data['device_identifier']);
         $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
-        $response['share_img'] = isset($carInfo['files'][0]) ? $carInfo['files'][0]['file_url'] : '';
+        $response['share_img'] = isset($carInfo['files']["type1"]) ? $carInfo['files']["type1"][0]['file_url'] : '';
 
         $this->send($response);
 
@@ -113,10 +114,11 @@ class CarController extends ApiYafControllerAbstract
     /**
      * @api {POST} /v4/car/list 车辆列表
      * @apiName car list
-     * @apiGroup Car_V4
+     * @apiGroup Car
      * @apiDescription 车辆列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier]设备唯一标识
      * @apiParam {string} session_id session_id
@@ -162,7 +164,6 @@ class CarController extends ApiYafControllerAbstract
 
 
     public function listAction(){
-
         $jsonData = require APPPATH .'/configs/JsonData.php';
         $this->optional_fields = array('keyword','order_id','brand_id','series_id');
         //$this->required_fields = array_merge($this->required_fields, array('session_id'));
@@ -288,17 +289,6 @@ class CarController extends ApiYafControllerAbstract
 
         $lists = $carM->getCarList($userId);
 
-        if($lists['car_list']){
-
-            foreach($lists['car_list'] as $key => $list){
-
-                $file = isset($list['car_info']['files'][0]) ?  $list['car_info']['files'][0] : array();
-
-                $lists['car_list'][$key]['car_info']['files'] = array();
-                $lists['car_list'][$key]['car_info']['files'][] = $file;
-            }
-        }
-
         $response = $lists;
         $response['order_id'] = $data['order_id'];
 
@@ -322,24 +312,47 @@ class CarController extends ApiYafControllerAbstract
 
     }
 
-    public function userfavoriteAction(){
+    /**
+     * @api {POST} /v4/car/carvisithistory 车辆浏览历史
+     * @apiName car carvisithistory
+     * @apiGroup Car
+     * @apiDescription 车辆列表
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {string} device_identifier]设备唯一标识
+     * @apiParam {string} session_id session_id
+     *
+     * @apiParamExample {json} 请求样例
+     *    POST /v4/car/index
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *
+     *     }
+     *   }
+     *
+     */
+    public function carvisithistoryAction(){
 
-        $this->required_fields = array_merge($this->required_fields, array('session_id'));
+           $this->required_fields = array_merge($this->required_fields, array('session_id','page'));
 
-        $data = $this->get_request_data();
+           $data = $this->get_request_data();
 
-        $userId = $this->userAuth($data);
+           $userId = $this->userAuth($data);
 
-        $objId = $this->getAccessId($data, $userId);
+           $page = $data['page'] ? ($data['page']+1) : 1;
 
-        $car = new CarSellingModel();
+           $carM = new CarSellingV1Model();
 
-        $response = $car->getUserCar($objId);
+           $carM->page = $page;
 
-        $this->send($response);
+           $car_list = $carM->getUserVisitCars($userId);
+
+           $this->send($car_list);
     }
-
-
 
 
 

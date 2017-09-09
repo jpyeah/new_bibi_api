@@ -244,7 +244,7 @@ class FeedvideoModel extends PdoDb
                         t1.feed_id
                         FROM
                         `bibi_feeds` AS t1
-                        WHERE t1.feed_type = 5 
+                        WHERE (t1.feed_type = 5 OR t1.feed_type =7 )
                         ORDER BY
                         created DESC,feed_id
                         LIMIT ' .$number. ' , ' . $pageSize . '
@@ -254,7 +254,7 @@ class FeedvideoModel extends PdoDb
                         COUNT(t1.feed_id) AS total
                         FROM
                         `bibi_feeds` AS t1
-                        WHERE t1.feed_type = 5
+                        WHERE (t1.feed_type = 5 OR t1.feed_type =7 )
                         ORDER BY
                         created DESC,feed_id
                     ';
@@ -412,7 +412,7 @@ class FeedvideoModel extends PdoDb
         return $items;
     }
 
-    public function getUserCollectFeed($userId){
+    public function getUserCollectVideo($userId){
 
         $pageSize = 10;
 
@@ -427,7 +427,7 @@ class FeedvideoModel extends PdoDb
                 ON t2.user_id = t3.user_id
                 LEFT JOIN `bibi_feeds_collect` AS t4
                 ON t1.feed_id = t4.feed_id
-            WHERE t4.user_id = '.$userId.'
+            WHERE t4.user_id = '.$userId.' AND (t1.feed_type = 5 OR t1.feed_type =7 )
             ORDER BY t4.created DESC
         ';
 
@@ -445,7 +445,7 @@ class FeedvideoModel extends PdoDb
             ON t2.user_id = t3.user_id
             LEFT JOIN `bibi_feeds_collect` AS t4
             ON t1.feed_id = t4.feed_id
-            WHERE t4.user_id = '.$userId.'
+            WHERE t4.user_id = '.$userId.' AND (t1.feed_type = 5 OR t1.feed_type =7 )
             ORDER BY t4.created DESC
         ';
 
@@ -507,11 +507,9 @@ class FeedvideoModel extends PdoDb
 
         $feeds = $this->query($sql);
 
-
         $feeds=$this->handleFeeds($feeds);
 
         $total = @$this->query($sqlCnt)[0]['total'];
-
 
         if(!$feeds){
 

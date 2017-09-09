@@ -66,7 +66,7 @@ $sql = "INSERT INTO bibi_feeds(feed_type,user_id,post_content,post_files,image_u
                    $classno =substr($value['vin_no'], -6);
                    $engineno=substr($value['engine_no'], -6);
                    $hphm    =$value['car_no'];
-                   $city    =$value['']
+                   $city    =$value[''];
 
                    $wz=new WeiZhang();
                     $time=time();

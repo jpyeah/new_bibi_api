@@ -41,6 +41,16 @@ class BannerModel extends PdoDb
         foreach($bannerlist as $key =>$value){
 
             $banners[$key]['imgUrl']="http://img.bibicar.cn/".$value["post_file"];
+
+            if($value["id"]== 39 && @$this->device_size ){
+                if(@$this->device_size == 1 ){
+                    $banners[$key]['imgUrl']="http://img.bibicar.cn/xiuchunideaiche1.png";
+                }else if(@$this->device_size == 2){
+                    $banners[$key]['imgUrl']="http://img.bibicar.cn/".$value["post_file"];
+                }else if(@$this->device_size == 3){
+                    $banners[$key]['imgUrl']="http://img.bibicar.cn/%1Cxiuchunideaiche3.png";
+                }
+            }
             $banners[$key]['appUrl']=$value["theme"];
             $banners[$key]['title']=$value["title"];
             $banners[$key]['link']="/topic/".$value["id"];

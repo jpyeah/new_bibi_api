@@ -102,8 +102,9 @@ class YicheController extends ApiYafControllerAbstract {
     }
     
      public function getseAction(){
-           exit;
-           $masterId=92;
+
+        exit;
+        $masterId=100;
 
            $url="http://carapi.ycapp.yiche.com/car/getseriallist?masterid=".$masterId."&allserial=true";
            $html=file_get_contents($url);
@@ -461,12 +462,14 @@ class YicheController extends ApiYafControllerAbstract {
 
          //通过品牌id获取车型
          public function getsebybranAction(){
-
-           $masterId=92;
+        exit;
+           $masterId=127;
 
            $url="http://carapi.ycapp.yiche.com/car/getseriallist?masterid=".$masterId."&allserial=true";
            $html=file_get_contents($url);
            $data=json_decode($html,true)['data'];
+
+
 
                foreach($data as $key =>$value){
                         $makename=$value['brandName'];
@@ -479,8 +482,6 @@ class YicheController extends ApiYafControllerAbstract {
                        
                        foreach($value['serialList'] as $key =>$value){
                              // print_r($value["serialName"]);
-                             
-
                              $exist=$this->is_exist('id','bibi_car_brand_series','brand_series_id',$value["serialId"]);
                              if(!$exist){
                               $sql = "INSERT INTO bibi_car_brand_series(brand_id,brand_series_name,brand_series_id,brand_series_url,makename,uv,saleStatus,foreigns,dealerPrice) VALUES("."'".$masterId."'".","."'".$value["serialName"]."'".","."'".$value["serialId"]."'".","."'".$value["Picture"]."'".","."'".$makename."'".","."'".$value["uv"]."'".","."'".$value["saleStatus"]."'".","."'".$foreign."'".","."'".$value["dealerPrice"]."'".")";
@@ -488,10 +489,7 @@ class YicheController extends ApiYafControllerAbstract {
                               $list = $pdo->query($sql);
                              
                               }
-                             
-
                        }
-
 
                }
         
@@ -500,9 +498,9 @@ class YicheController extends ApiYafControllerAbstract {
 
      //通过车型获取系列
          public function getmobyseAction(){
-         // exit;
+          exit;
        //  echo "123456";exit;
-         $masterid=92;
+         $masterid=127;
          $sql="SELECT brand_series_id FROM bibi_car_brand_series WHERE brand_id=".$masterid;
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
@@ -530,7 +528,6 @@ class YicheController extends ApiYafControllerAbstract {
                                $list = $pdo->query($sql);
 
 
-                             
                               }
                                 
                         }
@@ -841,7 +838,7 @@ class YicheController extends ApiYafControllerAbstract {
     //获取车型详情
     public function getdetailAction(){
          exit;
-         $masterId=7;
+         $masterId=127;
          $sql="SELECT brand_series_id FROM bibi_car_brand_series WHERE brand_id=".$masterId;
          $pdo = new PdoDb;
          $list = $pdo->query($sql);
@@ -859,7 +856,7 @@ class YicheController extends ApiYafControllerAbstract {
     
     //处理易车车型图片
     public function updateurlAction(){
-       
+        exit;
         $sql="SELECT brand_series_url,brand_series_id FROM bibi_car_brand_series ";
         $pdo = new PdoDb;
         $list = $pdo->query($sql);

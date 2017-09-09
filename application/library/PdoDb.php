@@ -188,6 +188,7 @@ class PdoDb
      */
     public function updateByPrimaryKey($tableName, $where, $data)
     {
+
         self::$pdo || self::instance();
         //条件
         $whereId    = array_keys($where);

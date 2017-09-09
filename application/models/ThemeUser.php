@@ -49,7 +49,11 @@ class ThemeUserModel extends PdoDb
         return $info;
     }
 
-    public function getThemeUser($theme_id){
+    public function getThemeUser($theme_id,$page=1){
+
+        $pageSize = 10;
+
+        $number = ($page-1)*$pageSize;
 
         $sql='
         SELECT 
@@ -61,7 +65,7 @@ class ThemeUserModel extends PdoDb
         ON t2.user_id = t1.user_id 
         WHERE
         t1.theme_id ='.$theme_id.'
-        limit 10
+        LIMIT ' . $number . ' , ' . $pageSize . '
         ';
 
         $sqlCnt='
@@ -76,13 +80,27 @@ class ThemeUserModel extends PdoDb
         ';
 
         $user=$this->query($sql);
-        $count=$this->query($sqlCnt)[0];
+        $total=$this->query($sqlCnt)[0]['total'];
+        $count=count($user);
+
+        foreach($user as $k =>$val){
+
+            $friendShipM = new FriendShipModel();
+
+            $friendShipM->currentUser = $val['user_id'];
+
+            $user[$k]['friend_num'] = $friendShipM->friendNumCnt();
+
+            $user[$k]['fans_num']   = $friendShipM->fansNumCnt();
+            unset($user[$k]['theme_id']);
+
+        }
 
         $list['users']=$user;
-        $list['total']=$count['total'];
+        $list['has_more'] = (($number + $count) < $total) ? 1 : 2;
+        $list['total'] = $total;
 
         return $list;
-
     }
 
 

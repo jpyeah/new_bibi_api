@@ -28,21 +28,39 @@ class ThemelistModel extends PdoDb
     public function getTheme($theme_id=1){
         $sql='
         SELECT 
-        id,theme,title,post_file,sort,is_skip
+        t1.id,t1.theme,t1.title,t1.post_file,t1.sort,t1.is_skip,t1.user_id,
+        t2.avatar,t2.nickname
         FROM
-        `bibi_themelist`
+        `bibi_themelist` as t1
+        LEFT JOIN `bibi_user_profile` as t2 
+        ON t2.user_id = t1.user_id
         WHERE
-        id ='.$theme_id.'
+        t1.id ='.$theme_id.'
         ';
 
         $theme=$this->query($sql);
         if($theme){
            $info=@$theme[0];
            $info["post_file"]="http://img.bibicar.cn/".$info['post_file'];
+
+            $info['user_info']=array();
+            $info['user_info']['avatar']=$info['avatar'];
+            $info['user_info']['user_id']=$info['user_id'];
+            $info['user_info']['nickname']=$info['nickname'];
+
+            $friendShipM = new FriendShipModel();
+
+            $friendShipM->currentUser = $info['user_id'];
+
+            $info['user_info']['friend_num'] = $friendShipM->friendNumCnt();
+
+            $info['user_info']['fans_num']   = $friendShipM->fansNumCnt();
+            unset($info['avatar']);
+            unset($info['user_id']);
+            unset($info['nickname']);
         }else{
           $info=array();
         }
-
         return $info;
     }
 
@@ -90,6 +108,7 @@ class ThemelistModel extends PdoDb
 
 
         if($type == 2){
+            
            $sql .= "  AND tag = ".$this->tag;
            $sqlNearByCnt .= " AND tag = ".$this->tag;
 

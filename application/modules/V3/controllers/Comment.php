@@ -8,14 +8,7 @@
 
 class CommentController extends ApiYafControllerAbstract {
 
-/**
- * @apiDefine Data
- *
- * @apiParam (data) {string} [device_identifier]  设备唯一标示.
- * @apiParam (data) {string} [session_id]     用户session_id.
- * 
- * 
- */
+
 /**
  * @api {POST} /v3/Comment/create 添加评论
  * @apiName create comment
@@ -23,14 +16,13 @@ class CommentController extends ApiYafControllerAbstract {
  * @apiDescription 添加评论接口
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [feed_id] 朋友圈id/文章id
  * @apiParam {string} [content] 评论内容
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/Comment/create
  *   {
@@ -141,14 +133,13 @@ class CommentController extends ApiYafControllerAbstract {
  * @apiDescription 朋友圈评论列表接口
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [page] 页数
  * @apiParam {string} [feed_id] 朋友圈评论
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/Comment/list
  *   {
@@ -188,13 +179,12 @@ class CommentController extends ApiYafControllerAbstract {
  * @apiDescription 评论我的
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [page] 页数
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/Comment/tome
  *   {
@@ -231,14 +221,13 @@ class CommentController extends ApiYafControllerAbstract {
  * @apiDescription 评论删除
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [feed_id] 朋友圈id
  * @apiParam {string} [comment_id] 评论id
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/Comment/delete
  *   {
@@ -302,15 +291,15 @@ class CommentController extends ApiYafControllerAbstract {
  * @apiDescription 评论点赞接口
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [comment_id] 评论id
  * @apiParam {string} [feed_id] 朋友圈id
+ * @apiVersion 1.0.0
  * 
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/Comment/commentlikecreate
  *   {
@@ -338,11 +327,7 @@ class CommentController extends ApiYafControllerAbstract {
         $data = $this->get_request_data();
 
         $userId = $this->userAuth($data);
-        
-       
-        $data['feed_id']=1446;
-        $data['comment_id']=695;
-        $userId=389;
+
         $time = time();
 
         $CommentLikeM = new CommentLikeModel();
@@ -391,15 +376,14 @@ class CommentController extends ApiYafControllerAbstract {
  * @apiDescription 评论点赞取消接口
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [comment_id] 评论id
  * @apiParam {string} [feed_id] 朋友圈id
  * 
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/Comment/commentlikedelete
  *   {
@@ -417,7 +401,6 @@ class CommentController extends ApiYafControllerAbstract {
  */
 
     public function commentlikedeleteAction(){
-      /*
         $this->required_fields = array_merge(
             $this->required_fields,
             array('session_id', 'feed_id','comment_id')
@@ -426,21 +409,7 @@ class CommentController extends ApiYafControllerAbstract {
         $data = $this->get_request_data();
 
         $userId = $this->userAuth($data);
-        */
-       
-        /*
-        $this->required_fields = array_merge(
-            $this->required_fields,
-            array('session_id', 'feed_id')
-        );
 
-        $data = $this->get_request_data();
-        
-        $userId = $this->userAuth($data);
-      */
-       $userId  =389;
-       $data['feed_id']=1446;
-       $data['comment_id']=695;
       
         $CommentLikeM = new CommentLikeModel();
 

@@ -22,14 +22,12 @@ class FavoritecarController extends ApiYafControllerAbstract{
  * @apiGroup Collect
  * @apiDescription 收藏车辆
  * @apiPermission anyone
- * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiSampleRequest http://testapi.bibicar.cn
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [car_id] 车辆id
  * 
- * @apiParam {json} data object
- * @apiUse Data
  * @apiParamExample {json} 请求样例
  *   POST /v3/Favoritecar/create
  *   {
@@ -109,13 +107,12 @@ class FavoritecarController extends ApiYafControllerAbstract{
  * @apiGroup Collect
  * @apiDescription 删除收藏车辆
  * @apiPermission anyone
- * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiSampleRequest http://testapi.bibicar.cn
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [car_id] 车辆id
  * 
- * @apiParam {json} data object
  * @apiUse Data
  * @apiParamExample {json} 请求样例
  *   POST /v3/Favoritecar/delete
@@ -160,18 +157,17 @@ class FavoritecarController extends ApiYafControllerAbstract{
     }
 
 /**
- * @api {POST} /v3/Favoritecar/delete 收藏车辆列表
+ * @api {POST} /v3/Favoritecar/list 收藏车辆列表
  * @apiName favoritecar list
  * @apiGroup Collect
  * @apiDescription 收藏车辆列表
  * @apiPermission anyone
- * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiSampleRequest http://testapi.bibicar.cn
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {number} [page] 车辆id
  * 
- * @apiParam {json} data object
  * @apiUse Data
  * @apiParamExample {json} 请求样例
  *   POST /v3/Favoritecar/list

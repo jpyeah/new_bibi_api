@@ -101,7 +101,10 @@ class Commentv1Model extends PdoDb {
         
        
         if($comments){
-
+            foreach($comments as $k => $val){
+                $num = $this->getCommentReplyNum($val['comment_id']);
+                $comments[$k]['comment_num']=$num;
+            }
             $count = count($comments);
             $list['comment_list'] = $comments;
             $list['has_more'] = (($number + $count) < $total) ? 1 : 2;
@@ -447,6 +450,21 @@ class Commentv1Model extends PdoDb {
 
         }
         return $items;
+
+    }
+
+
+    public function getCommentReplyNum($comment_id){
+
+        $sql = '
+              SELECT count(*) as total
+              FROM `bibi_comments`
+              WHERE `father_id` = '.$comment_id
+        ;
+
+        $res = $this->query($sql);
+
+        return $res ? $res[0]['total'] : 0;
 
     }
 

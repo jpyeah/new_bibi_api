@@ -108,7 +108,16 @@ class ThemeController extends ApiYafControllerAbstract {
 
         $feeds = $FeedThemeM->getFeeds(0,8,0,$data['page']);
 
-        $response['feed_list']=$feeds['feed_list'];//本周最热
+        foreach($feeds["feed_list"] as $k => $val){
+
+            $nickname = $val['post_user_info'] ?$val['post_user_info']['profile']['nickname'] : "";
+            $feed_id  = $val['feed_id'];
+            $device_identifier  = $data['device_identifier'];
+            $file_url  = @$val['post_files'][0]['file_url'];
+            $feeds['feed_list'][$k]['share'] = $this->CreateShare($nickname,$feed_id,$device_identifier,$file_url);
+        }
+
+        $response['feed_list']=$feeds;//本周最热
 
         return $this->send($response);
 
@@ -229,32 +238,6 @@ class ThemeController extends ApiYafControllerAbstract {
         }
     }
 
-    /**
-     * @api {POST} /v3/theme/gettheme 判断话题是否被创建
-     * @apiName Theme  gettheme
-     * @apiGroup Theme
-     * @apiDescription 判断话题是否被创建
-     * @apiPermission anyone
-     * @apiSampleRequest http://testapi.bibicar.cn
-     *
-     * @apiParam {string} device_identifier device_identifier
-     * @apiParam {string} session_id session_id
-     * @apiParam {string} theme  话题
-     *
-     *
-     * @apiParamExample {json} 请求样例
-     *   POST  /v3/theme/gettheme
-     *   {
-     *     "data": {
-     *       "device_identifier":"85e8c1b3a7e2b3a64296892bf56b3b42",
-     *       "session_id":"session578614120f571",
-     *       "theme":"#手机摄影#",
-     *
-     *
-     *     }
-     *   }
-     *
-     */
     //判断是否被创建
     public function getthemeAction(){
 
@@ -342,10 +325,17 @@ class ThemeController extends ApiYafControllerAbstract {
             $themeM->post_file = $data['post_file'];
             $themeM->title= $data['title'];
             $themeM->saveProperties();
-
             $themeId = $themeM->CreateM();
-
             $themeInfo = $themeM->gettheme($themeId);
+
+            //加入自己创建话题中
+            $themeuserM= new ThemeUserModel();
+            $time = time();
+            $themeuserM->user_id = $userId;
+            $themeuserM->theme_id = $data['theme_id'];
+            $themeuserM->created = $time;
+            $themeuserM->saveProperties();
+            $themeId = $themeuserM->CreateM();
 
             $this->send($themeInfo);
 
@@ -404,7 +394,6 @@ class ThemeController extends ApiYafControllerAbstract {
         $this->send($response);
 
     }
-
 
     /**
      * @api {POST} /v3/theme/followthemelist 我加入的话题
@@ -474,10 +463,12 @@ class ThemeController extends ApiYafControllerAbstract {
      * @apiDescription 话题详情
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      * @apiParam {number} theme_id 话题Id
+     * @apiParam {number} tag  1:最热 2:最新
      * @apiParam {number} page 页码
      *
      * @apiSuccess {json} theme_user 加入话题的用户
@@ -496,17 +487,27 @@ class ThemeController extends ApiYafControllerAbstract {
         $sess = new SessionModel();
         $userId = $sess->Get($data);
 
-
         $data['post_type'] = 7;
         $data['page']     = $data['page'] ? ($data['page']+1) : 1;
-       
+
         $feedM = new FeedThemeModel();
         $themeM= new ThemelistModel();
         $themeUserM = new ThemeUserModel();
         $theme= $themeM->getTheme($data['theme_id']);
         $feedM->currentUser = $userId;
         $feedM->currenttheme= $theme["theme"];
+        if(@$data['tag']){
+            $feedM->themeType = $data['tag'];
+        }
         $response = $feedM->getFeeds(0,$data['post_type'],$userId,$data['page']);
+        foreach($response["feed_list"] as $k => $val){
+            $nickname = $val['post_user_info']['profile']['nickname'];
+            $feed_id  = $val['feed_id'];
+            $device_identifier  = $data['device_identifier'];
+            $file_url  = @$val['post_files'][0]['file_url'];
+
+            $response['feed_list'][$k]['share'] = $this->CreateShare($nickname,$feed_id,$device_identifier,$file_url);
+        }
         $response['theme_user']=$themeUserM->getThemeUser($data['theme_id']);
         $response['theme_info']=$theme;
         $theme= $themeUserM->getTheme($data['theme_id'],$userId);
@@ -515,6 +516,44 @@ class ThemeController extends ApiYafControllerAbstract {
         }else{
             $response['is_join'] = 0;
         }
+        $this->send($response);
+
+    }
+
+    /**
+     * @api {POST} /v3/theme/themeofuser 话题成员
+     * @apiName Theme  themeofuser
+     * @apiGroup Theme
+     * @apiDescription 话题成员
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_identifier device_identifier
+     * @apiParam {number} theme_id 话题Id
+     * @apiParam {number} page 页码
+     *
+     * @apiSuccess {json} theme_user 加入话题的用户
+     * @apiSuccess {json} theme_info 话题详情
+     *
+     */
+
+    //话题详情
+    public function themeofuserAction(){
+
+        $this->required_fields = array_merge($this->required_fields,array('theme_id','page'));
+
+        $data = $this->get_request_data();
+        $sess = new SessionModel();
+        $userId = $sess->Get($data);
+
+        $data['post_type'] = 7;
+        $data['page']     = $data['page'] ? ($data['page']+1) : 1;
+
+        $themeM= new ThemelistModel();
+        $themeUserM = new ThemeUserModel();
+        $response['theme_user']= $themeUserM->getThemeUser($data['theme_id'], $data['page']);
+        $response['theme_info']=$themeM->getTheme($data['theme_id']);
+
         $this->send($response);
 
     }
@@ -552,31 +591,25 @@ class ThemeController extends ApiYafControllerAbstract {
         $carM->currentUser =$userId;
         $lists = $carM->getCarList($userId);
         $response['car_list']=$lists;
-
         //视频
         $feedM = new FeedvideoModel();
         $type=1;
         $feedM->currentUser = $userId;
         $response['videos'] =$feedM->getFeeds($type,1);
-
         //文章列表
         $feedM = new Feedv1Model();
         $type=1;
         $feedM->currentUser = $userId;
         $response['article']=$feedM->getFeeds($type,1);
-
         //最佳车行
         $Profile=new ProfileModel();
         $Profile->pageSize=5;
         $page     = 1;
-        $user=$Profile->getCompanylist($page);
+        $user=$Profile->getCompanylistV1($page);
         $response['company_list']=$user;
-
         return $response;
 
     }
-
-
     /**
      * @api {POST} /v3/theme/myfocus 我的关注
      * @apiName Theme  myfocus
@@ -589,19 +622,52 @@ class ThemeController extends ApiYafControllerAbstract {
      * @apiParam {string} session_id session_id
      * @apiParam {number} page 页码
      *
-     * @apiSuccess {json} type 类型 1:车辆 2:发布状态 3:加入话题
-     * @apiSuccess {json} id 话题详情
-     * @apiSuccess {json} feed_list  话题动态列表
+     * @apiSuccess {json} data.type 类型 1:车辆发布 2:加入话题 3:关注用户 4:文章评论
+     * @apiSuccess {json} data.type_id 类型Id(车辆ID,话题Id,用户Id,文章Id)
+     * @apiSuccess {json} data.type_info 详情
      *
      */
-
     //我的关注
-
     public function MyFocusAction(){
 
+        $this->required_fields = array_merge($this->required_fields,array('session_id','page'));
+
+        $data = $this->get_request_data();
+
+        $userId = $this->userAuth($data);
+
+        $data['page']     = $data['page'] ? ($data['page']+1) : 1;
+
+        $UserFocusM= new MyFocusModel();
+
+        $response =  $UserFocusM->getUserFocuss($userId,$data['page']);
+
+        $this->send($response);
+
+    }
+
+    public function CreateFocusAction(){
+
+        $UserFocusM= new MyFocusModel();
+
+        $UserFocusM->created_at =time();
+        $UserFocusM->type = 1;
+        $UserFocusM->type_id = '5785f7310af84';
+        $UserFocusM->user_id = 389;
+        $UserFocusM->saveProperties();
+        $id = $UserFocusM->CreateM();
+
+        echo $id;
+    }
 
 
+    public function CreateShare($nickname,$feed_id,$device_identifier,$file_url){
 
+        $share['share_title'] = $nickname . '的车友圈';
+        $share['share_url'] = 'http://wap.bibicar.cn/circle/'.$feed_id.'?identity='.base64_encode($device_identifier);
+        $share['share_txt'] = '更多精彩内容尽在bibi,期待您的加入!';
+        $share['share_img'] = $file_url;
+        return $share;
     }
 
 

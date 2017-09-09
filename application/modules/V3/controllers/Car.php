@@ -28,6 +28,7 @@ class CarController extends ApiYafControllerAbstract
  * @apiDescription 上传车辆
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  * 
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
@@ -39,8 +40,6 @@ class CarController extends ApiYafControllerAbstract
  * @apiParam {string} [file_id] 车辆照片id
  * @apiParam {string} [file_type] 车辆照片类型 (1:外观 2:中控内饰 3:发动机及结构 4:更多细节)
  *
- * @apiParam {json} data object
- * @apiUse Data
  * @apiParamExample {json} 请求样例
  *   POST /v3/car/create
  *   {
@@ -179,12 +178,6 @@ class CarController extends ApiYafControllerAbstract
 
     }
 
-    public function updateAction()
-    {
-
-
-    }
-
 /**
  * @api {POST} /v3/car/delete 删除车辆
  * @apiName delete the car
@@ -192,14 +185,13 @@ class CarController extends ApiYafControllerAbstract
  * @apiDescription 删除车辆
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [car_id] 车Id
  *
- *  
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/car/delete
  *   {
@@ -240,14 +232,13 @@ class CarController extends ApiYafControllerAbstract
  * @apiDescription 车辆详情
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [car_id] 车辆Id
  *
  *
- * @apiParam {json} data object
- * @apiUse Data
  * @apiParamExample {json} 请求样例
  *   POST /v3/car/index
  *   {
@@ -290,6 +281,7 @@ class CarController extends ApiYafControllerAbstract
 
 
         $response['car_info'] = $carInfo;
+
 
         $brandId = isset($carInfo['brand_info']['brand_id']) ? $carInfo['brand_info']['brand_id'] : 0;
 
@@ -351,6 +343,7 @@ class CarController extends ApiYafControllerAbstract
  * @apiDescription 车辆列表
  * @apiPermission anyone
  * @apiSampleRequest http://testapi.bibicar.cn
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} device_identifier]设备唯一标识
  * @apiParam {string} session_id session_id
@@ -413,7 +406,7 @@ class CarController extends ApiYafControllerAbstract
 
 
         $carM = new CarSellingModel();
-        $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND (t1.car_type = 0 OR t1.car_type = 0 OR t1.car_type = 2 ) AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
+        $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND (t1.car_type = 0 OR t1.car_type = 1 OR t1.car_type = 2 ) AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
 
       if($data['keyword']){
             $carM->keyword = $data['keyword'];
@@ -594,12 +587,11 @@ class CarController extends ApiYafControllerAbstract
  * @apiDescription 用户爱车
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/car/userFavCars
  *   {
@@ -636,6 +628,7 @@ class CarController extends ApiYafControllerAbstract
  * @apiDescription 查询违章接口
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
@@ -643,9 +636,7 @@ class CarController extends ApiYafControllerAbstract
  * @apiParam {string} [hphm] 车牌号(粤AN324Y)
  * @apiParam {string} [classno]  车架后六位
  * @apiParam {string} [engineno]  发动机号六位
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/car/checkcar
  *   {
@@ -705,13 +696,12 @@ class CarController extends ApiYafControllerAbstract
  * @apiDescription 联系车主接口
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
  * @apiParam {string} [seller_id]  车主id
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/car/ContactSeller
  *   {
@@ -748,6 +738,7 @@ class CarController extends ApiYafControllerAbstract
  * @apiDescription 贷款申请接口
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
@@ -757,9 +748,7 @@ class CarController extends ApiYafControllerAbstract
  * @apiParam {string} [pay_scale]  首付
  * @apiParam {string} [pay_stages]  分期
  * 
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/car/applyloan
  *   {
@@ -810,6 +799,7 @@ class CarController extends ApiYafControllerAbstract
  * @apiDescription 定制车辆接口
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiVersion 1.0.0
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [session_id] session_id
@@ -827,9 +817,7 @@ class CarController extends ApiYafControllerAbstract
  * @apiParam {string} [name]  联系人
  * @apiParam {string} [phone]  联系方式
  * 
- *  
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /v3/car/applycar
  *   {
@@ -863,27 +851,7 @@ class CarController extends ApiYafControllerAbstract
         $data = $this->get_request_data();
         unset($data["v3/car/applycar"]);
         $ApplyCarM = new ApplyCarModel();
-        /*
-        $loan=$ApplyCarM ->getapply($data['mobile'],$data['contact_name'],$data['carid']);
-        if($loan){
-             $this->send_error(APPLY_LOAN_ERROR);
-        }
-       
-        $data['is_burn']=0;
-        $data['is_strike']=0; 
-        $data['is_soak']=0;
-        $data['brand_name']=1;
-        $data["pay_stages"]=1;
-        $data['post_type']=1;
-        $data['price']='56.5';
-        $data['mileage']='25000'; 
-        $data['age']="1522";
-        $data['maintenance']='good';
-        $data["maintain"]='1';
-        $data['desc']="saasfasld";
-        $data["name"]="jamp";
-        $data['phone']="2435435435";
-        */
+
         $data['created']=time();
         $str=json_encode($data);
         $ApplyCarM->info         =$str;
@@ -901,6 +869,7 @@ class CarController extends ApiYafControllerAbstract
      * @apiDescription 车辆查询接口
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
