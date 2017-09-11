@@ -469,4 +469,20 @@ class Commentv1Model extends PdoDb {
     }
 
 
+    public function getCommentInfo($comment_id){
+
+           $sql = '
+            SELECT * FROM `bibi_comments`
+           
+           ';
+
+           $sql .= ' WHERE comment_id ='.$comment_id;
+
+           $res = $this->query($sql);
+
+           return $res?$res[0]:array();
+
+    }
+
+
 }

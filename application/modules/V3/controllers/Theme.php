@@ -640,7 +640,7 @@ class ThemeController extends ApiYafControllerAbstract {
 
         $UserFocusM= new MyFocusModel();
 
-        $response =  $UserFocusM->getUserFocuss($userId,$data['page']);
+        $response =  $UserFocusM->getUserFocus($userId,$data['page']);
 
         $this->send($response);
 

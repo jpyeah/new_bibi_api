@@ -25,7 +25,7 @@ class MyFocusModel extends PdoDb
     }
 
 
-    public function getUserFocuss($userId,$page=1){
+    public function getUserFocus($userId,$page=1){
 
         $pageSize = 10;
         $number = ($page-1)*$pageSize;
@@ -36,11 +36,8 @@ class MyFocusModel extends PdoDb
             `bibi_friendship` 
             WHERE user_id = '.$userId.'
         ';
-
         $result =$this->query($sqlFocus);
-
         $result = $this->implodeArrayByKey( 'friendship_id', $result);
-
         $sql ='
            SELECT
            t1.id,t1.type,t1.type_id,t1.created_at,t1.user_id,
@@ -95,7 +92,7 @@ class MyFocusModel extends PdoDb
                    break;
                //文章评论
                case 4:
-                   $info = $this->getArticleInfo($type_id);
+                   $info = $this->getFeedInfo($type_id);
                    break;
            }
 
@@ -164,14 +161,21 @@ class MyFocusModel extends PdoDb
 
     }
 
-    public function getArticleInfo($feed_id){
+    public function getFeedInfo($comment_id){
+
+           $CommentM =  new Commentv1Model();
+
+           $comment = $CommentM->getCommentInfo($comment_id);
+
+           $feed_id=$comment['feed_id'];
 
            $FeedM = new Feedv1Model();
 
-           $info = $FeedM->GetFeedInfoById($feed_id);
+           $info = $FeedM->GetFeedInfo($feed_id);
+
+           $info['comment_info']=$comment;
 
            return $info;
-
     }
 
 

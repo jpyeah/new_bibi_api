@@ -680,6 +680,38 @@ class Feedv1Model extends PdoDb
     }
 
 
+    public function GetFeedInfo($feed_id,$userId=0)
+    {
+
+
+        $sql = '
+            SELECT
+            t1.feed_id,t1.feed_type,t1.user_id,t1.grade_id,t1.post_content,t1.post_files,t1.visit_num,t1.comment_num,t1.like_num,t1.collect_num,t1.created,t1.image_url,feed_from,html_url,
+            t2.avatar,t2.nickname 
+            FROM `' . self::$table . '`AS t1
+            LEFT JOIN `bibi_user_profile` AS t2
+            ON t1.user_id = t2.user_id
+            WHERE t1.feed_id = "' . $feed_id . '"
+        ';
+
+
+        $feed = @$this->query($sql)[0];
+
+        if (!$feed) {
+
+            return array();
+        }
+
+        $feed = $this->handlerFeeds($feed,$userId);
+
+        return $feed;
+
+    }
+
+
+
+
+
 
     
 
