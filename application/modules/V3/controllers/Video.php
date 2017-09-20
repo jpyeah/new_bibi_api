@@ -667,12 +667,13 @@ class VideoController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v3/Video/collectlist 视频收藏列表（喜欢的）
-     * @apiName Video  collectdelete
+     * @api {POST} /v3/Video/collectlist 视频收藏列表(喜欢的)
+     * @apiName Video  collectlist
      * @apiGroup Video
      * @apiDescription 视频收藏列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id

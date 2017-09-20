@@ -180,16 +180,14 @@ class CarController extends ApiYafControllerAbstract
         $this->send($response);
     }
 /**
- * @api {POST} /car/province 获取省份
- * @apiName car province 
- * @apiGroup Publish
+ * @api {POST} /car/province 获取省份(查询违章)
+ * @apiName PollingCar province
+ * @apiGroup PollingCar
  * @apiDescription 用户注册
  * @apiPermission anyone
- * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiSampleRequest http://testapi.bibicar.cn
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
- * @apiParam {json} data object
- * @apiUse Data
  * @apiParamExample {json} 请求样例
  *   POST /car/province
  *   {

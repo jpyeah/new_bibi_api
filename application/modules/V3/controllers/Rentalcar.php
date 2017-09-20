@@ -484,7 +484,7 @@ class RentalcarController extends ApiYafControllerAbstract
                     'detail'           => '吡吡汽车租车押金',
                     'out_trade_no'     => $order['order_info']['order_sn'],
                     'total_fee'        => $order['order_info']['total_price']*100, // 单位：分
-                    'notify_url'       => 'http://api.bibicar.cn/v3/rentalcar/wxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+                    'notify_url'       => 'http://testapi.bibicar.cn/v3/rentalcar/wxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
                     // 'sub_openid'        => '当前用户的 openid', // 如果传入sub_openid, 请在实例化Application时, 同时传入$sub_app_id, $sub_merchant_id
                     // ...
                 ];
@@ -507,7 +507,7 @@ class RentalcarController extends ApiYafControllerAbstract
 
             }else{
 
-                $notifyUrl="https://api.bibicar.cn/v3/rentalcar/alinotify";
+                $notifyUrl="https://testapi.bibicar.cn/v3/rentalcar/alinotify";
                 $alipayM=new Alipay();
                 $order_sn=$order['order_info']['order_sn'];
                 $order_amount=$order['order_info']['total_price'];

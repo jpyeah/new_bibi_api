@@ -243,6 +243,12 @@ class UserController extends ApiYafControllerAbstract
         unset( $data['car_tel']);
         unset( $data['car_address']);
 
+
+        unset( $data['car_address_name']);
+        unset( $data['car_address_lat']);
+        unset( $data['car_address_lng']);
+
+
         $nickname = $data['nickname'];
         unset($data['nickname']);
 
@@ -270,22 +276,7 @@ class UserController extends ApiYafControllerAbstract
 
         $device_identifier = $data['device_identifier'];
 
-        /*
-        //同步推正
-        $device_id=Common::shiwan($device_identifier);
-        if($device_id){
-            $key = 'shiwan_callback' . $device_id . '';
-            $callback = RedisDb::getValue($key);
-             $url=urldecode($callback);
-             //RedisDb::delValue($key);
-            if($url){
-                 $html = file_get_contents($url);
-            }
 
-
-
-        }
-        */
         unset($data['device_identifier']);
 
         $userId = $userModel->register($data);

@@ -56,7 +56,6 @@ class Feedv1Model extends PdoDb
     public function GetFeedInfoById($feed_id,$userId=0)
     {
 
-
         $sql = '
             SELECT
             t1.feed_id,t1.feed_type,t1.user_id,t1.grade_id,t1.post_content,t1.post_files,t1.visit_num,t1.comment_num,t1.like_num,t1.collect_num,t1.created,t1.image_url,feed_from,html_url,
@@ -67,9 +66,9 @@ class Feedv1Model extends PdoDb
             WHERE t1.feed_id = "' . $feed_id . '"
         ';
 
-        
         $feed = @$this->query($sql)[0];
-       
+
+
         if (!$feed) {
 
             return array();
@@ -473,6 +472,7 @@ class Feedv1Model extends PdoDb
         $items= array();
 
         foreach ($feeds as $k => $feed) {
+
             $items[$k]=array();
             if ($feed['user_id']) {
 
@@ -519,7 +519,9 @@ class Feedv1Model extends PdoDb
             }
 
 
-                $collectKey = 'collect_'.$userId.'_'.$feed['feed_id'].'';
+
+
+            $collectKey = 'collect_'.$userId.'_'.$feed['feed_id'].'';
 
                 Common::globalLogRecord('collect key', $collectKey);
 
@@ -558,6 +560,8 @@ class Feedv1Model extends PdoDb
         return $items;
     }
 
+
+
     public function getUserCollectFeed($userId){
 
         $pageSize = 10;
@@ -573,7 +577,7 @@ class Feedv1Model extends PdoDb
                 ON t2.user_id = t3.user_id
                 LEFT JOIN `bibi_feeds_collect` AS t4
                 ON t1.feed_id = t4.feed_id
-            WHERE t4.user_id = '.$userId.'
+            WHERE t4.user_id = '.$userId.' AND (t1.feed_type = 3 OR t1.feed_type =4  OR t1.feed_type =6 )
             ORDER BY t4.created DESC
         ';
 
@@ -591,7 +595,7 @@ class Feedv1Model extends PdoDb
             ON t2.user_id = t3.user_id
             LEFT JOIN `bibi_feeds_collect` AS t4
             ON t1.feed_id = t4.feed_id
-            WHERE t4.user_id = '.$userId.'
+            WHERE t4.user_id = '.$userId.' AND (t1.feed_type = 3 OR t1.feed_type =4   OR  t1.feed_type = 6)
             ORDER BY t4.created DESC
         ';
 
@@ -702,10 +706,95 @@ class Feedv1Model extends PdoDb
             return array();
         }
 
-        $feed = $this->handlerFeeds($feed,$userId);
+        $feed = $this->handleFeedOne($feed,$userId);
 
         return $feed;
 
+    }
+
+
+    public function handleFeedOne($feed,$userId = 0){
+
+        $items= array();
+
+
+        if ($feed['user_id']) {
+
+            $items['post_user_info'] = array();
+            $items['post_user_info']['user_id'] = $feed['user_id'];
+            $items['post_user_info']['profile']['avatar'] = $feed['avatar'];
+            $items['post_user_info']['profile']['nickname'] = $feed['nickname'];
+
+        } else {
+
+            $items['post_user_info'] = new stdClass();
+        }
+
+        $items['feed_id'] = $feed['feed_id'];
+        $items['feed_type'] = $feed['feed_type'];
+        $items['post_content'] = $feed['post_content'];
+        $items['comment_num'] = $feed['comment_num'];
+        $items['collect_num'] = $feed['collect_num'];
+        $items['like_num'] = $feed['like_num'];
+        $items['created'] = $feed['created'];
+
+
+        if ($feed['post_files'] && $feed["feed_type"]==1) {
+
+            $images = unserialize($feed['post_files']);
+
+            $postFiles = array();
+
+            foreach ($images as $k => $image) {
+
+                $item = array();
+                $item['file_id'] = $image['hash'];
+                $item['file_url'] = IMAGE_DOMAIN . $image['key'];
+                $item['file_type'] = $image['type'] ? $image['type'] : 0;
+                $postFiles[] = $item;
+            }
+
+            $items['post_files'] = $postFiles;
+
+        }
+        else{
+
+            $items['post_files'] = array();
+        }
+
+
+        $collectKey = 'collect_'.$userId.'_'.$feed['feed_id'].'';
+
+        Common::globalLogRecord('collect key', $collectKey);
+
+
+        $isCollect = RedisDb::getValue($collectKey);
+
+        $items['is_collect']  = $isCollect ? 1 : 2;
+
+        $likeKey= 'like_'.$feed['feed_id'].'_'.$userId;
+
+        Common::globalLogRecord('like key', $likeKey);
+
+
+        $isLike = RedisDb::getValue($likeKey);
+
+        $items['is_like']  = $isLike ? 1 : 2;
+
+
+        if ($feed['image_url']) {
+            $arr=array();
+            $arr=explode(";", $feed["image_url"]);
+
+            $items['image_url'] =$arr[0];
+
+        }
+        else{
+
+            $items['image_url'] = array();
+        }
+
+        return $items;
     }
 
 
@@ -713,7 +802,8 @@ class Feedv1Model extends PdoDb
 
 
 
-    
+
+
 
 
 

@@ -851,6 +851,31 @@ class ArticleController extends ApiYafControllerAbstract
 
     }
 
+    /**
+     * @api {POST} /v3/Article/collectcreate 收藏添加
+     * @apiName Article  collectcreate
+     * @apiGroup Article
+     * @apiDescription 收藏添加
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_identifier device_identifier
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} feed_id feed_id
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/Article/collectcreate
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "page":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
     //收藏添加
     public function collectcreateAction(){
         //添加收藏的文章
@@ -925,6 +950,32 @@ class ArticleController extends ApiYafControllerAbstract
 
     }
 
+    /**
+     * @api {POST} /v3/Article/collectdelete 收藏取消
+     * @apiName Article  collectdelete
+     * @apiGroup Article
+     * @apiDescription 收藏取消
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_identifier device_identifier
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} feed_id feed_id
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/Article/collectdelete
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "page":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+
     //收藏删除
     public function collectdeleteAction(){
 
@@ -954,6 +1005,33 @@ class ArticleController extends ApiYafControllerAbstract
             $this->send($response);
 
     }
+
+    /**
+ * @api {POST} /v3/Article/collectlist 收藏文章列表
+ * @apiName Article  collectlist
+ * @apiGroup Article
+ * @apiDescription 收藏视频
+ * @apiPermission anyone
+ * @apiSampleRequest http://testapi.bibicar.cn
+ * @apiVersion 2.0.0
+ *
+ * @apiParam {string} device_identifier device_identifier
+ * @apiParam {string} session_id session_id
+ * @apiParam {number} page 页码
+ *
+ * @apiParamExample {json} 请求样例
+ *   POST /v3/Video/collectlist
+ *   {
+ *     "data": {
+ *       "device_identifier":"",
+ *       "session_id":"",
+ *       "page":"",
+ *
+ *
+ *     }
+ *   }
+ *
+ */
 
     //收藏列表
      public function collectlistAction(){

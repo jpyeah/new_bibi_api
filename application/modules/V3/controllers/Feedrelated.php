@@ -34,7 +34,6 @@ class FeedrelatedController extends ApiYafControllerAbstract {
         $feeds =$feedrelatedM->getFeeds($data);
 
         $this->send($feeds);
-        
 
     }
 

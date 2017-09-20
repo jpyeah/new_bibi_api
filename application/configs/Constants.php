@@ -112,6 +112,12 @@ define('RENTAL_USER_UPLOAD_ERROR',74005);
 define('RENTAL_USER_HAS_ERROR',74006);
 
 
+define('USER_HAS_SIGN',80001);
+define('DRAW_HAS_NO_NUM',80002);
+define('PRIZE_HAS_CHANGE',80003);
+
+
+
 
 
 //item

@@ -47,28 +47,59 @@ class UserChipsModel extends PdoDb{
 
         $sql .= " AND type = ".$type;
 
-        $this->query($sql);
+        $sql .= " AND chip_num  != 0 ";
 
+        if(@$this->status){
+
+            $sql .= " AND status = ".$this->status;
+        }
+
+
+        $res =  $this->query($sql);
+
+        if($res){
+            $list = $this->handelChip($res);
+        }else{
+            $list['chips']=array();
+            $list["draw_num"]  = 0;
+        }
+        return $list;
     }
 
+    public function  getChipInfo($chip_id){
 
-    /**
-     * ep 统计用户所抽到的碎片
-     */
-    public function getUserChipsGroupBy($userId,$type){
+        $sql = "SELECT * FROM `bibi_user_chips_type` ";
 
-        $sql = "SELECT  id, count(id) as total FROM `bibi_user_chips` ";
-
-        $sql .= " WHERE user_id = ".$userId;
-
-        $sql .= " AND type = ".$type;
-
-        $sql .= "GROUP BY id ";
+        $sql .= " WHERE id = ".$chip_id;
 
         $res = $this->query($sql);
 
-        return $res;
+        return $res ? $res[0]:array();
+
     }
+
+    public function handelChip($chips){
+
+           $draw_num = count($chips);
+
+           if($draw_num == 4){
+
+                $nums =array();
+                foreach($chips as $k){
+                       $nums[]=$k['chip_num'];
+                }
+               $draw_num = min($nums);
+           }else{
+
+               $draw_num = 0;
+           }
+
+           $list['chips']=$chips;
+           $list['draw_num']=$draw_num;
+
+           return $list;
+    }
+
     /**
      * ep 查看抽奖劵
      */
@@ -85,6 +116,24 @@ class UserChipsModel extends PdoDb{
         $res = $this->query($sql);
 
         return $res;
+    }
+
+    /**
+     * ep 查看抽奖劵
+     */
+    public function getUserChipsById($userId,$type,$id){
+
+        $sql = "SELECT * FROM `bibi_user_chips` ";
+
+        $sql .= " WHERE user_id  =  ".$userId;
+
+        $sql .= " AND type = ".$type;
+
+        $sql .= " AND id = ".$id;
+
+        $res = $this->query($sql);
+
+        return $res ? $res[0] :array();
     }
 
     public function updateChipNum($userId,$type,$chip_id, $action='add'){

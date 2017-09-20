@@ -14,11 +14,11 @@ use Payment\Client\Notify;
 class UsercarpactController extends ApiYafControllerAbstract {
 
 
-    //     session_id=session5650660854db1&device_identifier=de762bd50f3e985476cb1fcfdd8886ab
+    //session_id=session5650660854db1&device_identifier=de762bd50f3e985476cb1fcfdd8886ab
     //买家 session_id=session58cb4211e4b2b&device_identifier=df4871c207120a5d73407318477b97b2  user_id = 544;
     //卖家 device_identifier=1d7c030c120f467e58e832cde18a4f4a&session_id=session58df1710ca231  user_id = 389;
     /**
-     * @api {POST} /v3/UserCarPact/checkstatus 查看是否有预约
+     * @api {POST} /v4/UserCarPact/checkstatus 查看是否有预约
      * @apiName UserCarPact checkstatus
      * @apiGroup UserCarPact
      * @apiDescription
@@ -28,10 +28,10 @@ class UsercarpactController extends ApiYafControllerAbstract {
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      * @apiParam {string} car_id  车辆id
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactcreate
+     *   POST /v4/UserCarPact/pactcreate
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -62,7 +62,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $userId = $this->userAuth($data);
 
-        $UserCarPact=new UserCarPactModel;
+        $UserCarPact=new UserCarPactV1Model;
 
         $result = $UserCarPact->getPactbyUser($userId,$data['car_id']);
 
@@ -73,7 +73,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
             $this->send($response);
         }else{
 
-            $CS= new CarSellingModel();
+            $CS= new CarSellingV1Model();
 
             $CarInfo = $CS->GetCarInfoById($data['car_id']);
 
@@ -85,7 +85,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
     }
 
     /**
-     * @api {POST} /v3/usercarpact/updateCarPactStatus 修改车辆预约状态
+     * @api {POST} /v4/usercarpact/updateCarPactStatus 修改车辆预约状态
      * @apiName UserCarPact  updateCarPactStatus
      * @apiGroup UserCarPact
      * @apiDescription
@@ -96,10 +96,10 @@ class UsercarpactController extends ApiYafControllerAbstract {
      * @apiParam {string} session_id session_id
      * @apiParam {string} car_id 车辆id
      * @apiParam {number} is_pacted 1：可预约 2:不可预约
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactcreate
+     *   POST /v4/UserCarPact/pactcreate
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -123,7 +123,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
            $userId = $this->userAuth($data);
 
-           $CS= new CarSellingModel();
+           $CS= new CarSellingV1Model();
 
            $CarInfo = $CS->GetCarInfoById($data['car_id']);
 
@@ -136,7 +136,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
            if($data['is_pacted'] == 1){
 
-           $UserCarPact = new UserCarPactModel();
+           $UserCarPact = new UserCarPactV1Model();
 
            $if_pact=$UserCarPact->SumSellerPact($userId);
 
@@ -158,20 +158,20 @@ class UsercarpactController extends ApiYafControllerAbstract {
     }
 
     /**
-     * @api {POST} /v3/usercarpact/getsellerpactcar 获取可以预约的车辆
+     * @api {POST} /v4/usercarpact/getsellerpactcar 获取可以预约的车辆
      * @apiName UserCarPact getsellerpactcar
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      * @apiParam {string} seller_id
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactcreate
+     *   POST /v4/usercarpact/getsellerpactcar
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -199,7 +199,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $userId = $this->userAuth($data);
 
-        $UserCarPact=new UserCarPactModel();
+        $UserCarPact=new UserCarPactV1Model();
 
         $list=$UserCarPact->getPactCar($userId,$data['seller_id']);
 
@@ -211,7 +211,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
     /**
      *
-     * @api {POST} /v3/UserCarPact/getpactinfo 预约详情
+     * @api {POST} /v4/UserCarPact/getpactinfo 预约详情
      * @apiName UserCarPact getpactinfo
      * @apiGroup UserCarPact
      * @apiDescription
@@ -221,11 +221,11 @@ class UsercarpactController extends ApiYafControllerAbstract {
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      * @apiParam {string} pact_id 预约Id
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactpay
+     *   POST /v4/UserCarPact/pactpay
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -247,11 +247,11 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $userId = $this->userAuth($data);
 
-        $UserCarPact=new UserCarPactModel();
+        $UserCarPact=new UserCarPactV1Model();
 
         $pact_info=$UserCarPact->getPact($data['pact_id']);
 
-        $CS= new CarSellingModel();
+        $CS= new CarSellingV1Model();
 
         $CarInfo = $CS->GetCarInfoById($pact_info['car_id']);
 
@@ -273,7 +273,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $userId = $this->userAuth($data);
 
-        $UserCarPact=new UserCarPactModel();
+        $UserCarPact=new UserCarPactV1Model();
 
         $res=$UserCarPact->SumSellerPact($data['seller_id']);
 
@@ -281,7 +281,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
     }
 
     /**
-     * @api {POST} /v3/UserCarPact/pactcreate 创建预约
+     * @api {POST} /v4/UserCarPact/pactcreate 创建预约
      * @apiName UserCarPact pactcreate
      * @apiGroup UserCarPact
      * @apiDescription
@@ -291,10 +291,10 @@ class UsercarpactController extends ApiYafControllerAbstract {
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      * @apiParam {string} car_id 车辆Id
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactcreate
+     *   POST /v4/UserCarPact/pactcreate
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -322,7 +322,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $userId = $this->userAuth($data);
 
-        $UserCarPact=new UserCarPactModel;
+        $UserCarPact=new UserCarPactV1Model;
 
         $res=$UserCarPact->getPactbyUser($userId,$data['car_id']);
 
@@ -332,7 +332,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
             return;
         }
 
-        $CS= new CarSellingModel();
+        $CS= new CarSellingV1Model();
 
         $CarInfo = $CS->GetCarInfoById($data['car_id']);
 
@@ -373,13 +373,13 @@ class UsercarpactController extends ApiYafControllerAbstract {
     }
     /**
  *
- * @api {POST} /v3/UserCarPact/Pactpay 预约支付
+ * @api {POST} /v4/UserCarPact/Pactpay 预约支付
  * @apiName UserCarPact pactpay
  * @apiGroup UserCarPact
  * @apiDescription
  * @apiPermission anyone
  * @apiSampleRequest http://testapi.bibicar.cn
- * @apiVersion 1.0.0
+ * @apiVersion 2.0.0
  * @apiParam {string} device_identifier device_identifier
  * @apiParam {string} session_id session_id
  * @apiParam {string} pact_id 预约Id
@@ -388,7 +388,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
  *
  *
  * @apiParamExample {json} 请求样例
- *   POST /v3/UserCarPact/pactpay
+ *   POST /v4/UserCarPact/pactpay
  *   {
  *     "data": {
  *       "device_identifier":"",
@@ -420,7 +420,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
         $userId = $this->userAuth($data);
 
 
-        $UserCarPact=new UserCarPactModel();
+        $UserCarPact=new UserCarPactV1Model();
 
         $pact_info=$UserCarPact->getPact($data['pact_id']);
 
@@ -494,13 +494,13 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
     /**
      *
-     * @api {POST} /v3/UserCarPact/Pactpaycancel 支付取消
+     * @api {POST} /v4/UserCarPact/Pactpaycancel 支付取消
      * @apiName UserCarPact pactpaycancel
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
@@ -510,7 +510,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactpay
+     *   POST /v4/UserCarPact/pactpay
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -534,7 +534,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
         $userId = $this->userAuth($data);
 
 
-        $UserCarPact=new UserCarPactModel();
+        $UserCarPact=new UserCarPactV1Model();
 
         $pact_info=$UserCarPact->getPact($data['pact_id']);
 
@@ -561,13 +561,13 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
 
     /**
-     * @api {POST} /v3/UserCarPact/Sellerconfirm 卖家确认预约
+     * @api {POST} /v4/UserCarPact/Sellerconfirm 卖家确认预约
      * @apiName UserCarPact Sellerconfirm
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
@@ -578,7 +578,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
      * @apiParam {string} lng 经度
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactcreate
+     *   POST /v4/UserCarPact/pactcreate
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -610,7 +610,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $userId = $this->userAuth($data);
 
-        $UserCarPact=new UserCarPactModel();
+        $UserCarPact=new UserCarPactV1Model();
 
         $pact_info=$UserCarPact->getPact($data['pact_id']);
 
@@ -638,13 +638,13 @@ class UsercarpactController extends ApiYafControllerAbstract {
     }
 
     /**
-     * @api {POST} /v3/UserCarPact/pactconfirm 确认对方履约
+     * @api {POST} /v4/UserCarPact/pactconfirm 确认对方履约
      * @apiName UserCarPact pactconfirm
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
@@ -656,7 +656,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
      * @apiParam {string} lng 经度
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactconfirm
+     *   POST /v4/UserCarPact/pactconfirm
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -688,7 +688,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $userId = $this->userAuth($data);
 
-        $UserCarPact = new UserCarPactModel();
+        $UserCarPact = new UserCarPactV1Model();
 
         $Pact_Info = $UserCarPact->getPact($data['pact_id']);
 
@@ -815,7 +815,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         if($result['result_code']=="SUCCESS"){
 
-            $UserCarPact=new UserCarPactModel();
+            $UserCarPact=new UserCarPactV1Model();
             $pact_info=$UserCarPact->getPactInfoByPactNo($result['out_trade_no']);
 
             if( $pact_info['status'] == 0 ){
@@ -834,7 +834,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         }else{
 
-            $UserCarPact=new UserCarPactModel();
+            $UserCarPact=new UserCarPactV1Model();
             $pact_info=$UserCarPact->getPactInfoByPactNo($result['out_trade_no']);
 
             if( $pact_info['status'] == 0 ){
@@ -868,7 +868,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
             if($data['trade_status'] == "TRADE_SUCCESS"){
 
-                $UserCarPact=new UserCarPactModel();
+                $UserCarPact=new UserCarPactV1Model();
                 $pact_info=$UserCarPact->getPactInfoByPactNo($data['out_trade_no']);
 
                 if($pact_info['status'] == 0 ){
@@ -882,7 +882,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
             }else if($data['trade_status'] == "TRADE_CLOSED"){
 
 
-                $UserCarPact=new UserCarPactModel();
+                $UserCarPact=new UserCarPactV1Model();
                 $pact_info=$UserCarPact->getPactInfoByPactNo($data['out_trade_no']);
 
                 if($pact_info['status'] == 0 ){
@@ -931,13 +931,13 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
 
     /**
-     * @api {POST} /v3/UserCarPact/withdraw  卖家支付预约
+     * @api {POST} /v4/UserCarPact/withdraw  卖家支付预约
      * @apiName UserCarPact withdraw
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
@@ -946,7 +946,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactconfirm
+     *   POST /v4/UserCarPact/pactconfirm
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -1204,15 +1204,15 @@ class UsercarpactController extends ApiYafControllerAbstract {
         }
 
     }
-
+    
     /**
-     * @api {POST} /v3/UserCarPact/buyerrefund 买家退款
+     * @api {POST} /v4/UserCarPact/buyerrefund 买家退款
      * @apiName UserCarPact buyerrefund
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
@@ -1220,7 +1220,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactconfirm
+     *   POST /v4/UserCarPact/pactconfirm
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -1242,7 +1242,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
        $userId = $this->userAuth($data);
 
-       $UserCarPact = new UserCarPactModel();
+       $UserCarPact = new UserCarPactV1Model();
 
        $Pact_Info = $UserCarPact->getPact($data['pact_id']);
 
@@ -1308,20 +1308,20 @@ class UsercarpactController extends ApiYafControllerAbstract {
    }
 
     /**
-     * @api {POST} /v3/UserCarPact/sellerrefund 卖家退款
+     * @api {POST} /v4/UserCarPact/sellerrefund 卖家退款
      * @apiName UserCarPact sellerrefund
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactconfirm
+     *   POST /v4/UserCarPact/pactconfirm
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -1345,7 +1345,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $UserCarPactSeller = new UserCarPactSellerModel();
 
-        $UserCarPact = new UserCarPactModel();
+        $UserCarPact = new UserCarPactV1Model();
 
         $Pact_Info = $UserCarPactSeller->getSellerPactList($userId);
 
@@ -1512,20 +1512,20 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
 
     /**
-     * @api {POST} /v3/UserCarPact/sellerpactlist 卖家预约金列表
+     * @api {POST} /v4/UserCarPact/sellerpactlist 卖家预约金列表
      * @apiName UserCarPact SellerPactList
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactconfirm
+     *   POST /v4/UserCarPact/pactconfirm
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -1555,20 +1555,20 @@ class UsercarpactController extends ApiYafControllerAbstract {
     }
 
     /**
-     * @api {POST} /v3/UserCarPact/buyerpactlist 买家预约订单列表
+     * @api {POST} /v4/UserCarPact/buyerpactlist 买家预约订单列表
      * @apiName UserCarPact buyerPactList
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactconfirm
+     *   POST /v4/UserCarPact/pactconfirm
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -1590,7 +1590,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
        $userId = $this->userAuth($data);
 
-       $UserCarPact = new UserCarPactModel();
+       $UserCarPact = new UserCarPactV1Model();
 
        $UserCarPact->type = 1;
 
@@ -1602,20 +1602,20 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
 
     /**
-     * @api {POST} /v3/UserCarPact/getusermoney 获取余额
+     * @api {POST} /v4/UserCarPact/getusermoney 获取余额
      * @apiName UserCarPact getusermoney
      * @apiGroup UserCarPact
      * @apiDescription
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/UserCarPact/pactconfirm
+     *   POST /v4/UserCarPact/pactconfirm
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -1649,7 +1649,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
     public function BuyerRefundMoney($pact_id){
 
-        $UserCarPact = new UserCarPactModel();
+        $UserCarPact = new UserCarPactV1Model();
 
         $Pact_Info = $UserCarPact->getPact($pact_id);
 

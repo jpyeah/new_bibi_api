@@ -94,7 +94,6 @@ class FeedModel extends PdoDb
                  ON t6.user_id = t7.user_id
                 ';
 
-
         if ($feedId) {
 
             $sql .= ' WHERE t1.feed_id = ' . $feedId . ' '; //ORDER BY t3.comment_id DESC
@@ -398,8 +397,6 @@ class FeedModel extends PdoDb
 
             return isset($feeds[0]) ? $feeds[0] : array() ;
         }
-
-
 
     }
 

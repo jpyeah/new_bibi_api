@@ -25,17 +25,71 @@ class PollingCarModel extends PdoDb
            return $result ? $result[0] : array();
     }
 
+    public function getReprotBrand($brand_id){
 
-    public function getReportList($userId){
+          $sql = 'SELECT * FROM  `bibi_chedang_brand_list` WHERE brand_id ='.$brand_id;
+
+          $brand_info = $this->query($sql);
+
+          return $brand_info ? $brand_info[0] : array();
+
+    }
 
 
-        $sql = 'SELECT * FROM `bibi_chedang_report` WHERE user_id = '.$userId;
+    public function getReportList($userId,$type=0){
 
-        $sql .= " AND status != 1 ";
+        $pageSize = 10;
+
+        $number = ($this->page-1)*$pageSize;
+
+        $sql = 'SELECT t1.* ,t2.name as brand_name,t2.logo as brand_logo 
+
+        FROM `bibi_chedang_report` AS t1 
+
+        LEFT JOIN `bibi_chedang_brand_list` AS t2 
+         
+        ON t2.brand_id =t1.brand_id 
+
+        WHERE t1.user_id = '.$userId;
+
+        $sql .= " AND t1.status != 1 ";
+
+        if($type){
+
+            $sql .= " AND t1.type = ".$type;
+
+        }
+
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+
+        $sqlCnt = 'SELECT count(t1.id) as total FROM  `bibi_chedang_report` AS t1
+   
+        LEFT JOIN `bibi_chedang_brand_list` AS t2 
+        
+        ON t2.brand_id = t1.brand_id 
+ 
+        WHERE t1.user_id='.$userId;
+
+        $sqlCnt .= " AND t1.status != 1 ";
+
+        if($type){
+
+            $sqlCnt .= " AND t1.type = ".$type;
+
+        }
+
 
         $result  =$this->query($sql);
 
-        return $result ? $result : array();
+        $total  =$this->query($sqlCnt)[0]['total'];
+
+        $count = count($result);
+
+        $list['list'] =$result ;
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] =$total;
+
+        return $list;
 
     }
 

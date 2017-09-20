@@ -134,6 +134,11 @@ class FeedvideoModel extends PdoDb
             $items['post_user_info']['user_id'] = $feed['user_id'];
             $items['post_user_info']['profile']['avatar'] = $feed['avatar'];
             $items['post_user_info']['profile']['nickname'] = $feed['nickname'];
+            $friendShipM = new FriendShipModel();
+
+            $friendShip = $friendShipM->getMyFriendShip($userId, $feed['user_id']);
+
+            $items['post_user_info']['is_friend'] = isset($friendShip['user_id']) ? 1 : 2;
         }
         else{
             $items['post_user_info'] = new stdClass();

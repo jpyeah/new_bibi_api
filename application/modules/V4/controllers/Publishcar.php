@@ -193,6 +193,106 @@ class PublishcarController extends ApiYafControllerAbstract
 
     }
 
+    /**
+     * @api {POST} /v4/Publishcar/list 我的售车
+     * @apiName Car list
+     * @apiGroup Car
+     * @apiDescription 我的售车
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} [brand_id] 品牌id
+     * @apiParam {number} [user_id] 用户id
+     * @apiParam {number} [series_id] 系列id
+     * @apiParam {number} [type] type类型 1：已售出 2:在售 ,3：在售最新＋已出售 4 所有售车；
+     * @apiParam {number} page 页数
+     *
+     * @apiParam {json} data object
+     * @apiUse Data
+     * @apiParamExample {json} 请求样例
+     *   POST /v4/Publishcar/list
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "series_id":"",
+     *       "brand_id":"",
+     *       "user_id":"",
+     *       "series_id":"",
+     *       "page":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function listAction()
+    {
+
+        $this->required_fields = array_merge($this->required_fields, array('session_id'));
+
+        $carM = new CarSellingV1Model();
+
+        $data = $this->get_request_data();
+
+        $page = $data['page'] ? ($data['page']+1) : 1;
+
+        $carM->page = $page;
+
+        $userId = $this->userAuth($data);
+
+        $objId = $this->getAccessId($data, $userId);
+
+
+        $carM->currentUser = $objId;
+
+        if(@$data['brand_id']){
+            $carM->brand_id =  $data['brand_id'];
+        }
+        if(@$data['series_id']){
+            $carM->series_id = $data['series_id'];
+        }
+        if(@$data['type']){
+            if($data['type'] == 1){
+                $carM->verify_status=4;
+            }else if($data['type'] == 2){
+                $carM->verify_status=0;
+            }else if($data['type'] ==3){
+                $carM->pageSize=5;
+                $carM->verify_status=0;
+                $sale=$carM->getUserPublishCar($objId);
+
+                $carM->verify_status=4;
+                $sold=$carM->getUserPublishCar($objId);
+
+                $response['saleing']= $sale;
+                $response['sold']= $sold;
+
+                $this->send($response);
+                return ;
+
+            }else if($data['type'] == 4){
+                $carM->verify_status=1;
+            }
+
+        }
+        $list = $carM->getUserPublishCar($objId);
+        if($userId != $objId){
+            foreach($list["car_list"] as $key => $value){
+                unset($list["car_list"][$key]["car_info"]["vin_no"]);
+                unset($list["car_list"][$key]["car_info"]["engine_no"]);
+                unset($list["car_list"][$key]["car_info"]["vin_file"]);
+            }
+        }
+        $response = $list;
+
+        $this->send($response);
+    }
+
+
 
 
 

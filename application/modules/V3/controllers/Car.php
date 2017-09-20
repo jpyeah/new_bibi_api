@@ -862,33 +862,6 @@ class CarController extends ApiYafControllerAbstract
     
     }
 
-    /**
-     * @api {POST} /v3/car/PollingCar  车辆检修查询
-     * @apiName PollingCar  car
-     * @apiGroup Car
-     * @apiDescription 车辆查询接口
-     * @apiPermission anyone
-     * @apiSampleRequest http://www.bibicar.cn:8090
-     * @apiVersion 1.0.0
-     *
-     * @apiParam {string} [device_identifier] 设备唯一标识
-     * @apiParam {string} [session_id] session_id
-     *
-     *
-     * @apiParamExample {json} 请求样例
-     *   POST /v3/car/applycar
-     *   {
-     *     "data": {
-     *       "device_identifier":"",
-     *       "session_id":"",
-     *
-     *
-     *     }
-     *   }
-     *
-     */
-
-
     public function PollingCarAction(){
 
         $this->required_fields = array_merge($this->required_fields, array());

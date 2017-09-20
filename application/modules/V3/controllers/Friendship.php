@@ -68,6 +68,15 @@ class FriendshipController extends ApiYafControllerAbstract {
             $friendShipM->saveProperties();
             $friendShipM->CreateM();
 
+            //我的关注数据myfocus
+            $UserFocusM= new MyFocusModel();
+            $UserFocusM->created_at =time();
+            $UserFocusM->type = 3;
+            $UserFocusM->type_id = $data['user_id'];
+            $UserFocusM->user_id =  $userId;
+            $UserFocusM->saveProperties();
+            $id = $UserFocusM->CreateM();
+
             /*
             $mh = new MessageHelper;
             $userM = new ProfileModel();

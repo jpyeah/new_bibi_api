@@ -366,6 +366,15 @@ class PublishcarController extends ApiYafControllerAbstract
 
             $response['car_info'] = $carInfo;
 
+            //我的关注数据myfocus
+            $UserFocusM= new MyFocusModel();
+            $UserFocusM->created_at =time();
+            $UserFocusM->type = 1;
+            $UserFocusM->type_id = $properties['hash'];
+            $UserFocusM->user_id =  $userId;
+            $UserFocusM->saveProperties();
+            $id = $UserFocusM->CreateM();
+
             $mh = new MessageHelper;
             $toId=389;
             $content = '用户:'.$userId.'上传了车，赶紧去审核吧';
@@ -463,6 +472,14 @@ class PublishcarController extends ApiYafControllerAbstract
 
             $response['car_info'] = $carInfo;
 
+            //我的关注数据myfocus
+            $UserFocusM= new MyFocusModel();
+            $UserFocusM->created_at =time();
+            $UserFocusM->type = 1;
+            $UserFocusM->type_id = $properties['hash'];
+            $UserFocusM->user_id =  $userId;
+            $UserFocusM->saveProperties();
+            $id = $UserFocusM->CreateM();
 
             $mh = new MessageHelper;
             $toId=389;

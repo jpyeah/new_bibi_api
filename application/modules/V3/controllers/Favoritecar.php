@@ -93,7 +93,7 @@ class FavoritecarController extends ApiYafControllerAbstract{
 
             $key = 'favorite_'.$userId.'_'.$data['car_id'].'';
 
-            RedisDb::setValue($key,1);
+            RedisDb::setValue($key,$id);
 
             $this->send($response);
         }
@@ -143,7 +143,6 @@ class FavoritecarController extends ApiYafControllerAbstract{
 
         $key = 'favorite_'.$favCarM->user_id.'_'.$favCarM->car_id.'';
 
-
         $favId = RedisDb::getValue($key);
         $favCarM->favorite_id = $favId;
         $favCarM->delete();
@@ -187,7 +186,7 @@ class FavoritecarController extends ApiYafControllerAbstract{
 
         $this->required_fields = array_merge($this->required_fields,array('session_id','page'));
 
-        $carM = new CarSellingModel();
+        $carM = new CarSellingV1Model();
 
         $data = $this->get_request_data();
 

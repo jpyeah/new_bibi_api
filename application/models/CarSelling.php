@@ -185,7 +185,6 @@ class CarSellingModel extends PdoDb
         //print_r($car);exit;
         //可优化查询
 
-
         $favkey = 'favorite_'.$userId.'_'.$car['car_id'].'';
         Common::globalLogRecord('favorite key', $favkey);
         $favId = RedisDb::getValue($favkey);

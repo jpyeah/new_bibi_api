@@ -92,6 +92,7 @@ class ThemeUserModel extends PdoDb
             $user[$k]['friend_num'] = $friendShipM->friendNumCnt();
 
             $user[$k]['fans_num']   = $friendShipM->fansNumCnt();
+
             unset($user[$k]['theme_id']);
 
         }

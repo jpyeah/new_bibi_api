@@ -338,3 +338,31 @@ Stack trace:
 [11-Sep-2017 16:06:37 PRC] PHP Fatal error:  Call to undefined method MyFocusModel::getArticleInfo() in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 95
 [11-Sep-2017 16:07:15 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [11-Sep-2017 16:09:23 PRC] PHP Notice:  Undefined index: feed_id in /usr/local/var/www/bibi-api/application/models/MyFocus.php on line 170
+[11-Sep-2017 18:02:57 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[11-Sep-2017 18:31:05 PRC] PHP Fatal error:  Call to undefined method UserChipsModel::getUserChipsGroupBy() in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 78
+[11-Sep-2017 18:44:44 PRC] PHP Notice:  Undefined index: chip_id in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 176
+[11-Sep-2017 18:45:44 PRC] PHP Notice:  Undefined offset: 0 in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 175
+[11-Sep-2017 18:45:44 PRC] PHP Warning:  Invalid argument supplied for foreach() in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 175
+[14-Sep-2017 09:53:31 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Sep-2017 09:54:24 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Sep-2017 13:49:10 PRC] PHP Notice:  Undefined offset: 0 in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 107
+[14-Sep-2017 18:02:36 PRC] PHP Notice:  Undefined index: reprot_sn in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 978
+[14-Sep-2017 18:02:36 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Sep-2017 18:02:55 PRC] PHP Notice:  Undefined index: reprot_sn in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 978
+[14-Sep-2017 18:02:55 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Sep-2017 18:03:27 PRC] PHP Notice:  Undefined index: reprot_sn in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 978
+[14-Sep-2017 18:03:27 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[14-Sep-2017 18:03:58 PRC] PHP Notice:  Undefined index: reprot_sn in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 978
+[15-Sep-2017 13:19:04 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[15-Sep-2017 13:20:33 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[15-Sep-2017 13:28:21 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[20-Sep-2017 15:46:06 PRC] PHP Warning:  file_get_contents(http://120.24.3.137/outapi/v1/insures?secret_key=de199b8e2193fa41252b80db8d5d83fb&amp;partner_number=ip46a71&amp;vin=LSVET69F1B2444483): failed to open stream: HTTP request failed! HTTP/1.1 502 Bad Gateway
+ in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 831
+[20-Sep-2017 15:47:05 PRC] PHP Warning:  file_get_contents(http://120.24.3.137/outapi/v1/insures?secret_key=de199b8e2193fa41252b80db8d5d83fb&amp;partner_number=ip46a71&amp;s_type=1&amp;vin=LSVET69F1B2444483): failed to open stream: HTTP request failed! HTTP/1.1 502 Bad Gateway
+ in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 831
+[20-Sep-2017 15:48:35 PRC] PHP Warning:  file_get_contents(http://120.24.3.137/outapi/v1/get_report?secret_key=de199b8e2193fa41252b80db8d5d83fb&amp;partner_number=ip46a71&amp;apply_id=15900): failed to open stream: HTTP request failed! HTTP/1.1 502 Bad Gateway
+ in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 833
+[20-Sep-2017 16:40:49 PRC] PHP Notice:  Undefined index: min in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 434
+[20-Sep-2017 16:40:49 PRC] PHP Notice:  Undefined index: max in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 435
+[20-Sep-2017 16:41:21 PRC] PHP Notice:  Undefined index: min in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 434
+[20-Sep-2017 16:41:21 PRC] PHP Notice:  Undefined index: max in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 435

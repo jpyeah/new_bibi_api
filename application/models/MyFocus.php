@@ -31,13 +31,14 @@ class MyFocusModel extends PdoDb
         $number = ($page-1)*$pageSize;
         $sqlFocus = '
             SELECT
-            friendship_id
+            friend_id
             FROM
             `bibi_friendship` 
             WHERE user_id = '.$userId.'
         ';
         $result =$this->query($sqlFocus);
-        $result = $this->implodeArrayByKey( 'friendship_id', $result);
+        $result = $this->implodeArrayByKey( 'friend_id', $result);
+
         $sql ='
            SELECT
            t1.id,t1.type,t1.type_id,t1.created_at,t1.user_id,
@@ -51,7 +52,6 @@ class MyFocusModel extends PdoDb
             COUNT(id) AS total
             FROM `bibi_my_focus`
             ';
-
         $sql .=" WHERE t1.user_id in ($result) ORDER BY `created_at` DESC";
         $sqlNearByCnt.=" WHERE user_id in ($result ) ORDER BY `created_at` DESC";
 
@@ -94,6 +94,10 @@ class MyFocusModel extends PdoDb
                case 4:
                    $info = $this->getFeedInfo($type_id);
                    break;
+               //视频评论
+               case 5:
+                   $info = $this->getVideoInfo($type_id);
+                   break;
            }
 
            return $info;
@@ -104,12 +108,11 @@ class MyFocusModel extends PdoDb
 
         $sql = '
             SELECT
-            car_name,price,hash,files,car_type
+            car_name,price,hash,files,car_type,car_intro
             FROM `bibi_car_selling_list`
             WHERE hash = "' . $hash . '"
         ';
         $car = @$this->query($sql)[0];
-
 
         if (!$car) {
             return array();
@@ -129,9 +132,11 @@ class MyFocusModel extends PdoDb
 
     public function getThemeInfo($theme_id){
 
+        $themeListM=new ThemelistModel();
+
         $sql='
         SELECT 
-        t1.id,t1.theme,t1.title,t1.post_file,t1.sort,t1.is_skip,t1.user_id,
+        t1.id,t1.theme,t1.title,t1.post_file,t1.sort,t1.is_skip,t1.user_id,t1.feed_num,
         t2.avatar,t2.nickname
         FROM
         `bibi_themelist` as t1
@@ -144,6 +149,7 @@ class MyFocusModel extends PdoDb
         if($theme){
             $info=@$theme[0];
             $info["post_file"]="http://img.bibicar.cn/".$info['post_file'];
+            $info["user_num"]=$themeListM->CountThemeUserNum($info['id']);
         }else{
             $info=array();
         }
@@ -165,6 +171,7 @@ class MyFocusModel extends PdoDb
 
            $CommentM =  new Commentv1Model();
 
+
            $comment = $CommentM->getCommentInfo($comment_id);
 
            $feed_id=$comment['feed_id'];
@@ -176,6 +183,25 @@ class MyFocusModel extends PdoDb
            $info['comment_info']=$comment;
 
            return $info;
+    }
+
+
+    public function getVideoInfo($comment_id){
+
+        $CommentM =  new Commentv1Model();
+
+        $comment = $CommentM->getCommentInfo($comment_id);
+
+        $feed_id=$comment['feed_id'];
+
+        $FeedM = new FeedvideoModel();
+
+        $info = $FeedM->GetFeedInfoById($feed_id);
+
+        $info['comment_info']=$comment;
+
+        return $info;
+
     }
 
 

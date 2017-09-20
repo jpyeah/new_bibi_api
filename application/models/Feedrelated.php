@@ -41,7 +41,6 @@ class FeedrelatedModel extends Model {
        
         $feedM=new FeedrelatedModel;
         $options['feed_id']=$data['feed_id'];
-       // $options['page']   =$data['page'];
         $sql='select feed_id,user_id from bibi_feed_related where feed_id='. $options['feed_id'];
         $lists=$feedM->query($sql);
         $arr=array();

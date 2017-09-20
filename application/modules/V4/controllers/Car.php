@@ -176,7 +176,7 @@ class CarController extends ApiYafControllerAbstract
 
 
         $carM = new CarSellingV1Model();
-        $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND (t1.car_type = 0 OR t1.car_type = 0 OR t1.car_type = 2 ) AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
+        $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND (t1.car_type = 0 OR t1.car_type = 1 OR t1.car_type = 2 ) AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
 
         if(@$data['keyword']){
             $carM->keyword = $data['keyword'];
@@ -312,6 +312,51 @@ class CarController extends ApiYafControllerAbstract
 
     }
 
+
+    /**
+     * @api {POST} /v4/car/userFavCars 用户爱车
+     * @apiName user favcars
+     * @apiGroup Car
+     * @apiDescription 用户爱车
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} user_id user_id
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v4/car/userFavCars
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *
+     *     }
+     *   }
+     *
+     */
+
+    public function userFavCarsAction(){
+
+        $this->required_fields = array_merge($this->required_fields, array('session_id'));
+
+        $data = $this->get_request_data();
+
+        $userId = $this->userAuth($data);
+
+        $objId = $this->getAccessId($data,$userId);
+
+        $car = new CarSellingV1Model();
+
+        $car->currentUser = $userId;
+
+        $response['list'] = $car->getUserCars($objId);
+
+        $this->send($response);
+    }
+
     /**
      * @api {POST} /v4/car/carvisithistory 车辆浏览历史
      * @apiName car carvisithistory
@@ -352,6 +397,14 @@ class CarController extends ApiYafControllerAbstract
            $car_list = $carM->getUserVisitCars($userId);
 
            $this->send($car_list);
+    }
+
+    public function testInsertAction(){
+
+
+          $MyfocusM = new MyFocusModel();
+
+
     }
 
 

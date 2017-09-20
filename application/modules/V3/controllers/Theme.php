@@ -234,6 +234,16 @@ class ThemeController extends ApiYafControllerAbstract {
             $themeuserM->created = $time;
             $themeuserM->saveProperties();
             $themeId = $themeuserM->CreateM();
+
+            //我的关注数据myfocus
+            $UserFocusM= new MyFocusModel();
+            $UserFocusM->created_at =time();
+            $UserFocusM->type = 2;
+            $UserFocusM->type_id = $data['theme_id'];
+            $UserFocusM->user_id =  $userId;
+            $UserFocusM->saveProperties();
+            $id = $UserFocusM->CreateM();
+
             $this->send($themeInfo);
         }
     }
@@ -332,7 +342,7 @@ class ThemeController extends ApiYafControllerAbstract {
             $themeuserM= new ThemeUserModel();
             $time = time();
             $themeuserM->user_id = $userId;
-            $themeuserM->theme_id = $data['theme_id'];
+            $themeuserM->theme_id = $themeId;
             $themeuserM->created = $time;
             $themeuserM->saveProperties();
             $themeId = $themeuserM->CreateM();
@@ -517,7 +527,6 @@ class ThemeController extends ApiYafControllerAbstract {
             $response['is_join'] = 0;
         }
         $this->send($response);
-
     }
 
     /**
@@ -536,7 +545,6 @@ class ThemeController extends ApiYafControllerAbstract {
      * @apiSuccess {json} theme_info 话题详情
      *
      */
-
     //话题详情
     public function themeofuserAction(){
 
@@ -622,12 +630,12 @@ class ThemeController extends ApiYafControllerAbstract {
      * @apiParam {string} session_id session_id
      * @apiParam {number} page 页码
      *
-     * @apiSuccess {json} data.type 类型 1:车辆发布 2:加入话题 3:关注用户 4:文章评论
+     * @apiSuccess {json} data.type 类型 1:车辆发布 2:加入话题 3:关注用户 4:文章评论 5:视频评论
      * @apiSuccess {json} data.type_id 类型Id(车辆ID,话题Id,用户Id,文章Id)
      * @apiSuccess {json} data.type_info 详情
      *
      */
-    //我的关注
+    //我的关注 comment.php friendship.php theme.php publishcar.php
     public function MyFocusAction(){
 
         $this->required_fields = array_merge($this->required_fields,array('session_id','page'));
@@ -640,7 +648,11 @@ class ThemeController extends ApiYafControllerAbstract {
 
         $UserFocusM= new MyFocusModel();
 
+        $userM = new UserModel();
+
         $response =  $UserFocusM->getUserFocus($userId,$data['page']);
+
+        $response['recomment_user']= $userM->getRecommentUser( $userId);
 
         $this->send($response);
 
@@ -669,6 +681,44 @@ class ThemeController extends ApiYafControllerAbstract {
         $share['share_img'] = $file_url;
         return $share;
     }
+
+    /**
+     * @api {POST} /v3/theme/alltheme 全部话题
+     * @apiName Theme  alltheme
+     * @apiGroup Theme
+     * @apiDescription 全部话题
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_identifier device_identifier
+     *
+     *
+     */
+
+    public function AllThemeAction(){
+
+        $themeM= new ThemelistModel();
+
+        $result = $themeM->getAlltheme();
+
+        $this->send($result);
+
+    }
+
+
+    public function TestRecommentAction(){
+
+
+        $userM = new UserModel();
+
+        $res = $userM->getRecommentUser(544);
+
+        print_r($res);exit;
+
+        
+    }
+
+
 
 
 }

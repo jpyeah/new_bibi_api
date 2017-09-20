@@ -326,7 +326,7 @@ class FeedThemeModel extends PdoDb
                         ON
                         t1.user_id = t2.user_id
                         WHERE
-                        t1.post_content LIKE "'.$post_content.'%"
+                        t1.post_content LIKE "%'.$post_content.'%"
                         AND t1.feed_type=1
                         ORDER BY t1.feed_id DESC
                         LIMIT ' . $number . ' , ' . $pageSize .'
@@ -342,13 +342,11 @@ class FeedThemeModel extends PdoDb
                         ON
                         t1.user_id = t2.user_id
                         WHERE
-                        t1.post_content LIKE "'.$post_content.'%"
+                        t1.post_content LIKE "%'.$post_content.'%"
                         AND t1.feed_type=1
                         ORDER BY t1.feed_id DESC
                     ';
-
                     $total = $this->query($sqlNearByCnt)[0]['total'];
-
                     $result = @$this->query($sqlNearBy);
                     $result = $this->implodeArrayByKey('feed_id', $result);
 
@@ -356,7 +354,6 @@ class FeedThemeModel extends PdoDb
                         $themeM= new ThemelistModel();
                         $themeM->updatethemefeedNum($this->currentthemeId,$total);
                     }
-
 
                     $sql .= ' WHERE t1.feed_id in (' . $result . ')';
 
@@ -574,6 +571,12 @@ class FeedThemeModel extends PdoDb
             $item['is_like']  = $isLike ? $isLike : 2;
 
             $list[] = $item;
+
+            $friendShipM = new FriendShipModel();
+
+            $friendShip = $friendShipM->getMyFriendShip($userId, $feed['user_id']);
+
+            $item['is_friend'] = isset($friendShip['user_id']) ? 1 : 2;
         }
         return $list;
     }

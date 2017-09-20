@@ -237,6 +237,30 @@ class ThemelistModel extends PdoDb
     }
 
 
+    public function CountThemeUserNum($themeId){
+
+        $sql = 'SELECT count(*) total FROM `bibi_themelist_user`';
+
+        $sql .= ' WHERE theme_id ='.$themeId;
+
+        $result = $this->query($sql);
+
+        return $result ? $result[0]["total"] : 0;
+
+    }
+
+
+    public function getAlltheme(){
+
+
+        $sql = 'SELECT id,theme FROM bibi_themelist WHERE type = 1 AND is_hot =1';
+
+        $result = $this->query($sql);
+
+        return $result;
+    }
+
+
 
 
 }

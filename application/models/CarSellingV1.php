@@ -248,6 +248,24 @@ class CarSellingV1Model extends PdoDb
         unset($car['nickname']);
         unset($car['type']);
 
+        $favkey = 'favorite_'.$userId.'_'.$car['car_id'].'';
+        Common::globalLogRecord('favorite key', $favkey);
+        $favId = RedisDb::getValue($favkey);
+
+
+        $car['is_fav'] = $favId ? 1 : 2;
+        $car['car_time'] = Common::getBeforeTimes($car['created']);
+        //$car['visit_num'] = $car['visit_num'];
+        //
+
+        $likeKey='favoritecarlike_'.$car['car_id'].'_'.$userId.'';
+        Common::globalLogRecord('like key', $likeKey);
+        $isLike = RedisDb::getValue($likeKey);
+
+        $car['is_like']  = $isLike ? 1 : 2;
+
+        $favCarM = null;
+
         return $car;
 
     }
@@ -716,11 +734,21 @@ class CarSellingV1Model extends PdoDb
 
             $likevalue= RedisDb::getValue($key);
 
+
+
             if($likevalue){
                 $items[$k]['is_like']=1;
             }else{
                 $items[$k]['is_like']=2;
             }
+
+            $items[$k]['rank']=$number + $k + 1;
+
+            $rankkey = 'rich_rank_'.$val['user_id'];
+
+            $rankvalue= RedisDb::setValue($rankkey,$items[$k]['rank']);
+
+            $items[$k]['like_num']=$items[$k]['sort'];
 
 
         }
@@ -759,7 +787,37 @@ class CarSellingV1Model extends PdoDb
 
         $res = $this->query($sql);
 
-        return $res;
+        if($res){
+
+            $rankkey = 'rich_rank_'.$res[0]['user_id'];
+
+            $rankvalue= RedisDb::getValue($rankkey);
+
+            if($rankvalue){
+                $res[0]['rank']=$rankvalue;
+
+            }else{
+
+                $res[0]['rank']=0;
+            }
+
+            $key = 'rich_like_'.$res[0]['user_id'].'_'.$userId.'';
+
+            $likevalue= RedisDb::getValue($key);
+
+            if($likevalue){
+                $res[0]['is_like']=1;
+            }else{
+                $res[0]['is_like']=2;
+            }
+
+            $res[0]['like_num']=$res[0]['sort'];
+
+
+
+        }
+
+        return $res ? $res[0] :array();
     }
 
 
@@ -896,8 +954,16 @@ class CarSellingV1Model extends PdoDb
         if(@$this->series_id){
             $sql.= ' AND t1.series_id ='.$this->series_id;
         }
+
         if(@$this->verify_status){
-            $sql.= ' AND t1.verify_status ='.$this->verify_status;
+
+            if($this->verify_status == 1){
+
+                $sql.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.' OR t1.verify_status = 4)';
+
+            }else{
+                $sql.= ' AND t1.verify_status ='.$this->verify_status;
+            }
         }else{
             $sql.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.')';
         }
@@ -918,7 +984,14 @@ class CarSellingV1Model extends PdoDb
         }
 
         if(@$this->verify_status){
-            $sqlCnt.= ' AND t1.verify_status ='.$this->verify_status;
+
+            if($this->verify_status == 1){
+
+                $sqlCnt.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.' OR t1.verify_status = 4)';
+
+            }else{
+                $sqlCnt.= ' AND t1.verify_status ='.$this->verify_status;
+            }
         }else{
             $sqlCnt.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.')';
         }
@@ -993,6 +1066,67 @@ class CarSellingV1Model extends PdoDb
         $total = @$this->query($sqlCnt)[0]['total'];
 
         return $total;
+    }
+
+
+    public function getUserFavoriteCar($userId){
+
+        $pageSize = 10;
+
+        $sql = '
+            SELECT
+                t1.*,
+                t3.avatar,t3.nickname,t3.type
+                FROM `bibi_car_selling_list` AS t1
+                LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+                LEFT JOIN `bibi_favorite_car` AS t4
+                ON t1.hash = t4.car_id
+            WHERE t4.user_id = '.$userId.'
+            ORDER BY t4.created DESC
+        ';
+
+        $number = ($this->page - 1)*$pageSize;
+
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+
+        $sqlCnt = '
+            SELECT
+                count(*) AS total
+            FROM `bibi_car_selling_list` AS t1
+            LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+            LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+            LEFT JOIN `bibi_favorite_car` AS t4
+                ON t1.hash = t4.car_id
+                WHERE t4.user_id = '.$userId.'
+        ';
+
+        $cars = $this->query($sql);
+
+        $items = array();
+
+        foreach($cars as $k => $car){
+
+            $item = $this->handlerCarByList($car);
+            $items[$k]['car_info'] = $item;
+            //$items[$k]['car_users'] = $this->getSameBrandUsers();
+        }
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+        $count = count($items);
+
+        $list['car_list'] = $items;
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] = $total;
+        //$list['number'] = $number;
+
+        return $list;
+
     }
 
 

@@ -187,15 +187,42 @@ class UserModel extends PdoDb {
         
     }
 
+    public function getRecommentUser($userId){
 
-//    public static function userAuth($device_identifier , $user_id, $session_id){
-//
-//        $id = RedisDb::getValue('auth_'.$device_identifier.'_'.$session_id.'');
-//
-//        $result = $id == $user_id ? true : false;
-//
-//        return $result;
-//    }
+        $sql = "SELECT friend_id FROM `bibi_friendship` WHERE  user_id=".$userId;
+
+        $result = $this->query($sql);
+
+        $result = $this->implodeArrayByKey( 'friend_id', $result);
+
+
+        $sqlrecomuser ="SELECT user_id FROM `bibi_feeds`";
+
+        $sqlrecomuser .=" WHERE user_id not in (".$result.") ORDER BY `feed_id` DESC ,`like_num` DESC limit 40";
+
+
+        $recomuser = $this->query($sqlrecomuser);
+
+        $recomuser = $this->implodeArrayByKey( 'user_id', $recomuser);
+
+
+        $sqlrecom ="SELECT user_id FROM `bibi_feeds`";
+
+        $sqlrecom .=" WHERE user_id  in (".$recomuser.") GROUP BY user_id  ORDER BY `user_id` DESC limit 10";
+
+        $data = $this->query($sqlrecom);
+
+        $profileM = new ProfileModel();
+
+        $items=array();
+
+        foreach($data as $k => $val){
+            $items[$k]['user_info']=$profileM->getProfile($val['user_id']);
+            $items[$k]['user_info']['user_id']=$val['user_id'];
+        }
+        return $items;
+
+    }
 
 }
 

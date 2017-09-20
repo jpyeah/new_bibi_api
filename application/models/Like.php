@@ -198,6 +198,8 @@ class LikeModel extends PdoDb {
 
             $list = array();
 
+            $item = array();
+
             foreach($likes as $like){
 
                 $item[] = $like['user_info'];

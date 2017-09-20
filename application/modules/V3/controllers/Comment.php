@@ -99,6 +99,16 @@ class CommentController extends ApiYafControllerAbstract {
         $commentId = $commentM->CreateM();
 
         if($commentId){
+
+            //我的关注数据myfocus
+            $UserFocusM= new MyFocusModel();
+            $UserFocusM->created_at =time();
+            $UserFocusM->type = 4;
+            $UserFocusM->type_id = $commentId;
+            $UserFocusM->user_id =  $userId;
+            $UserFocusM->saveProperties();
+            $id = $UserFocusM->CreateM();
+
              //sort 热度加分
             $userpro=new UserSortModel();
             $active="comment";
