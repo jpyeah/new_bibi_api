@@ -63,7 +63,7 @@ class SessionModel extends PdoDb{
         if(!$user_id){
 
             $table = self::$table;
-            //$sql = "SELECT `user_id` FROM `{$table}` WHERE `session_id` = '{$session_id}' AND `device_identifier` = '{$device_identifier}' ";
+            $sql = "SELECT `user_id` FROM `{$table}` WHERE `session_id` = '{$session_id}' AND `device_identifier` = '{$device_identifier}' ";
             $sql = "SELECT `user_id` FROM `{$table}` WHERE `session_id` = :session_id AND `device_identifier` = :device_identifier ";
             $param = array(':session_id'=>$session_id, ':device_identifier'=>$device_identifier);
             $info = $this->query($sql,$param);
@@ -73,7 +73,6 @@ class SessionModel extends PdoDb{
 
         }
 
-      
 
         return $user_id;
 

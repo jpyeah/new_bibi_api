@@ -115,7 +115,7 @@ class MyFocusModel extends PdoDb
         $car = @$this->query($sql)[0];
 
         if (!$car) {
-            return array();
+            return new stdClass();
         }
 
         $images = unserialize($car['files']);
@@ -125,7 +125,8 @@ class MyFocusModel extends PdoDb
             $car['file_img'] = IMAGE_DOMAIN.$images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
         }
         unset($car['files']);
-        return $car;
+
+        return $car ? $car : new stdClass();
 
     }
 

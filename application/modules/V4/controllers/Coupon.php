@@ -42,9 +42,12 @@ class CouponController extends ApiYafControllerAbstract
         $key = 'user_sign_time_'.$userId;
         $last_sign_time = RedisDb::getValue($key);
         $now_time = time();
-        $time = $now_time-$last_sign_time;
 
-        if($time < 86400){
+        $a_date = date('Y-m-d',$last_sign_time);
+        // 获取今天的 YYYY-MM-DD 格式
+        $b_date = date('Y-m-d');
+        // 使用IF当作字符串判断是否相等
+        if($a_date==$b_date){
             //已签到
             $has_sign=2;
             $this->send_error(USER_HAS_SIGN);
@@ -96,6 +99,7 @@ class CouponController extends ApiYafControllerAbstract
             $properties['chip_num']  = 1;
             $ChipsM->insert($ChipsM->tableName, $properties);
         }
+
 
         $res['has_sign']=$has_sign;
 
@@ -203,6 +207,7 @@ class CouponController extends ApiYafControllerAbstract
                 $res['chips'][$k]['chip_info']=$ChipsM->getChipInfo($val['chip_id']);
             }
         }
+        $res['ward_num'] = $ChipsM->CountWardNum($userId);
 
         $res['has_sign']=$has_sign;
 
@@ -303,7 +308,33 @@ class CouponController extends ApiYafControllerAbstract
             $chip['status']=2;
             $ChipsM->updateByPrimaryKey($ChipsM->tableName,$where,$chip);
             $response['message']="成功";
+//            switch($res['chip_id']){
+//
+//                case 6:
+//                    $reward_money =6999;
+//                    $reward_info ="汽车隐私贴膜";
+//                    break;
+//                case 7:
+//                    $reward_money =3000;
+//                    $reward_info ="豪车租赁优惠卷";
+//                    break;
+//                case 8:
+//                    $reward_money =1000;
+//                    $reward_info ="DOD one新车记录仪";
+//                    break;
+//                case 9:
+//                    $reward_money =100;
+//                    $reward_info ="APC中心保养优惠卷";
+//                    break;
+//                default:
+//                    $reward_money = 50;
+//                    $reward_info  = "流行音乐CD";
+//                    break;
+//            }
+
             //发送短信
+           // Common::sendSMS($data['contact_phone'],array($res['user_id']+10000,$reward_money,$reward_info),"208009");
+
             $this->send($response);
         }
 
@@ -345,7 +376,9 @@ class CouponController extends ApiYafControllerAbstract
         $properties['chip_id']  = $res['yes']['id'];
         $properties['type']  = $res['yes']['type'];
         $properties['chip_num']  = 1;
-        $ChipsM->insert($ChipsM->tableName, $properties);
+        $id = $ChipsM->insert($ChipsM->tableName, $properties);
+
+        $res['id']=$id;
 
         return $res;
 
@@ -409,6 +442,55 @@ class CouponController extends ApiYafControllerAbstract
         $result['id'] = $res['id'];
         $response = $result;
         $this->send($response);
+    }
+
+
+    public function TestSignAction(){
+
+
+        $this->required_fields = array_merge($this->required_fields, array('session_id'));
+
+        $data = $this->get_request_data();
+
+        $userId = $this->userAuth($data);
+
+        $key = 'user_sign_time_'.$userId;
+        $last_sign_time = RedisDb::getValue($key);
+        $now_time = time();
+        $time = $now_time-$last_sign_time;
+
+
+          // RedisDb::setValue($key,$now_time);
+
+
+        $a_date = date('Y-m-d',$last_sign_time);
+        // 获取今天的 YYYY-MM-DD 格式
+        $b_date = date('Y-m-d');
+        // 使用IF当作字符串判断是否相等
+        if($a_date==$b_date){
+            echo "是今".$a_date;
+        }else{
+            echo "不是今".$a_date;
+        }
+
+//        if($time < 86400){
+//            //已签到
+//            $has_sign=2;
+//            $this->send_error(USER_HAS_SIGN);
+//        }else{
+//            $has_sign=1;
+//            RedisDb::setValue($key,$now_time);
+//        }
+
+    }
+
+
+    public function TestSendAction(){
+
+
+        //Common::sendSMS(18823732410,array('zhongjipiao','1','牙刷'),"208009");
+
+
     }
 
 

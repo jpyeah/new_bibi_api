@@ -86,7 +86,7 @@ class PollingCarController extends ApiYafControllerAbstract
 
         $order_sn = $this->createorder_sn();
 
-        $pay_fee =0.01;
+        $pay_fee =25;
 
         if($data['pay_type'] == 2){
 
@@ -102,7 +102,7 @@ class PollingCarController extends ApiYafControllerAbstract
                 'detail'           => '车辆检测报告',
                 'out_trade_no'     => $order_sn,
                 'total_fee'        => $pay_fee *100, // 单位：分
-                'notify_url'       => 'http://testapi.bibicar.cn/v4/pollingcar/pollingwxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+                'notify_url'       => 'http://api.bibicar.cn/v4/pollingcar/pollingwxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
                 // 'sub_openid'        => '当前用户的 openid', // 如果传入sub_openid, 请在实例化Application时, 同时传入$sub_app_id, $sub_merchant_id
                 // ...
             ];
@@ -132,7 +132,7 @@ class PollingCarController extends ApiYafControllerAbstract
 
         }else{
 
-            $notifyUrl="https://testapi.bibicar.cn/v4/pollingcar/pollingalinotify";
+            $notifyUrl="https://api.bibicar.cn/v4/pollingcar/pollingalinotify";
             $alipayM=new Alipay();
             $order_amount=$pay_fee;
             $goods_name='车辆检测报告';
@@ -559,7 +559,7 @@ class PollingCarController extends ApiYafControllerAbstract
                 'detail'           => '车辆出险报告',
                 'out_trade_no'     => $order_sn,
                 'total_fee'        => $pay_fee *100, // 单位：分
-                'notify_url'       => 'http://testapi.bibicar.cn/v4/pollingcar/inswxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+                'notify_url'       => 'http://api.bibicar.cn/v4/pollingcar/inswxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
                 // 'sub_openid'        => '当前用户的 openid', // 如果传入sub_openid, 请在实例化Application时, 同时传入$sub_app_id, $sub_merchant_id
                 // ...
             ];
@@ -589,7 +589,7 @@ class PollingCarController extends ApiYafControllerAbstract
 
         }else{
 
-            $notifyUrl="https://testapi.bibicar.cn/v4/pollingcar/insalinotify";
+            $notifyUrl="https://api.bibicar.cn/v4/pollingcar/insalinotify";
             $alipayM=new Alipay();
             $order_amount=$pay_fee;
             $goods_name='车辆出险报告';
@@ -827,7 +827,7 @@ class PollingCarController extends ApiYafControllerAbstract
 
 
        $url ='http://120.24.3.137/outapi/v1/insures?secret_key='.$secret_key."&partner_number=ip46a71&s_type=1&vin=LSVET69F1B2444483";
-        $url ='http://120.24.3.137/outapi/v1/get_report?secret_key='.$secret_key."&partner_number=ip46a71&apply_id=15900";
+       // $url ='http://120.24.3.137/outapi/v1/get_report?secret_key='.$secret_key."&partner_number=ip46a71&apply_id=15900";
 
 
        $html=file_get_contents($url);

@@ -131,7 +131,7 @@ class RentalcarController extends ApiYafControllerAbstract
             $carInfo['user_info']['profile']['nickname'] . '的' . $carInfo['car_name']
             : $carInfo['car_name'];
 
-        $response['share_url']="http://custom.bibicar.cn/views/detail/rent.html?ident=".$data['device_identifier']."&session=".$data['session_id']."&car_id=".$carId;
+        $response['share_url']="http://share.bibicar.cn/views/detail/rent.html?ident=".$data['device_identifier']."&session=".$data['session_id']."&car_id=".$carId;
 
         $response['share_title'] = $title;
         //http://m.bibicar.cn/post/index?device_identifier='.$data['device_identifier'].'&fcar_id='.$carId.'

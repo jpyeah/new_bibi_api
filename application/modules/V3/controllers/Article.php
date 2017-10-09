@@ -560,14 +560,13 @@ class ArticleController extends ApiYafControllerAbstract
 
                     $visitFeedM->insert($visitFeedM->tableName, $properties);
                 }
-                
-                
                 $title = $FeedInfo['title'];
                 $response['share_title'] = $title;
-                $response['share_url'] = 'http://wap.bibicar.cn/'.$FeedId.'?identity='.base64_encode($data[
-                    "device_identifier"]);
+                $response['share_url'] = 'http://share.bibicar.cn/views/detail/article.html?ident='.$data[
+                    "device_identifier"]."&session=".$data['session_id']."&feed_id=".$FeedId;
                 $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
                 $response['share_img'] = isset($FeedInfo['image_url'][0]) ? $FeedInfo['image_url'][0] : '';
+
                 $this->send($response);
 
     }

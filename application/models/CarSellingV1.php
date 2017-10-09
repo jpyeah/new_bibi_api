@@ -28,7 +28,7 @@ class CarSellingV1Model extends PdoDb
         $sql = '
             SELECT
             t1.*,
-            t3.avatar,t3.nickname,t3.type
+            t3.avatar,t3.nickname,t3.type as user_type
             FROM `' . self::$table . '`
             AS t1
             LEFT JOIN `bibi_user` AS t2
@@ -113,6 +113,8 @@ class CarSellingV1Model extends PdoDb
             unset($car['avatar']);
             $car['user_info']['profile']['nickname']  = $car['nickname'];
             unset($car['nickname']);
+            $car['user_info']['profile']['type']  = $car['user_type'];
+            unset($car['user_type']);
             $car['user_info']['profile']['signature']  = '';
             $car['user_info']['profile']['age']  = 0;
             $car['user_info']['profile']['constellation']  = '';
@@ -146,6 +148,7 @@ class CarSellingV1Model extends PdoDb
 //        unset($car['check_expiration_time']);
 
         $images = unserialize($car['files']);
+
         $car['files'] = array();
         $items1=array();
         $items2=array();
@@ -158,6 +161,7 @@ class CarSellingV1Model extends PdoDb
                 if ($image['hash']) {
 
                     switch ($image['type']) {
+                        case 0:
                         case 1:
                         case 5:
                         case 6:
@@ -307,10 +311,13 @@ class CarSellingV1Model extends PdoDb
             unset($car['avatar']);
             $car['user_info']['profile']['nickname']  = $car['nickname'];
             unset($car['nickname']);
+            $car['user_info']['profile']['type']  = $car['user_type'];
+            unset($car['user_type']);
             $car['user_info']['profile']['signature']  = '';
             $car['user_info']['profile']['age']  = 0;
             $car['user_info']['profile']['constellation']  = '';
             $car['user_info']['profile']['gender']  = 0;
+
         }
         else{
 
@@ -322,7 +329,7 @@ class CarSellingV1Model extends PdoDb
         unset($car['engine_no']);
         unset($car['vin_file']);
       //  unset($car['car_intro']);
-        unset($car['verify_status']);
+      //  unset($car['verify_status']);
         // unset($car['price']);
         unset($car['guide_price']);
 //        unset($car['board_time']);
@@ -349,7 +356,20 @@ class CarSellingV1Model extends PdoDb
         if($car['car_type']==2){
             $car['file_img'] = "http://thirtimg.bibicar.cn/". $images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
         }else{
-            $car['file_img'] = IMAGE_DOMAIN.$images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+            if($images){
+
+//                $car['file_img'] = IMAGE_DOMAIN.$images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+//
+
+                foreach($images as $k => $val ){
+                       if($k == 0){
+                           $car['file_img'] = IMAGE_DOMAIN.$val['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+                           break;
+                       }
+                }
+            }else{
+                $car['file_img'] = "";
+            }
         }
 
         unset($car['id']);
@@ -399,7 +419,7 @@ class CarSellingV1Model extends PdoDb
         $sql = '
                 SELECT
                 t1.*,
-                t3.avatar,t3.nickname,t3.type
+                t3.avatar,t3.nickname,t3.type as user_type
                 FROM `bibi_car_selling_list` AS t1
                 LEFT JOIN `bibi_user` AS t2
                 ON t1.user_id = t2.user_id
@@ -505,7 +525,7 @@ class CarSellingV1Model extends PdoDb
         $sql = '
                 SELECT
                 t1.*,
-                t3.avatar,t3.nickname
+                t3.avatar,t3.nickname,t3.type as user_type
                 FROM `bibi_car_selling_list` AS t1
                 LEFT JOIN `bibi_user` AS t2
                 ON t1.user_id = t2.user_id
@@ -602,17 +622,21 @@ class CarSellingV1Model extends PdoDb
 
     public function getUserCars($userId){
 
+        $pageSize = 10;
+
+        $number = ($this->page-1)*$pageSize;
+
         $sql = '
             SELECT
             t1.*,
-            t3.avatar,t3.nickname,t3.type
+            t3.avatar,t3.nickname,t3.type as user_type
             FROM `' . self::$table . '`
             AS t1
             LEFT JOIN `bibi_user` AS t2
             ON t1.user_id = t2.user_id
             LEFT JOIN `bibi_user_profile` AS t3
             ON t2.user_id = t3.user_id
-            WHERE t1.user_id = "' . $userId . '" limit 0 ,3
+            WHERE t1.user_id = "' . $userId . '" 
         ';
 
         $sqlCnt = '
@@ -624,10 +648,22 @@ class CarSellingV1Model extends PdoDb
             ON t1.user_id = t2.user_id
             LEFT JOIN `bibi_user_profile` AS t3
             ON t2.user_id = t3.user_id
-            WHERE t1.user_id = "' . $userId . '" limit 0 ,3
+            WHERE t1.user_id = "' . $userId . '"
         ';
 
+        if(@$this->car_type){
+
+            $sql .= ' AND car_type = '.$this->car_type;
+
+            $sqlCnt .= ' AND car_type = '.$this->car_type;
+
+        }
+
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+
+
         $cars = $this->query($sql);
+
         $total = $this->query($sqlCnt)['0']['total'];
 
         $price = $this->getUserCarTotalPrice($userId);
@@ -644,9 +680,12 @@ class CarSellingV1Model extends PdoDb
             }
         }
 
+        $count  =count($items);
+
         $result['car_list']=$items;
-        $result['total']=$total;
         $result['total_price']=$price;
+        $result['total']=$total;
+        $result['has_more'] = (($number+$count) < $total) ? 1 : 2;
 
         return $result;
 
@@ -701,7 +740,7 @@ class CarSellingV1Model extends PdoDb
 
         $number = ($this->page-1)*$pageSize;
 
-        if($this->page >5){
+        if($this->page > 5 ){
 
             $list['list'] = array();
             $list['user_info'] = $this->getUserPrice($this->currenuser);
@@ -711,16 +750,17 @@ class CarSellingV1Model extends PdoDb
             return $list;
 
         }
-        $sql =  '
+
+        $sql = '
             SELECT
             sum( t3.CarReferPrice) as total_money,
-            t1.type,t1.user_id,t1.nickname,t1.avatar,t1.sort
-            FROM bibi_user_profile AS t1
-            LEFT JOIN `bibi_car_selling_list` AS t2
+            t2.type,t2.user_id,t2.nickname,t2.avatar,t2.sort
+            FROM bibi_car_selling_list AS t1
+            LEFT JOIN `bibi_user_profile` AS t2
             ON t2.user_id = t1.user_id
             LEFT JOIN `bibi_car_model_detail` AS t3
-            ON t3.model_id = t2.model_id
-            WHERE t1.type = 1
+            ON t3.model_id = t1.model_id
+            WHERE t2.type = 1
             GROUP BY t1.user_id
             ORDER BY total_money DESC 
         ';
@@ -734,6 +774,7 @@ class CarSellingV1Model extends PdoDb
 
             $likevalue= RedisDb::getValue($key);
 
+            $items[$k]['total_money']=$val['total_money']?$val['total_money'] :0;
 
 
             if($likevalue){
@@ -753,14 +794,18 @@ class CarSellingV1Model extends PdoDb
 
         }
 
-        $total =50;
+        $total = 50;
 
         $count = count($items);
+
+        if($count != 10 ){
+            $total = $number+$count;
+        }
 
         $list['list'] = $items;
         $list['user_info'] = $this->getUserPrice($this->currenuser);
         $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
-        $list['total'] = 50;
+        $list['total'] = $total;
 
         return $list;
     }
@@ -773,13 +818,13 @@ class CarSellingV1Model extends PdoDb
            FROM (
             SELECT
             sum( t3.CarReferPrice) as total_money,
-            t1.type,t1.user_id,t1.nickname,t1.avatar
-            FROM bibi_user_profile AS t1
-            LEFT JOIN `bibi_car_selling_list` AS t2
+            t2.type,t2.user_id,t2.nickname,t2.avatar,t2.sort
+            FROM bibi_car_selling_list AS t1
+            LEFT JOIN `bibi_user_profile` AS t2
             ON t2.user_id = t1.user_id
             LEFT JOIN `bibi_car_model_detail` AS t3
-           ON t3.model_id = t2.model_id
-           WHERE t1.type = 1
+            ON t3.model_id = t1.model_id
+            WHERE t2.type = 1
             GROUP BY t1.user_id
             ORDER BY total_money DESC 
            ) as A where A.user_id = '.$userId.'
@@ -813,11 +858,35 @@ class CarSellingV1Model extends PdoDb
 
             $res[0]['like_num']=$res[0]['sort'];
 
+            return $res ? $res[0] :new stdClass();
 
+        }else{
+            $Profile = new ProfileModel();
 
+            $userinfo =$Profile->getProfile($userId);
+
+            $key = 'rich_like_'.$userId.'_'.$userId.'';
+
+            $likevalue= RedisDb::getValue($key);
+
+            if($likevalue){
+                $result['is_like']=1;
+            }else{
+                $result['is_like']=2;
+            }
+            $result['like_num']=$userinfo['sort'];
+
+            $result['total_money']=0;
+            $result['type']= $userinfo['type'];
+            $result['user_id']=$userId;
+            $result['nickname']=$userinfo['nickname'];
+            $result['avatar']=$userinfo['avatar'];
+            $result['nickname']=$userinfo['nickname'];
+            $result['rank']=0;
+
+            return $result;
         }
 
-        return $res ? $res[0] :array();
     }
 
 
@@ -856,7 +925,7 @@ class CarSellingV1Model extends PdoDb
         $sql = '
             SELECT
             t1.*,
-            t3.avatar,t3.nickname,t3.type
+            t3.avatar,t3.nickname,t3.type as user_type
             FROM `' . self::$table . '`
             AS t1
             LEFT JOIN `bibi_user` AS t2
@@ -900,7 +969,7 @@ class CarSellingV1Model extends PdoDb
         $sql = '
             SELECT
                 t1.*,
-                t3.avatar,t3.nickname,t3.type
+                t3.avatar,t3.nickname,t3.type as user_type
                 FROM `bibi_car_selling_list` AS t1
                 LEFT JOIN `bibi_user` AS t2
                 ON t1.user_id = t2.user_id

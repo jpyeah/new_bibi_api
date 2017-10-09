@@ -444,6 +444,12 @@ class FeedThemeModel extends PdoDb
                 $items[$feed['feed_id']]['post_user_info']['profile']['nickname'] = $feed['nickname'];
                 $items[$feed['feed_id']]['post_user_info']['profile']['type'] = $feed['type'];
 
+                $friendShipM = new FriendShipModel();
+
+                $friendShip = $friendShipM->getMyFriendShip($userId, $feed['user_id']);
+
+                $items[$feed['feed_id']]['post_user_info']['is_friend'] = isset($friendShip['user_id']) ? 1 : 2;
+
             } else {
 
                 $items[$feed['feed_id']]['post_user_info'] = new stdClass();
@@ -565,18 +571,14 @@ class FeedThemeModel extends PdoDb
 
             Common::globalLogRecord('like key', $likeKey);
 
-
             $isLike = RedisDb::getValue($likeKey);
 
             $item['is_like']  = $isLike ? $isLike : 2;
 
+
             $list[] = $item;
 
-            $friendShipM = new FriendShipModel();
 
-            $friendShip = $friendShipM->getMyFriendShip($userId, $feed['user_id']);
-
-            $item['is_friend'] = isset($friendShip['user_id']) ? 1 : 2;
         }
         return $list;
     }

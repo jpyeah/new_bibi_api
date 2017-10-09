@@ -168,10 +168,6 @@ class ApiYafControllerAbstract extends Yaf_Controller_Abstract {
         $sess = new SessionModel();
         $result = $sess->Get($data);
 
-        // if($result==544){
-        //     $this->send_error(USER_AUTH_BLACK_LIST);
-        // }
-
         if(!$result){
 
             $this->send_error(USER_AUTH_FAIL);

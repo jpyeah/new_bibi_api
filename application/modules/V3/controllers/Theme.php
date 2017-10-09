@@ -35,26 +35,19 @@ class ThemeController extends ApiYafControllerAbstract {
     //首页
     public function homepageAction(){
 
-        $this->required_fields = array_merge($this->required_fields,array('session_id'));
+       // $this->required_fields = array_merge($this->required_fields,array('session_id'));
         $data = $this->get_request_data();
 
-        if(@$data['session_id']){
+        $sess = new SessionModel();
+        $userId = $sess->Get($data);
 
-            $sess = new SessionModel();
-            $userId = $sess->Get($data);
-        }
-        else{
-
-            $userId = 0;
-        }
         $response =  $this->getNewHomePage($userId);
 
         //1车辆  2 视频 3 文章 4 车行
         //吡吡头条
         $array=array(
             ['img_url' =>'http://ojygvz0ql.bkt.clouddn.com/23.jpg' , 'content'  => '路虎揽胜','type'=> 1, 'type_id'=>'576bb220c300c'],
-            ['img_url' =>'http://ojygvz0ql.bkt.clouddn.com/24.jpg' , 'content'  => '全民星探－尚恒竟然在车上干出这种事','type'=> 2, 'type_id'=>5024 ],
-            ['img_url' =>'http://ojygvz0ql.bkt.clouddn.com/20.jpg' , 'content'  => '震惊！5000块就可以开走的车','type'=> 3, 'type_id'=>5014 ],
+            ['img_url' =>'http://ojygvz0ql.bkt.clouddn.com/20.jpg' , 'content'  => '巨优惠！5000块就可以开走的车','type'=> 3, 'type_id'=>5014 ],
             ['img_url' =>'http://ojygvz0ql.bkt.clouddn.com/1.jpg' , 'content'  => '捷豹车行入驻成功','type'=> 4, 'type_id'=>389 ],
         );
         $response['news'] = $array;
@@ -88,9 +81,7 @@ class ThemeController extends ApiYafControllerAbstract {
 
         $data = $this->get_request_data();
 
-        $sess = new SessionModel();
-
-        $userId = $sess->Get($data);
+        $userId = $this->userAuth($data);
 
         $data['page']  = $data['page'] ? ($data['page']+1) : 1;
 
@@ -106,7 +97,7 @@ class ThemeController extends ApiYafControllerAbstract {
 
         $FeedThemeM = new FeedThemeModel();
 
-        $feeds = $FeedThemeM->getFeeds(0,8,0,$data['page']);
+        $feeds = $FeedThemeM->getFeeds(0,8,$userId,$data['page']);
 
         foreach($feeds["feed_list"] as $k => $val){
 
@@ -159,8 +150,7 @@ class ThemeController extends ApiYafControllerAbstract {
 
         $data = $this->get_request_data();
 
-        $sess = new SessionModel();
-        $userId = $sess->Get($data);
+        $userId = $this->userAuth($data);
 
         $data['page']  = $data['page'] ? ($data['page']+1) : 1;
 

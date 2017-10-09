@@ -85,14 +85,6 @@ class LikeController extends ApiYafControllerAbstract {
             $id = $likeM->CreateM();
 
             if($id){
-                
-                //sort 热度加分
-                $userpro=new UserSortModel();
-                $active="like";
-                $type_id=$data['feed_id'];
-                $fromId=$userId;
-                $toId=$toId;
-                $result=$userpro->updateSortByKey($active,$type_id,$fromId,$toId);
 
                 $feedM->updateLikeNum($data['feed_id']);
 

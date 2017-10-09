@@ -366,3 +366,11 @@ Stack trace:
 [20-Sep-2017 16:40:49 PRC] PHP Notice:  Undefined index: max in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 435
 [20-Sep-2017 16:41:21 PRC] PHP Notice:  Undefined index: min in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 434
 [20-Sep-2017 16:41:21 PRC] PHP Notice:  Undefined index: max in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Coupon.php on line 435
+[23-Sep-2017 13:06:02 PRC] PHP Warning:  file_get_contents(http://120.24.3.137/outapi/v1/get_report?secret_key=de199b8e2193fa41252b80db8d5d83fb&amp;partner_number=ip46a71&amp;apply_id=15900): failed to open stream: HTTP request failed! HTTP/1.1 502 Bad Gateway
+ in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 833
+[23-Sep-2017 13:07:03 PRC] PHP Warning:  file_get_contents(http://120.24.3.137/outapi/v1/get_report?secret_key=de199b8e2193fa41252b80db8d5d83fb&amp;partner_number=ip46a71&amp;apply_id=15900): failed to open stream: HTTP request failed! HTTP/1.1 502 Bad Gateway
+ in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 833
+[23-Sep-2017 13:07:21 PRC] PHP Warning:  file_get_contents(http://120.24.3.137/outapi/v1/insures?secret_key=de199b8e2193fa41252b80db8d5d83fb&amp;partner_number=ip46a71&amp;s_type=1&amp;vin=LSVET69F1B2444483): failed to open stream: HTTP request failed! HTTP/1.1 502 Bad Gateway
+ in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 833
+[23-Sep-2017 13:07:22 PRC] PHP Warning:  file_get_contents(http://120.24.3.137/outapi/v1/insures?secret_key=de199b8e2193fa41252b80db8d5d83fb&amp;partner_number=ip46a71&amp;s_type=1&amp;vin=LSVET69F1B2444483): failed to open stream: HTTP request failed! HTTP/1.1 502 Bad Gateway
+ in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 833

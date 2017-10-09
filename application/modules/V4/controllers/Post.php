@@ -52,7 +52,7 @@ class PostController extends ApiYafControllerAbstract {
 
         $feedM->currentUser = $userId;
 
-        $feed = $feedM->GetFeedInfo($data['feed_id']);
+        $feed = $feedM->GetFeedInfo($data['feed_id'],$userId);
 
 
         $likeM = new LikeModel();
@@ -66,8 +66,11 @@ class PostController extends ApiYafControllerAbstract {
 
         $response['feed_info'] = $feed;
 
+        // http://share.bibicar.cn/views/detail/feed.html?ident=459d80f0c3046739584c2af6940416b7&session=session59c89139c4090&feed_id=6193
+
         $response['share_title'] = $feed['post_user_info']['profile']['nickname'] . '的车友圈';
-        $response['share_url'] = 'http://wap.bibicar.cn/circle/'.$data['feed_id'].'?identity='.base64_encode($data['device_identifier']);
+       // $response['share_url'] = 'http://wap.bibicar.cn/circle/'.$data['feed_id'].'?identity='.base64_encode($data['device_identifier']);
+        $response['share_url'] = 'http://share.bibicar.cn/views/detail/feed.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&feed_id='.$data['feed_id'];
         //$response['share_url'] = 'http://wx.bibicar.cn/post/index/feed_id/'.$data['feed_id'].'';
 
         $response['share_txt'] = '更多精彩内容尽在bibi,期待您的加入!';

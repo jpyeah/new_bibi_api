@@ -101,8 +101,8 @@ class CarController extends ApiYafControllerAbstract
             : $carInfo['car_name'];
 
         $response['share_title'] = $title;
-        //http://m.bibicar.cn/post/index?device_identifier='.$data['device_identifier'].'&fcar_id='.$carId.'
-        $response['share_url'] = 'http://wap.bibicar.cn/car/'.$carId.'?identity='.base64_encode($data['device_identifier']);
+        $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id='.$carId;
+
         $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
         $response['share_img'] = isset($carInfo['files']["type1"]) ? $carInfo['files']["type1"][0]['file_url'] : '';
 
@@ -325,6 +325,8 @@ class CarController extends ApiYafControllerAbstract
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
      * @apiParam {number} user_id user_id
+     * @apiParam {number} page 页码
+     *
      *
      * @apiParamExample {json} 请求样例
      *   POST /v4/car/userFavCars
@@ -340,7 +342,7 @@ class CarController extends ApiYafControllerAbstract
 
     public function userFavCarsAction(){
 
-        $this->required_fields = array_merge($this->required_fields, array('session_id'));
+        $this->required_fields = array_merge($this->required_fields, array('session_id','page'));
 
         $data = $this->get_request_data();
 
@@ -351,6 +353,10 @@ class CarController extends ApiYafControllerAbstract
         $car = new CarSellingV1Model();
 
         $car->currentUser = $userId;
+
+        $car->car_type = 3;
+
+        $car->page = $data['page'] ? $data['page'] + 1 : 1;
 
         $response['list'] = $car->getUserCars($objId);
 

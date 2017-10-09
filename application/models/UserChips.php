@@ -156,5 +156,23 @@ class UserChipsModel extends PdoDb{
     }
 
 
+    public function CountWardNum($userId){
+
+
+        $sql ='
+              SELECT count(*) as total 
+              FROM `bibi_user_chips` WHERE
+              user_id = '.$userId.' AND type = 2
+        ';
+
+        $res = $this->query($sql);
+
+        return $res ? $res[0]['total'] :0;
+
+
+
+    }
+
+
 
 }

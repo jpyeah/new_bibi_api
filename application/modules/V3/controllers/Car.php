@@ -37,6 +37,7 @@ class CarController extends ApiYafControllerAbstract
  * @apiParam {number} [model_id] 车型id
  * @apiParam {string} [vin_no]   车架号
  * @apiParam {string} [vin_file] 驾驶证照片
+ * @apiParam {string} [car_no]  车牌号
  * @apiParam {string} [file_id] 车辆照片id
  * @apiParam {string} [file_type] 车辆照片类型 (1:外观 2:中控内饰 3:发动机及结构 4:更多细节)
  *
@@ -63,7 +64,7 @@ class CarController extends ApiYafControllerAbstract
             $this->required_fields,
             array(
                 'session_id',
-                'car_no',
+                //'car_no',
                 'brand_id',
                 //'city_id',
                 'series_id',
@@ -78,6 +79,7 @@ class CarController extends ApiYafControllerAbstract
         $userId = $this->userAuth($data);
 
         unset($data["v3/car/create"]);
+        unset($data['action']);
 
         if (!json_decode($data['files_id']) || !json_decode($data['files_type'])){
 

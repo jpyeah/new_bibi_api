@@ -289,6 +289,12 @@ class PublishcarController extends ApiYafControllerAbstract
         }
         $response = $list;
 
+        $friendShipM = new FriendShipModel();
+
+        $friendShip = $friendShipM->getMyFriendShip($userId, $objId);
+
+        $response['is_friend'] = isset($friendShip['user_id']) ? 1 : 2;
+
         $this->send($response);
     }
 

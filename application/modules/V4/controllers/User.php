@@ -73,7 +73,7 @@ class UserController extends ApiYafControllerAbstract
 
         $feedM = new FeedModel();
 
-        $response['feed_num'] = $feedM->getPublishedFeedTotal($data['user_id']);
+        $response['feed_num'] = $feedM->getPublishedFeedTotal(@$data['user_id']);
 
         $this->send($response);
 

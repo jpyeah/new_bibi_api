@@ -857,6 +857,8 @@ class CarSellingModel extends PdoDb
 
         $sql = 'DELETE FROM `bibi_car_selling_list` WHERE `user_id` = '.$userId.' AND `hash`="'.$carId.'"';
 
+        print_r($sql);exit;
+
         $this->execute($sql);
 
     }
