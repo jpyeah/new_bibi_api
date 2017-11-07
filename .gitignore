@@ -7,14 +7,10 @@
 
 ## Directory-based project format:
 .idea/
-application/log
+application/log/
 application/vendor
 application/static/
-json
 conf
-application.ini
-bibi.sql
-application1.ini
 # if you remove the above rule, at least ignore the following:
 
 # User-specific stuff:
