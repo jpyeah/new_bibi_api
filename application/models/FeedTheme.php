@@ -372,7 +372,7 @@ class FeedThemeModel extends PdoDb
                     break;
                 case 8:
 
-                    $times = strtotime('-7 days');
+                    $times = strtotime('-30 days');
                     //本周最热
                     $sqlLatest = '
                         SELECT

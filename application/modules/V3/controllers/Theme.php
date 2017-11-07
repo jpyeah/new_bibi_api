@@ -77,11 +77,19 @@ class ThemeController extends ApiYafControllerAbstract {
     //大厅
     public  function themehomeAction(){
 
-        $this->required_fields = array_merge($this->required_fields,array('session_id','page'));
+        $this->required_fields = array_merge($this->required_fields,array('page'));
 
         $data = $this->get_request_data();
 
-        $userId = $this->userAuth($data);
+        if(@$data['session_id']){
+
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }
+        else{
+
+            $userId = 0;
+        }
 
         $data['page']  = $data['page'] ? ($data['page']+1) : 1;
 
@@ -150,7 +158,15 @@ class ThemeController extends ApiYafControllerAbstract {
 
         $data = $this->get_request_data();
 
-        $userId = $this->userAuth($data);
+        if(@$data['session_id']){
+
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }
+        else{
+
+            $userId = 0;
+        }
 
         $data['page']  = $data['page'] ? ($data['page']+1) : 1;
 
@@ -224,6 +240,8 @@ class ThemeController extends ApiYafControllerAbstract {
             $themeuserM->created = $time;
             $themeuserM->saveProperties();
             $themeId = $themeuserM->CreateM();
+
+            $themelistM->updatethemeNum($data['theme_id']);
 
             //我的关注数据myfocus
             $UserFocusM= new MyFocusModel();
@@ -327,6 +345,9 @@ class ThemeController extends ApiYafControllerAbstract {
             $themeM->saveProperties();
             $themeId = $themeM->CreateM();
             $themeInfo = $themeM->gettheme($themeId);
+
+            $themeM->updatethemeNum($themeId);
+
 
             //加入自己创建话题中
             $themeuserM= new ThemeUserModel();
@@ -496,6 +517,7 @@ class ThemeController extends ApiYafControllerAbstract {
         $theme= $themeM->getTheme($data['theme_id']);
         $feedM->currentUser = $userId;
         $feedM->currenttheme= $theme["theme"];
+        $feedM->currentthemeId= $data['theme_id'];
         if(@$data['tag']){
             $feedM->themeType = $data['tag'];
         }
@@ -581,7 +603,7 @@ class ThemeController extends ApiYafControllerAbstract {
         //车辆列表
         $jsonData = require APPPATH .'/configs/JsonData.php';
         $carM = new CarSellingV1Model();
-        $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND t1.car_type <> 3 AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
+        $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND ( t1.car_type = 0 OR t1.car_type = 1 ) AND (t1.verify_status = 2 OR t1.verify_status = 11 ) ';
         $carM->where = $where;
         $carM->order = $jsonData['order_info'][0];
         $carM->page = 1;

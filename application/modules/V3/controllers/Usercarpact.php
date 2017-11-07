@@ -362,8 +362,6 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $info=$UserCarPact->initProfile($PactInfo);
 
-       // print_r($info);exit;
-
         $response['pact_info'] = $UserCarPact->getPactInfoByPactNo($PactInfo['pact_no']);
         $response['car_info']   =$CarInfo;
 
@@ -985,7 +983,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
                'body'             => '吡吡汽车预约支付服务',
                'detail'           => '吡吡汽车预约支付服务',
                'out_trade_no'     =>  $out_trade_no,
-               'total_fee'        => $money, // 单位：分
+               'total_fee'        => $money*100, // 单位：分
                'notify_url'       => 'http://api.bibicar.cn/v3/usercarpact/withdrawwxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
            ];
            $order = new Order($attributes);
@@ -1387,7 +1385,9 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
                         $refundNo      = time();
 
-                        $result = $payment->refund($orderNo, $refundNo, $pact['money']); // 总金额 100 退款 100，操作员：商户号
+                        $result = $payment->refund($orderNo, $refundNo, $pact['money']*100); // 总金额 100 退款 100，操作员：商户号
+
+                       // print_r($result);exit;
 
                         //  $result = $payment->refundByTransactionId($transactionId, $refundNo,$pact['money']); // 总金额 100 退款 100，操作员：商户号
 

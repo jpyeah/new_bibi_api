@@ -374,3 +374,41 @@ Stack trace:
  in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 833
 [23-Sep-2017 13:07:22 PRC] PHP Warning:  file_get_contents(http://120.24.3.137/outapi/v1/insures?secret_key=de199b8e2193fa41252b80db8d5d83fb&amp;partner_number=ip46a71&amp;s_type=1&amp;vin=LSVET69F1B2444483): failed to open stream: HTTP request failed! HTTP/1.1 502 Bad Gateway
  in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Pollingcar.php on line 833
+[19-Oct-2017 13:51:45 PRC] PHP Parse error:  syntax error, unexpected '$this' (T_VARIABLE) in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 439
+[19-Oct-2017 13:51:57 PRC] PHP Parse error:  syntax error, unexpected '$this' (T_VARIABLE) in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 438
+[19-Oct-2017 13:54:50 PRC] PHP Fatal error:  Call to undefined method CarController::implodeArrayByKey() in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 436
+[19-Oct-2017 13:55:13 PRC] PHP Notice:  Undefined index: _id in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 450
+[19-Oct-2017 13:55:13 PRC] PHP Notice:  Undefined index: _id in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 450
+[19-Oct-2017 13:58:08 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:08 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:58:41 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 442
+[19-Oct-2017 13:59:33 PRC] PHP Notice:  Undefined index: source in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 441
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[19-Oct-2017 14:01:04 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 461
+[06-Nov-2017 10:47:52 PRC] PHP Parse error:  syntax error, unexpected '}' in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 486
+[06-Nov-2017 11:59:46 PRC] PHP Notice:  Undefined variable: items in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 504
+[06-Nov-2017 16:17:36 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[06-Nov-2017 16:18:00 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[06-Nov-2017 16:19:15 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[06-Nov-2017 16:21:24 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[06-Nov-2017 16:21:25 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[06-Nov-2017 16:22:06 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[06-Nov-2017 16:22:07 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[06-Nov-2017 16:51:13 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91

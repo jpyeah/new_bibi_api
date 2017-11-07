@@ -104,7 +104,7 @@ class YicheController extends ApiYafControllerAbstract {
      public function getseAction(){
 
         exit;
-        $masterId=100;
+        $masterId=1;
 
            $url="http://carapi.ycapp.yiche.com/car/getseriallist?masterid=".$masterId."&allserial=true";
            $html=file_get_contents($url);
@@ -376,7 +376,7 @@ class YicheController extends ApiYafControllerAbstract {
 
     public function modeldetailAction () {
 
-           $seriesId=2066;
+           $seriesId=2412;
            $sql="SELECT model_id FROM `bibi_car_series_model` WHERE series_id=".$seriesId;
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
@@ -498,8 +498,8 @@ class YicheController extends ApiYafControllerAbstract {
 
          //通过品牌id获取车型
          public function getsebybranAction(){
-        exit;
-           $masterId=127;
+
+           $masterId=189;
 
            $url="http://carapi.ycapp.yiche.com/car/getseriallist?masterid=".$masterId."&allserial=true";
            $html=file_get_contents($url);
@@ -536,15 +536,15 @@ class YicheController extends ApiYafControllerAbstract {
          public function getmobyseAction(){
 //          exit;
 //       //  echo "123456";exit;
-//         $masterid=127;
+//         $masterid=189;
 //         $sql="SELECT brand_series_id FROM bibi_car_brand_series WHERE brand_id=".$masterid;
 //           $pdo = new PdoDb;
 //           $list = $pdo->query($sql);
 
-          $list = ['3088'];
+          $list = ['2412'];
            foreach($list as $key => $value){
-              $serialId=$value["brand_series_id"];
-              //$serialId=2734;
+              //$serialId=$value["brand_series_id"];
+              $serialId=$value;
               $url="http://carapi.ycapp.yiche.com/car/GetCarListV61?csid=".$serialId."&cityId=502";
              // print_r($url);exit;
               $html=file_get_contents($url);
@@ -734,8 +734,8 @@ class YicheController extends ApiYafControllerAbstract {
     }
 
     public function updatemodelanddetailAction(){
-        exit;
-        $sql="SELECT brand_series_id FROM bibi_car_brand_series where brand_id = 7 ";
+
+        $sql="SELECT brand_series_id FROM bibi_car_brand_series where brand_id = 189 ";
         $pdo = new PdoDb;
         $list = $pdo->query($sql);
 

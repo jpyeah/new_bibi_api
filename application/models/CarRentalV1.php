@@ -46,6 +46,7 @@ class CarRentalV1Model extends PdoDb
 
         $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
 
+
         $cars = $this->query($sql);
 
         $total = @$this->query($sqlCnt)[0]['total'];
@@ -114,6 +115,7 @@ class CarRentalV1Model extends PdoDb
             'deposit'      =>$car['deposit'],
             'subscription' =>$car['subscription'],
         ];
+
 
         if($car['status'] == 2){
 
@@ -222,6 +224,9 @@ class CarRentalV1Model extends PdoDb
         $car['user_info'] = new stdClass();
 
         $images = unserialize($car['files']);
+
+        $car['file_img'] = IMAGE_DOMAIN.$images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+
         $car['files'] = array();
         $items1=array();
         $items2=array();

@@ -269,6 +269,97 @@ class UserController extends ApiYafControllerAbstract
     }
 
 
+    /**
+     * @api {POST} /v4/User/quicklogin 用户登录/注册
+     * @apiName user login
+     * @apiGroup User
+     * @apiDescription 用户登录/注册
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [mobile] 手机号码
+     * @apiParam {string} [code] 验证码
+     *
+     * @apiParam {json} data object
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v4/User/quicklogin
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "mobile":"",
+     *       "code":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function quickloginAction()
+    {
+        $this->required_fields = array_merge($this->required_fields, array('mobile','code'));
+
+        $data = $this->get_request_data();
+
+        $key ='code_' . $data['mobile'] . '';
+        $code = RedisDb::getValue($key);
+
+        if($code != $data['code']){
+            $this->send_error(USER_CODE_ERROR);
+        }
+        unset($data['code']);
+        $userModel = new \UserModel;
+        $user = $userModel->getInfoByMobile($data['mobile']);
+        if ($user) {
+                $userId = $user[0]['user_id'];
+                $device_identifier = $data['device_identifier'];
+                $response = array();
+                $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
+                //删除sessionId
+                $sess = new SessionModel();
+                $sessId = $sess->Create($sessionData);
+        }else{
+            $time = time();
+            $data['login_ip'] = $_SERVER['REMOTE_ADDR'];
+            $data['login_time'] = $time;
+            $data['created'] = $time;
+            $data['updated'] = $time;
+            $data['username']= 'bibi_' . Common::randomkeys(6);
+            $data['password']=md5('12345');
+            $device_identifier = $data['device_identifier'];
+            unset($data['device_identifier']);
+            $userId = $userModel->register($data);
+            if (!$userId) {
+                $this->send_error(USER_REGISTER_FAIL);
+            }
+            $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
+            $sess = new SessionModel();
+            $sessId = $sess->Create($sessionData);
+            $profileModel = new \ProfileModel;
+            $profileInfo = array();
+            $profileInfo['user_id'] = $userId;
+            $profileInfo['user_no'] = $data['username'];
+            $profileInfo['nickname'] = $data['mobile'];
+            $profileInfo['avatar']   = AVATAR_DEFAULT;
+            $profileInfo['bibi_no']  =$userId+10000;
+            $profileModel->initProfile($profileInfo);
+
+        }
+        $profileModel = new \ProfileModel;
+        $userInfo = $userModel->getInfoById($userId);
+        $userInfo['profile'] = $profileModel->getProfile($userId);
+        $response = array();
+        $response['session_id'] = $sessId;
+        $response['user_info'] = $userInfo;
+        $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$userInfo['profile']['nickname'],AVATAR_DEFAULT);
+        $this->send($response);
+
+    }
+
+
+
 
 
 

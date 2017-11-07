@@ -166,9 +166,10 @@ class CarController extends ApiYafControllerAbstract
     public function listAction(){
         $jsonData = require APPPATH .'/configs/JsonData.php';
         $this->optional_fields = array('keyword','order_id','brand_id','series_id');
-        //$this->required_fields = array_merge($this->required_fields, array('session_id'));
+       // $this->required_fields = array_merge($this->required_fields, array('session_id'));
 
         $data = $this->get_request_data();
+
         @$data['order_id'] = $data['order_id'] ? $data['order_id'] : 0 ;
         @$data['page']     = $data['page'] ? ($data['page']+1) : 1;
         @$data['brand_id'] = $data['brand_id'] ? $data['brand_id'] : 0 ;
@@ -179,8 +180,18 @@ class CarController extends ApiYafControllerAbstract
         $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND (t1.car_type = 0 OR t1.car_type = 1 OR t1.car_type = 2 ) AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
 
         if(@$data['keyword']){
-            $carM->keyword = $data['keyword'];
-            $where .= ' AND t1.car_name LIKE "%'.$carM->keyword.'%" ';
+
+
+            $results = $this->search($data['keyword']);
+
+            $values  = $this->implodeArrayByKey('_id',$results['hits']['hits']);
+
+            $inStr = "'".str_replace(",","','",$values)."'";
+
+            $where .= ' AND t1.hash in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
+
+//            $carM->keyword = $data['keyword'];
+//            $where .= ' AND t1.car_name LIKE "%'.$carM->keyword.'%" ';
         }
 
         if(@$data['brand_id']){
@@ -404,12 +415,189 @@ class CarController extends ApiYafControllerAbstract
 
            $this->send($car_list);
     }
+    /**
+     * @api {POST} /v4/car/search 车辆搜索
+     * @apiName car search
+     * @apiGroup Car
+     * @apiDescription 车辆搜索
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {string} device_identifier]设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {string} keyword 关键词
+     *
+     * @apiParamExample {json} 请求样例
+     *    POST /v4/car/search
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "keyword":"",
+     *
+     *     }
+     *   }
+     *
+     */
+    public function SearchAction(){
+
+        $this->required_fields = array_merge($this->required_fields, array('keyword','page'));
+
+        $data = $this->get_request_data();
+
+        $data['page']     = $data['page'] ? ($data['page']+1) : 1;
+
+        $number = ($data['page']-1)*10;
+
+        $carM = new CarSellingV1Model();
+
+        $results = $this->search($data['keyword'], $number);
+
+        if($results['hits']['hits']){
+
+            $values  = $this->implodeArrayByKey('_id',$results['hits']['hits']);
+
+            $inStr = "'".str_replace(",","','",$values)."'";
+
+            $where = '';
+
+            $where .= ' where t1.hash in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
+
+            $carM = new CarSellingV1Model();
+
+            $carM->where = $where;
+
+            $list = $carM->getCarlistByIds();
+
+        }else{
+
+            $list=array();
+        }
+
+        $total=$results['hits']['total'];
+
+        $count = count($results['hits']['hits']);
+
+        $lists['car_list']=$list;
+        $lists['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $lists['total'] = $total;
+        return $this->send($lists);
+    }
 
     public function testInsertAction(){
 
 
           $MyfocusM = new MyFocusModel();
 
+
+    }
+
+    public function search($keyword,$number=0){
+
+        $client=new Elasticsearch;
+
+        $client=$client->instance();
+
+        $params = [
+            'index' => 'car',
+            'type' => 'car_selling_list',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'car_name' => $keyword,
+                    ]
+                ],
+                'highlight' =>[
+                    "pre_tags" => ["<b>"],
+                    "post_tags" => ["</b>"],
+                    "fields" => [
+                        "car_name" => new \stdClass()
+                    ]
+                ]
+            ]
+        ];
+        $params['size'] = 10;
+        $params['from'] =$number;
+        $results = $client->search($params);
+
+        //print_r($results);exit;
+
+        return $results;
+
+    }
+
+
+//    public function searchAction(){
+//
+//        $this->required_fields = array_merge($this->required_fields, array('keyword'));
+//
+//        $data = $this->get_request_data();
+//
+//        $client=new Elasticsearch;
+//
+//        $client=$client->instance();
+//
+//        $params = [
+//            'index' => 'car',
+//            'type' => 'car_selling_list',
+//            'body' => [
+//                'query' => [
+//                    'match' => [
+//                        'car_name' => $data['keyword'],
+//                    ]
+//                ]
+//            ]
+//        ];
+//        $results = $client->search($params);
+//
+//        $total=$results['hits']['total'];
+//
+//        $count = count($results['hits']['hits']);
+//
+//        $this->send($results['hits']['hits']);
+//
+//    }
+
+    public function implodeArrayByKey($key, $result,$string=','){
+
+
+        $values = array();
+
+        foreach($result as $k => $rs){
+
+            $values[] = $rs[$key];
+
+        }
+
+        $values = implode($string , $values);
+
+        return $values ? $values : 0;
+    }
+
+
+    public function testAction(){
+
+           $ExtraModel = new CarSellingExtraInfoModel();
+
+//           $list =$ExtraModel->getExtrainfolist();
+           $str = '1,2,3,4,5,6';
+           $list = $ExtraModel->where = '  WHERE id in ('.$str.')';
+
+           $list = $ExtraModel->getExtraInfo();
+           $this->send($list);
+
+    }
+
+
+    public function createtestAction(){
+
+        $ExtraModel = new CarSellingExtraInfoModel();
+
+        $insert['hash']='134567';
+        $insert['ids']='12,13,14,1,2,3,4';
+        $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
+        print_r($id);
 
     }
 

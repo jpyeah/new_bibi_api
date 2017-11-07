@@ -31,11 +31,11 @@ class UserCarPactSellerModel extends PdoDb{
 
     public function getSellerPactInfoByPactNo($pact_no){
 
-        $sql = "SELECT * FROM ".self::$table." WHERE pact_no =".$pact_no;
+        $sql = "SELECT * FROM ".self::$table." WHERE pact_no ="."'".$pact_no."'";
 
         $result = $this->query($sql);
 
-        return $result[0];
+        return $result ? $result[0] :array();
     }
 
     public function getSellerPactList($user_id){

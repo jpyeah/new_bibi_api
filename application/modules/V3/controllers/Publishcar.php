@@ -168,7 +168,7 @@ class PublishcarController extends ApiYafControllerAbstract
  * @api {POST} /v3/Publishcar/update 更新车辆
  * @apiName car update
  * @apiGroup Car
- * @apiDescription 发布朋友圈
+ * @apiDescription 更新车辆
  * @apiPermission anyone
  * @apiSampleRequest http://www.bibicar.cn:8090
  * @apiVersion 1.0.0

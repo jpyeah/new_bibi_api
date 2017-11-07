@@ -162,6 +162,7 @@ class UserController extends ApiYafControllerAbstract
 
     }
 
+
     /**
      * @apiDefine Data
      *
@@ -1798,9 +1799,6 @@ class UserController extends ApiYafControllerAbstract
             $this->send_error(USER_LOGIN_FAIL);
 
         }
-
-
-        
 
         $userModel = new \UserModel;
 

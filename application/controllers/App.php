@@ -137,7 +137,8 @@ class AppController extends ApiYafControllerAbstract {
 
         $policy = array(
             'callbackUrl' => 'http://120.25.62.110/index/callback',
-            'callbackBody' => '{"fname":"$(fname)", "hash":"$(key)",  "user_id":' . $userId . '}'
+            'callbackBody' => '{"fname":"$(fname)", "hash":"$(key)",  "user_id":' . $userId . '}',
+            'mimeLimit'    => 'image/*'
         );
 
         $uploadToken = $auth->uploadToken($bucket, null, $expire, $policy);

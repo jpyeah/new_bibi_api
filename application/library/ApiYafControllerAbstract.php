@@ -26,6 +26,7 @@ class ApiYafControllerAbstract extends Yaf_Controller_Abstract {
      */
     public function get_request_data() {
 
+
         $data = array();
 
         $jsonFields = array('files_id','files_type');
@@ -75,15 +76,17 @@ class ApiYafControllerAbstract extends Yaf_Controller_Abstract {
 
     private function validate_auth($device_identifier){
 
+
         Common::globalLogRecord('di:', $device_identifier);
 
-       $di = RedisDb::getValue('di_'.$device_identifier.'');
+        $di = RedisDb::getValue('di_'.$device_identifier.'');
 
         Common::globalLogRecord('di:', $di);
 
        if(!$di){
 
-            $sql = 'SELECT `id` FROM `bibi_device_info` WHERE `device_identifier` = "'.$device_identifier.'"';
+
+           $sql = 'SELECT `id` FROM `bibi_device_info` WHERE `device_identifier` = "'.$device_identifier.'"';
             $pdo = new PdoDb();
 
             $id = $pdo->query($sql);
