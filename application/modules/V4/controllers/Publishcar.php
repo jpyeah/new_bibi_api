@@ -155,6 +155,257 @@ class PublishcarController extends ApiYafControllerAbstract
     }
 
     /**
+     * @api {POST} /v4/Publishcar/create  上传二手车
+     * @apiName car create
+     * @apiGroup Car
+     * @apiDescription 发布朋友圈
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [session_id] session_id
+     * @apiParam {Object} [file_type] 文字说明
+     * @apiParam {Object} [files_id] 图片
+     * @apiParam {number} [car_color] 车辆颜色
+     * @apiParam {string} [city_id] 车辆类型 0:新车 1:二手车 3:爱车
+     * @apiParam {number} [model_id] 车型id
+     * @apiParam {number} [series_id] 车系列id
+     * @apiParam {number} [action] 上传车类型
+     * @apiParam {string} [contact_phone] 联系电话
+     * @apiParam {string} [vin_no] 车架号
+     * @apiParam {string} [vin_file] 驾驶证照片
+     * @apiParam {number} [mileage] 里程
+     * @apiParam {string} [brand_id] 车品牌id
+     * @apiParam {string} [engine_no] 发动机号
+     * @apiParam {number} [is_transfer] 是否过户
+     * @apiParam {string} [contact_address] 联系地址
+     * @apiParam {string} [car_no] 车牌号码
+     * @apiParam {string} [car_intro] 车主介绍
+     * @apiParam {string} [contact_name] 联系人姓名
+     * @apiParam {string} [price] 价格
+     * @apiParam {number} [car_status] 车辆状态
+     * @apiParam {string} [board_time] 上牌时间
+     * @apiParam {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
+     *
+     * @apiParam {json} data object
+     * @apiUse Data
+     * @apiParamExample {json} 请求样例
+     *   POST /v4/Publishcar/create
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "files_id":"",
+     *       "files_type":"",
+     *       "car_id":"",
+     *       "car_color":"",
+     *       "city_id":"",
+     *       "model_id":"",
+     *       "series_id":"",
+     *       "action":"",
+     *       "contact_phone":"",
+     *       "vin_no":"",
+     *       "vin_file":"",
+     *       "mileage":"",
+     *       "brand_id":"",
+     *       "engine_no":"",
+     *       "is_transfer":"",
+     *       "contact_address":"",
+     *       "car_no":"",
+     *       "car_intro":"",
+     *       "contact_name":"",
+     *       "price":"",
+     *       "car_status":"",
+     *       "board_time":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function createAction()
+    {
+
+        $this->required_fields = array_merge(
+            $this->required_fields,
+            array('session_id', 'action', 'files_id', 'files_type'),
+            array_keys($this->car_info_fields),
+            $this->vin_fields
+        );
+
+        $data = $this->get_request_data();
+        unset($data["v3/publishcar/create"]);
+        $userId = $this->userAuth($data);
+
+        $cs = new CarSellingModel();
+
+        $properties = $this->publishProgress($data, $userId, $cs);
+
+        $properties['hash'] = uniqid();
+
+        unset($properties['car_id']);
+
+
+        $cs->properties = $properties;
+
+        $carId = $cs->CreateM();
+
+        if ($carId) {
+
+            $ifr = new ItemFilesRelationModel();
+            $ifr->CreateBatch($carId, $data['files_id'], ITEM_TYPE_CAR, $data['files_type']);
+
+            $carInfo = $cs->GetCarInfoById($properties['hash']);
+
+            $response['car_info'] = $carInfo;
+
+            if(@$data['car_info_ids']){
+                $ExtraModel = new CarSellingExtraInfoModel();
+                $insert['hash']=$properties['hash'];
+                $insert['ids']=$data['car_info_ids'];
+                $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
+            }
+
+            //我的关注数据myfocus
+            $UserFocusM= new MyFocusModel();
+            $UserFocusM->created_at =time();
+            $UserFocusM->type = 1;
+            $UserFocusM->type_id = $properties['hash'];
+            $UserFocusM->user_id =  $userId;
+            $UserFocusM->saveProperties();
+            $id = $UserFocusM->CreateM();
+
+            $mh = new MessageHelper;
+            $toId=389;
+            $content = '用户:'.$userId.'上传了车，赶紧去审核吧';
+            $mh->systemNotify($toId, $content);
+
+            $this->send($response);
+
+        } else {
+
+            $this->send_error(CAR_ADDED_ERROR);
+
+        }
+
+    }
+
+    /**
+     * @api {POST} /v4/Publishcar/newCar  上传新车
+     * @apiName car newCar
+     * @apiGroup Car
+     * @apiDescription 发布朋友圈
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {Object} file_type 文字说明
+     * @apiParam {Object} files_id 图片
+     * @apiParam {number} car_color 车辆颜色
+     * @apiParam {string} city_id 车辆类型 0:新车 1:二手车 3:爱车
+     * @apiParam {string} brand_id 车品牌id
+     * @apiParam {number} model_id 车型id
+     * @apiParam {number} series_id 车系列id
+     * @apiParam {string} car_no 车牌号码
+     * @apiParam {string} car_intro 车主介绍
+     * @apiParam {number} action 上传车类型
+     * @apiParam {string} price 价格
+     * @apiParam {string} contact_phone 联系电话
+     * @apiParam {string} contact_address 联系地址
+     * @apiParam {string} contact_name 联系人姓名
+     * @apiParam {string} [vin_no] 车架号
+     * @apiParam {string} [vin_file] 驾驶证照片
+     * @apiParam {number} [mileage] 里程
+     * @apiParam {string} [engine_no] 发动机号
+     * @apiParam {number} [is_transfer] 是否过户
+     * @apiParam {number} [car_status] 车辆状态
+     * @apiParam {string} [board_time] 上牌时间
+     * @apiParam {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v4/Publishcar/newCar
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "files_id":"",
+     *       "files_type":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function newCarAction(){
+
+        $this->required_fields = array_merge(
+            $this->required_fields,
+            array('session_id', 'action', 'files_id', 'files_type'),
+            array_keys($this->new_car_info_fields)
+        );
+
+        $data = $this->get_request_data();
+
+        unset($data['v3/publishcar/newCar']);
+
+        $userId = $this->userAuth($data);
+
+        $cs = new CarSellingModel();
+
+        $properties = $this->publishProgress($data, $userId, $cs,PLATFORM_USER_NEW_CAR);
+
+        $properties['hash'] = uniqid();
+
+        unset($properties['car_id']);
+
+        $cs->properties = $properties;
+
+        $carId = $cs->CreateM();
+
+        if ($carId) {
+
+            $ifr = new ItemFilesRelationModel();
+            $ifr->CreateBatch($carId, $data['files_id'], ITEM_TYPE_CAR, $data['files_type']);
+
+            $carInfo = $cs->GetCarInfoById($properties['hash']);
+
+            $response['car_info'] = $carInfo;
+
+            if(@$data['car_info_ids']){
+                $ExtraModel = new CarSellingExtraInfoModel();
+                $insert['hash']=$properties['hash'];
+                $insert['ids']=$data['car_info_ids'];
+                $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
+            }
+
+            //我的关注数据myfocus
+            $UserFocusM= new MyFocusModel();
+            $UserFocusM->created_at =time();
+            $UserFocusM->type = 1;
+            $UserFocusM->type_id = $properties['hash'];
+            $UserFocusM->user_id =  $userId;
+            $UserFocusM->saveProperties();
+            $id = $UserFocusM->CreateM();
+
+            $mh = new MessageHelper;
+            $toId=389;
+            $content = '用户:'.$userId.'上传了车，赶紧去审核吧';
+            $mh->systemNotify($toId, $content);
+
+
+            $this->send($response);
+
+        } else {
+
+            $this->send_error(CAR_ADDED_ERROR);
+
+        }
+    }
+
+    /**
      * @api {POST} /v4/publishcar/getcompanylist 车行列表
      * @apiName compayny list
      * @apiGroup Car

@@ -79,7 +79,15 @@ class CarSellingExtraInfoModel extends PdoDb
         $list = $this->query($sql);
 
         return $list;
+    }
 
+    public function getExtra($hash){
+
+        $sql ="SELECT * FROM bibi_car_selling_list_extra_info WHERE hash ='".$hash."'";
+
+        $res = $this->query($sql);
+
+        return $res ? $res[0] : array();
     }
 
 

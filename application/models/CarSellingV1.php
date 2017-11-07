@@ -83,6 +83,12 @@ class CarSellingV1Model extends PdoDb
 
         $brandM = new BrandModel();
 
+        $ExtraModel = new CarSellingExtraInfoModel();
+        $res = $ExtraModel->getExtra($car['car_id']);
+        $str = $res['ids'];
+        $ExtraModel->where = '  WHERE id in ('.$str.')';
+        $car['car_extra_info']= $ExtraModel->getExtraInfo();
+
         $car['brand_info']  = $brandM->getBrandModel($car['brand_id']);
         $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);
         $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
@@ -280,6 +286,8 @@ class CarSellingV1Model extends PdoDb
         $car['car_id'] = $car['hash'];
 
         $brandM = new BrandModel();
+
+
 
         $car['brand_info']  = $brandM->getBrandModel($car['brand_id']);
         $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);

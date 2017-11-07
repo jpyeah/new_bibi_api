@@ -579,25 +579,21 @@ class CarController extends ApiYafControllerAbstract
     public function testAction(){
 
            $ExtraModel = new CarSellingExtraInfoModel();
+           $hash = '57837734900f4';
+           $res = $ExtraModel->getExtra($hash);
 
-//           $list =$ExtraModel->getExtrainfolist();
-           $str = '1,2,3,4,5,6';
+           $str = $res['ids'];
            $list = $ExtraModel->where = '  WHERE id in ('.$str.')';
-
            $list = $ExtraModel->getExtraInfo();
            $this->send($list);
-
     }
-
 
     public function createtestAction(){
 
         $ExtraModel = new CarSellingExtraInfoModel();
-
         $insert['hash']='134567';
         $insert['ids']='12,13,14,1,2,3,4';
         $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
-        print_r($id);
 
     }
 
