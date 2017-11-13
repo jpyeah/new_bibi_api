@@ -21,13 +21,13 @@ class CarController extends ApiYafControllerAbstract
      * @apiSampleRequest http://testapi.bibicar.cn
      * @apiVersion 2.0.0
      *
-     * @apiParam {string} [device_identifier] 设备唯一标识
-     * @apiParam {string} [session_id] session_id
-     * @apiParam {string} [car_id] 车辆Id
+     * @apiParam (request) {string} [device_identifier] 设备唯一标识
+     * @apiParam (request) {string} [session_id] session_id
+     * @apiParam (request) {string} [car_id] 车辆Id
+     *
+     * @apiParam (response) {object} car_info_ids
      *
      *
-     * @apiParam {json} data object
-     * @apiUse Data
      * @apiParamExample {json} 请求样例
      *   POST /v3/car/index
      *   {
@@ -68,6 +68,9 @@ class CarController extends ApiYafControllerAbstract
 
         $carInfo = $carModel->GetCarInfoById($carId,$userId);
 
+//        $ExtraModel = new CarSellingExtraInfoModel();
+//
+//        $carInfo['car_info_ids']=$ExtraModel->getExtra($carId);
 
         $response['car_info'] = $carInfo;
 

@@ -87,8 +87,22 @@ class CarSellingExtraInfoModel extends PdoDb
 
         $res = $this->query($sql);
 
-        return $res ? $res[0] : array();
+        if($res){
+
+            $str = $res[0]['ids'];
+
+            $this->where = '  WHERE id in ('.$str.')';
+
+            $list = $this->getExtraInfo();
+
+            return $list ? $list : array();
+
+        }else{
+            return array();
+        }
+
     }
+
 
 
 

@@ -412,3 +412,9 @@ Stack trace:
 [06-Nov-2017 16:22:06 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [06-Nov-2017 16:22:07 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [06-Nov-2017 16:51:13 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[13-Nov-2017 14:46:54 PRC] PHP Notice:  Undefined index: ids in /usr/local/var/www/bibi-api/application/models/CarSellingExtraInfo.php on line 92
+[13-Nov-2017 14:46:54 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[13-Nov-2017 14:47:56 PRC] PHP Notice:  Undefined index: ids in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 88
+[13-Nov-2017 14:47:56 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[13-Nov-2017 14:48:46 PRC] PHP Notice:  Undefined index: ids in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 88
+[13-Nov-2017 14:48:46 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91

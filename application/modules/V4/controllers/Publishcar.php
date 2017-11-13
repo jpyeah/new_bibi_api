@@ -98,6 +98,10 @@ class PublishcarController extends ApiYafControllerAbstract
             
         }
 
+        if(isset($data['board_address'])){
+            $properties['board_address']=$data['board_address'];
+        }
+
         if(isset($data['contact_phone'])){
                 $properties['contact_phone']=$data['contact_phone'];
         }
@@ -117,6 +121,8 @@ class PublishcarController extends ApiYafControllerAbstract
 
             $properties['updated'] = $time;
         }
+
+
 
         $properties['files'] = $filesInfo ? serialize($filesInfo) : '';
 
@@ -161,7 +167,7 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiDescription 发布朋友圈
      * @apiPermission anyone
      * @apiSampleRequest http://www.bibicar.cn:8090
-     * @apiVersion 2.0.0
+     * @apiVersion 2.1.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
@@ -186,6 +192,7 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiParam {string} [price] 价格
      * @apiParam {number} [car_status] 车辆状态
      * @apiParam {string} [board_time] 上牌时间
+     * @apiParam {string} [board_address] 上牌地点(城市:深圳)
      * @apiParam {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
      *
      * @apiParam {json} data object

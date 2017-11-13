@@ -92,7 +92,6 @@ class CarController extends ApiYafControllerAbstract
  *   }
  *
  */
-
     public function seriesAction($brand_id)
     {
 
@@ -100,7 +99,6 @@ class CarController extends ApiYafControllerAbstract
 
             $this->send_error(NOT_ENOUGH_ARGS);
         }
-
 
         $pdo = new PdoDb;
 
@@ -189,7 +187,6 @@ class CarController extends ApiYafControllerAbstract
      * @apiSampleRequest http://testapi.bibicar.cn
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
-     * @apiParam {number} [series_id] 系列id
      *
      * @apiParamExample {json} 请求样例
      *   POST /Car/extrainfo
@@ -209,12 +206,11 @@ class CarController extends ApiYafControllerAbstract
         $this->send($response);
     }
 
-
-    /**
- * @api {POST} /car/province 获取省份(查询违章)
- * @apiName PollingCar province
- * @apiGroup PollingCar
- * @apiDescription 用户注册
+ /**
+ * @api {POST} /car/province 获取省份
+ * @apiName car  province
+ * @apiGroup Publish
+ * @apiDescription 获取省份
  * @apiPermission anyone
  * @apiSampleRequest http://testapi.bibicar.cn
  *
@@ -255,13 +251,11 @@ class CarController extends ApiYafControllerAbstract
  * @apiGroup Publish
  * @apiDescription 获取城市
  * @apiPermission anyone
- * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiSampleRequest http://testapi.bibicar.cn
  *
  * @apiParam {string} [device_identifier] 设备唯一标识
  * @apiParam {string} [province_id]  省份id
- * 
- * @apiParam {json} data object
- * @apiUse Data
+ *
  * @apiParamExample {json} 请求样例
  *   POST /car/city
  *   {
