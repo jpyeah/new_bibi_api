@@ -250,10 +250,6 @@ class PublishcarController extends ApiYafControllerAbstract
 
         $cs = new CarSellingModel();
 
-        $car_info_ids = $data['car_info_ids'];
-
-        unset($data['car_info_ids']);
-
         $properties = $this->publishProgress($data, $userId, $cs);
 
         $properties['hash'] = uniqid();

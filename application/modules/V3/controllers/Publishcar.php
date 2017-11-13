@@ -98,6 +98,11 @@ class PublishcarController extends ApiYafControllerAbstract
             
         }
 
+        if(isset($data['board_address'])){
+            $properties['board_address']=$data['board_address'];
+        }
+
+
         if(isset($data['contact_phone'])){
                 $properties['contact_phone']=$data['contact_phone'];
         }
@@ -341,6 +346,11 @@ class PublishcarController extends ApiYafControllerAbstract
         );
 
         $data = $this->get_request_data();
+
+        $car_info_ids = @$data['car_info_ids'];
+
+        unset($data['car_info_ids']);
+
         unset($data["v3/publishcar/create"]);
         $userId = $this->userAuth($data);
 
@@ -363,6 +373,13 @@ class PublishcarController extends ApiYafControllerAbstract
             $ifr->CreateBatch($carId, $data['files_id'], ITEM_TYPE_CAR, $data['files_type']);
 
             $carInfo = $cs->GetCarInfoById($properties['hash']);
+
+            if($car_info_ids){
+                $ExtraModel = new CarSellingExtraInfoModel();
+                $insert['hash']=$properties['hash'];
+                $insert['ids']=$car_info_ids;
+                $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
+            }
 
             $response['car_info'] = $carInfo;
 
@@ -446,6 +463,10 @@ class PublishcarController extends ApiYafControllerAbstract
         );
 
         $data = $this->get_request_data();
+
+        $car_info_ids = @$data['car_info_ids'];
+
+        unset($data['car_info_ids']);
         
         unset($data['v3/publishcar/newCar']);
        
@@ -469,6 +490,14 @@ class PublishcarController extends ApiYafControllerAbstract
             $ifr->CreateBatch($carId, $data['files_id'], ITEM_TYPE_CAR, $data['files_type']);
 
             $carInfo = $cs->GetCarInfoById($properties['hash']);
+
+            if($car_info_ids){
+                $ExtraModel = new CarSellingExtraInfoModel();
+                $insert['hash']=$properties['hash'];
+                $insert['ids']=$car_info_ids;
+                $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
+            }
+
 
             $response['car_info'] = $carInfo;
 
