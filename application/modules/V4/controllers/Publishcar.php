@@ -242,10 +242,17 @@ class PublishcarController extends ApiYafControllerAbstract
         );
 
         $data = $this->get_request_data();
+        $car_info_ids = @$data['car_info_ids'];
+
+        unset($data['car_info_ids']);
         unset($data["v3/publishcar/create"]);
         $userId = $this->userAuth($data);
 
         $cs = new CarSellingModel();
+
+        $car_info_ids = $data['car_info_ids'];
+
+        unset($data['car_info_ids']);
 
         $properties = $this->publishProgress($data, $userId, $cs);
 
@@ -267,10 +274,10 @@ class PublishcarController extends ApiYafControllerAbstract
 
             $response['car_info'] = $carInfo;
 
-            if(@$data['car_info_ids']){
+            if($car_info_ids){
                 $ExtraModel = new CarSellingExtraInfoModel();
                 $insert['hash']=$properties['hash'];
-                $insert['ids']=$data['car_info_ids'];
+                $insert['ids']=$car_info_ids;
                 $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
             }
 
@@ -356,6 +363,10 @@ class PublishcarController extends ApiYafControllerAbstract
 
         $data = $this->get_request_data();
 
+        $car_info_ids = @$data['car_info_ids'];
+
+        unset($data['car_info_ids']);
+
         unset($data['v3/publishcar/newCar']);
 
         $userId = $this->userAuth($data);
@@ -381,10 +392,10 @@ class PublishcarController extends ApiYafControllerAbstract
 
             $response['car_info'] = $carInfo;
 
-            if(@$data['car_info_ids']){
+            if($car_info_ids){
                 $ExtraModel = new CarSellingExtraInfoModel();
                 $insert['hash']=$properties['hash'];
-                $insert['ids']=$data['car_info_ids'];
+                $insert['ids']=$car_info_ids;
                 $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
             }
 
