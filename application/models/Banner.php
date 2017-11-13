@@ -88,7 +88,7 @@ class BannerModel extends PdoDb
                    $banners[$key]['appUrl']=$val["theme"];
                    $banners[$key]['title']=$val["title"];
                    $banners[$key]['link']="/topic/".$val["type_id"];
-                   $banners[$key]['type']=(string)$val["id"];
+                   $banners[$key]['type']=(string)$val["type_id"];
 
                    if($val["type_id"]== 39 && @$this->device_size ){
                         if(@$this->device_size == 1 ){
