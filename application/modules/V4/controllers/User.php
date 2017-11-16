@@ -271,7 +271,7 @@ class UserController extends ApiYafControllerAbstract
 
     /**
      * @api {POST} /v4/User/quicklogin 用户登录/注册
-     * @apiName user login
+     * @apiName user quicklogin
      * @apiGroup User
      * @apiDescription 用户登录/注册
      * @apiPermission anyone

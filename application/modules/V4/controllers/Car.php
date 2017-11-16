@@ -185,16 +185,16 @@ class CarController extends ApiYafControllerAbstract
         if(@$data['keyword']){
 
 
-            $results = $this->search($data['keyword']);
+//            $results = $this->search($data['keyword']);
+//
+//            $values  = $this->implodeArrayByKey('_id',$results['hits']['hits']);
+//
+//            $inStr = "'".str_replace(",","','",$values)."'";
+//
+//            $where .= ' AND t1.hash in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
 
-            $values  = $this->implodeArrayByKey('_id',$results['hits']['hits']);
-
-            $inStr = "'".str_replace(",","','",$values)."'";
-
-            $where .= ' AND t1.hash in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
-
-//            $carM->keyword = $data['keyword'];
-//            $where .= ' AND t1.car_name LIKE "%'.$carM->keyword.'%" ';
+            $carM->keyword = $data['keyword'];
+            $where .= ' AND t1.car_name LIKE "%'.$carM->keyword.'%" ';
         }
 
         if(@$data['brand_id']){
