@@ -190,7 +190,7 @@ class YicheController extends ApiYafControllerAbstract {
     public function createseriesAction(){
 
 
-        $serialId=3088;
+        $serialId=4165;
 
         $url="http://carapi.ycapp.yiche.com/car/GetCarListV61?csid=".$serialId."&cityId=502";
         $html=file_get_contents($url);
@@ -376,7 +376,7 @@ class YicheController extends ApiYafControllerAbstract {
 
     public function modeldetailAction () {
 
-           $seriesId=3859;
+           $seriesId=4165;
            $sql="SELECT model_id FROM `bibi_car_series_model` WHERE series_id=".$seriesId;
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
