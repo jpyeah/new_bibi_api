@@ -24,7 +24,6 @@ class UserController extends ApiYafControllerAbstract
  * @apiParam {string} session_id session_id
  * @apiParam {number} [user_id]  别人主页Uid
  *
- * @apiUse DreamParam
  * @apiParamExample {json} 请求样例
  *   POST /v4/User/userpage
  *   {
@@ -92,7 +91,6 @@ class UserController extends ApiYafControllerAbstract
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
      *
-     * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
      *   POST /v3/User/homepage
      *   {
@@ -282,8 +280,6 @@ class UserController extends ApiYafControllerAbstract
      * @apiParam {string} [mobile] 手机号码
      * @apiParam {string} [code] 验证码
      *
-     * @apiParam {json} data object
-     * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
      *   POST /v4/User/quicklogin
      *   {
