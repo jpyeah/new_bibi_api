@@ -305,6 +305,7 @@ class UserController extends ApiYafControllerAbstract
         if($code != $data['code']){
            // $this->send_error(USER_CODE_ERROR);
         }
+        unset($data['v4/user/quicklogin']);
         unset($data['code']);
         $userModel = new \UserModel;
         $user = $userModel->getInfoByMobile($data['mobile']);
