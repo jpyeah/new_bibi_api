@@ -339,7 +339,7 @@ class UserController extends ApiYafControllerAbstract
             $profileInfo = array();
             $profileInfo['user_id'] = $userId;
             $profileInfo['user_no'] = $data['username'];
-            $profileInfo['nickname'] = $data['mobile'];
+            $profileInfo['nickname'] = "BiBiCar".rand(10,100);
             $profileInfo['avatar']   = AVATAR_DEFAULT;
             $profileInfo['bibi_no']  =$userId+10000;
             $profileModel->initProfile($profileInfo);
@@ -367,7 +367,7 @@ class UserController extends ApiYafControllerAbstract
         $response['post']=$_POST;
         $response['get']=$_GET;
         $response['sever']=$_SERVER;
-        
+
         $this->send($response);
 
     }
