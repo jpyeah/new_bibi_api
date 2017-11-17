@@ -94,7 +94,7 @@ class ApiYafControllerAbstract extends Yaf_Controller_Abstract {
 
             if(!$id) {
                 $pdo = null;
-                $this->send_error(APP_NOT_AUTHORIZED);
+                //$this->send_error(APP_NOT_AUTHORIZED);
             }
             else{
                 $pdo = null;
