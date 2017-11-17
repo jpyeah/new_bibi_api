@@ -245,7 +245,7 @@ class PublishcarController extends ApiYafControllerAbstract
         $car_info_ids = @$data['car_info_ids'];
 
         unset($data['car_info_ids']);
-        unset($data["v3/publishcar/create"]);
+        unset($data["v4/publishcar/create"]);
         $userId = $this->userAuth($data);
 
         $cs = new CarSellingModel();
@@ -363,7 +363,7 @@ class PublishcarController extends ApiYafControllerAbstract
 
         unset($data['car_info_ids']);
 
-        unset($data['v3/publishcar/newCar']);
+        unset($data['v4/publishcar/newCar']);
 
         $userId = $this->userAuth($data);
 

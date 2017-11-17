@@ -220,9 +220,9 @@ class UserController extends ApiYafControllerAbstract
         $code = RedisDb::getValue($key);
 
 
-        if($code != $data['code']){
-            $this->send_error(USER_CODE_ERROR);
-        }
+        // if($code != $data['code']){
+        //     $this->send_error(USER_CODE_ERROR);
+        // }
 
         unset($data['code']);
 
