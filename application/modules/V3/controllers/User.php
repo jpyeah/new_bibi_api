@@ -1125,6 +1125,8 @@ class UserController extends ApiYafControllerAbstract
 
         $this->send($response);
     }
+
+
     /**
      * @api {POST} /v3/User/oauthregister 第三方注册登录
      * @apiName user oauthregister
@@ -1734,7 +1736,6 @@ class UserController extends ApiYafControllerAbstract
             $this->send_error(USER_CODE_ERROR);
         }
 
-
         unset($data['code']);
 
         if(@$data['session_id']){
@@ -1751,7 +1752,7 @@ class UserController extends ApiYafControllerAbstract
 
         $user = $userModel->getInfoByMobile($data['mobile']);
 
-        if ($user) {
+        if ($user && ($user[0]['user_id'] != $userId) ) {
             $this->send_error(USER_MOBILE_REGISTERED);
         }
 

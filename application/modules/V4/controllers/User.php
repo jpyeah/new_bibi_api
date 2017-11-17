@@ -357,6 +357,197 @@ class UserController extends ApiYafControllerAbstract
     }
 
 
+    /**
+     * @api {POST} /v4/User/oauthlogin 第三方登录
+     * @apiName user oauthlogin
+     * @apiGroup User
+     * @apiDescription 第三方登录
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
+     * @apiParam (request) {string} device_identifier 设备唯一标识
+     * @apiParam (request) {string} [wx_open_id] 微信识别ID
+     * @apiParam (request) {string} [weibo_open_id]  微博识别ID
+     * @apiParam (request) {string} nickname  昵称
+     * @apiParam (request) {string} avatar 头像
+     *
+     * @apiParam (response) {number} is_bind_mobile 是否绑定手机 1：是 2：否
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/oauthlogin
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function oauthloginAction(){
+
+        $this->required_fields = array_merge(
+            $this->required_fields,
+            array('wx_open_id','weibo_open_id','nickname','avatar')
+        );
+
+        $data = $this->get_request_data();
+
+        $userModel = new \UserModel;
+        $profileModel = new \ProfileModel;
+
+        $wx_open_id = $data['wx_open_id'];
+        $weibo_open_id = $data['weibo_open_id'];
+
+        $avatar = $data['avatar'];
+        $nickname = $data['nickname'];
+
+        $oauth['wx_open_id'] =  preg_match("/[A-Za-z0-9]+/", $wx_open_id) ? $wx_open_id : '';
+        $oauth['weibo_open_id'] = preg_match("/[A-Za-z0-9]+/", $weibo_open_id) ? $weibo_open_id : '';
+
+        $info = $userModel->loginByOauth($oauth);
+
+        $time=time();
+        $response = array();
+
+        if (!$info) {
+
+            $insert = array();
+            $insert['login_ip'] = $_SERVER['REMOTE_ADDR'];
+            $insert['login_time'] = $time;
+            $insert['created'] = $time;
+            $insert['updated'] = $time;
+
+            $name = 'bibi_' . Common::randomkeys(6);
+
+            $insert['username'] = $name;
+            $insert['wx_open_id'] = $data['wx_open_id'];
+            $insert['weibo_open_id'] = $data['weibo_open_id'];
+
+            $userId = $userModel->register($insert);
+            $profileInfo = array();
+            $profileInfo['user_id'] = $userId;
+            $profileInfo['user_no'] = $name;
+            $profileInfo['nickname'] = $nickname;
+            $profileInfo['avatar']   = $avatar;
+            $profileInfo['bibi_no']  =$userId+10000;
+            $profileModel->initProfile($profileInfo);
+
+            $response['is_bind_mobile'] =2;
+
+            //$this->send_error(USER_OAUTH_UPDATE_PROFILE);
+        }else{
+            $userId = $info['user_id'];
+
+            $update['updated'] = $time;
+
+            $userModel->update(array('user_id'=>$userId),$update);
+
+            $updateProfile['nickname'] = $data['nickname'];
+
+            $updateProfile['avatar']   = $data['avatar'];
+
+            $profileModel->updateProfileByKey($userId, $updateProfile);
+
+            $info['mobile'] ? $response['is_bind_mobile'] = 1 : $response['is_bind_mobile'] =2;
+
+        }
+
+        $device_identifier = $data['device_identifier'];
+
+        $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
+        //删除sessionId
+        $sess = new SessionModel();
+        $sessId = $sess->Create($sessionData);
+
+        $userInfo = $userModel->getInfoById($userId);
+        $userInfo['profile'] = $profileModel->getProfile($userId);
+
+        $response['session_id'] = $sessId;
+        $response['user_info'] = $userInfo;
+        $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$nickname,AVATAR_DEFAULT);
+
+        $this->send($response);
+    }
+
+    /**
+     * @api {POST} /v4/user/oauthbindmobile 第三方登录绑定手机号
+     * @apiName User  oauthbindmobile
+     * @apiGroup User
+     * @apiDescription  第三方登录绑定手机号
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
+     * @apiParam {string} device_identifier device_identifier
+     * @apiParam {string} session_id session_id
+     * @apiParam {string}  mobile 手机号码
+     * @apiParam {number} code 验证码
+     *
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v4/user/oauthbindmobile
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "mobile":"",
+     *       "code":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function oauthbindmobileAction(){
+
+        $this->required_fields = array_merge(
+            $this->required_fields,
+            array('session_id', 'mobile','code')
+        );
+
+        $data = $this->get_request_data();
+
+        $key =  $key = 'code_' . $data['mobile'] . '';
+        $code = RedisDb::getValue($key);
+
+        if($code != $data['code']){
+            $this->send_error(USER_CODE_ERROR);
+        }
+
+        unset($data['code']);
+
+        if(@$data['session_id']){
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }
+
+        if(!$userId){
+            $this->send_error('USER_AUTH_FAIL');
+        }
+
+        $userModel = new \UserModel;
+        $profileModel = new \ProfileModel;
+
+        $user = $userModel->getInfoByMobile($data['mobile']);
+
+        if ($user) {
+            $this->send_error(USER_MOBILE_REGISTERED);
+        }
+
+        $update['mobile'] = $data['mobile'];
+
+        $userModel->update(array('user_id'=>$userId),$update);
+
+        $userInfo = $userModel->getInfoById($userId);
+        $userInfo['profile'] = $profileModel->getProfile($userId);
+
+        $response['userinfo']=$userInfo;
+
+        $this->send($response);
+    }
+
+
     public function testloginAction(){
 
         $data = $this->get_request_data();
