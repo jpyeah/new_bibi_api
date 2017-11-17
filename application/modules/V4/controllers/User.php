@@ -366,6 +366,7 @@ class UserController extends ApiYafControllerAbstract
         $response['request']=$_REQUEST;
         $response['post']=$_POST;
         $response['get']=$_GET;
+        $response['sever']=$_SERVER;
 
         $this->send($response);
 
