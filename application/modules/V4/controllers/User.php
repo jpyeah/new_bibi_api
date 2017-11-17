@@ -365,8 +365,8 @@ class UserController extends ApiYafControllerAbstract
         
         $response['request']=$_REQUEST;
 
-        $this->send($data);
-        
+        $this->send($response);
+
     }
 
 
