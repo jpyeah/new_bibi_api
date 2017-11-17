@@ -24,7 +24,6 @@ class CarSellingV1Model extends PdoDb
     public function GetCarInfoById($hash,$userId=0)
     {
 
-
         $sql = '
             SELECT
             t1.*,
@@ -38,8 +37,9 @@ class CarSellingV1Model extends PdoDb
             WHERE t1.hash = "' . $hash . '"
         ';
 
+        $res = $this->query($sql);
 
-        $car = @$this->query($sql)[0];
+        $car= $res ? $res[0] : array();
 
         if (!$car) {
 
@@ -127,6 +127,7 @@ class CarSellingV1Model extends PdoDb
 
             $car['user_info'] = new stdClass();
         }
+
 
         unset($car['car_no']);
         unset($car['vin_no']);

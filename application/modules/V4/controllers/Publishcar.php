@@ -248,7 +248,7 @@ class PublishcarController extends ApiYafControllerAbstract
         unset($data["v4/publishcar/create"]);
         $userId = $this->userAuth($data);
 
-        $cs = new CarSellingModel();
+        $cs = new CarSellingV1Model();
 
         $properties = $this->publishProgress($data, $userId, $cs);
 
@@ -290,6 +290,15 @@ class PublishcarController extends ApiYafControllerAbstract
             $toId=389;
             $content = '用户:'.$userId.'上传了车，赶紧去审核吧';
             $mh->systemNotify($toId, $content);
+
+            $title = is_array($carInfo['user_info']) ?
+                $carInfo['user_info']['profile']['nickname'] . '的' . $carInfo['car_name']
+                : $carInfo['car_name'];
+
+            $response['share_title'] = $title;
+            $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id='.$properties['hash'];
+            $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
+            $response['share_img'] = isset($carInfo['files']["type1"]) ? $carInfo['files']["type1"][0]['file_url'] : '';
 
             $this->send($response);
 
@@ -367,7 +376,7 @@ class PublishcarController extends ApiYafControllerAbstract
 
         $userId = $this->userAuth($data);
 
-        $cs = new CarSellingModel();
+        $cs = new CarSellingV1Model();
 
         $properties = $this->publishProgress($data, $userId, $cs,PLATFORM_USER_NEW_CAR);
 
