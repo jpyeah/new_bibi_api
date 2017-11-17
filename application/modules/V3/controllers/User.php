@@ -791,8 +791,6 @@ class UserController extends ApiYafControllerAbstract
                 continue;
             }
 
-
-
             switch ($k) {
 
                 case 'birth':
