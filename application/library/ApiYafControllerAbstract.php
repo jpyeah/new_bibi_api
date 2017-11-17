@@ -31,7 +31,7 @@ class ApiYafControllerAbstract extends Yaf_Controller_Abstract {
 
         $jsonFields = array('files_id','files_type');
 
-        foreach ($_REQUEST as $key => $value){
+        foreach ($_POST as $key => $value){
 
 
             if(!in_array($key, $jsonFields)){
