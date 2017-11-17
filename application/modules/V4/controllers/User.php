@@ -362,8 +362,10 @@ class UserController extends ApiYafControllerAbstract
         $data = $this->get_request_data();
 
         $response['handle']=$data;
-        
+
         $response['request']=$_REQUEST;
+        $response['post']=$_POST;
+        $response['get']=$_GET;
 
         $this->send($response);
 
