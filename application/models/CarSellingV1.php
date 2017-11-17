@@ -39,6 +39,7 @@ class CarSellingV1Model extends PdoDb
 
         $res = $this->query($sql);
 
+
         $car= $res ? $res[0] : array();
 
         if (!$car) {

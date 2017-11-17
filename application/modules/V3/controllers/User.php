@@ -532,7 +532,7 @@ class UserController extends ApiYafControllerAbstract
             'code' => $code
         );
 
-        Common::sendSMS($data['mobile'],array($code),"74511");
+        Common::sendSMS($data['mobile'],array($code),"180149");
 
         $this->send($response);
 
@@ -928,7 +928,7 @@ class UserController extends ApiYafControllerAbstract
 
     }
     /**
-     * @api {POST} /v3/User/homepage个人中心
+     * @api {POST} /v3/User/homepage 个人中心
      * @apiName user homepage
      * @apiGroup User
      * @apiDescription 个人中心
@@ -1012,7 +1012,34 @@ class UserController extends ApiYafControllerAbstract
 
 
     }
-
+    /**
+     * @api {POST} /v3/User/oauthlogin 第三方登录
+     * @apiName user oauthlogin
+     * @apiGroup User
+     * @apiDescription 第三方登录
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 1.0.0
+     * @apiParam (request) {string} device_identifier 设备唯一标识
+     * @apiParam (request) {string} [wx_open_id] 微信识别ID
+     * @apiParam (request) {string} [weibo_open_id]  微博识别ID
+     * @apiParam (request) {string} nickname  昵称
+     * @apiParam (request) {string} avatar 头像
+     *
+     * @apiParam (response) {number} is_bind_mobile 是否绑定手机 1：是 2：否
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/oauthlogin
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
     public function oauthloginAction(){
 
         $this->required_fields = array_merge(
@@ -1037,6 +1064,7 @@ class UserController extends ApiYafControllerAbstract
         $info = $userModel->loginByOauth($oauth);
 
         $time=time();
+        $response = array();
 
         if (!$info) {
 
@@ -1061,6 +1089,8 @@ class UserController extends ApiYafControllerAbstract
             $profileInfo['bibi_no']  =$userId+10000;
             $profileModel->initProfile($profileInfo);
 
+            $response['is_bind_mobile'] =2;
+
             //$this->send_error(USER_OAUTH_UPDATE_PROFILE);
         }else{
             $userId = $info['user_id'];
@@ -1070,14 +1100,16 @@ class UserController extends ApiYafControllerAbstract
             $userModel->update(array('user_id'=>$userId),$update);
 
             $updateProfile['nickname'] = $data['nickname'];
+
             $updateProfile['avatar']   = $data['avatar'];
 
             $profileModel->updateProfileByKey($userId, $updateProfile);
+
+            $info['mobile'] ? $response['is_bind_mobile'] = 1 : $response['is_bind_mobile'] =2;
+
         }
 
         $device_identifier = $data['device_identifier'];
-
-        $response = array();
 
         $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
         //删除sessionId
@@ -1087,7 +1119,6 @@ class UserController extends ApiYafControllerAbstract
         $userInfo = $userModel->getInfoById($userId);
         $userInfo['profile'] = $profileModel->getProfile($userId);
 
-        $response = array();
         $response['session_id'] = $sessId;
         $response['user_info'] = $userInfo;
         $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$nickname,AVATAR_DEFAULT);
@@ -1700,7 +1731,6 @@ class UserController extends ApiYafControllerAbstract
 
 
         if($code != $data['code']){
-
             $this->send_error(USER_CODE_ERROR);
         }
 

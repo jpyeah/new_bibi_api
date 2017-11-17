@@ -68,6 +68,8 @@ class CarController extends ApiYafControllerAbstract
 
         $carInfo = $carModel->GetCarInfoById($carId,$userId);
 
+        //print_r($carInfo);exit;
+
 //        $ExtraModel = new CarSellingExtraInfoModel();
 //
 //        $carInfo['car_info_ids']=$ExtraModel->getExtra($carId);
