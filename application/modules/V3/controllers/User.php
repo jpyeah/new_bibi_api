@@ -180,11 +180,10 @@ class UserController extends ApiYafControllerAbstract
      * @apiDescription 企业注册
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
+     * @apiVersion 2.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [mobile] 手机号码
-     * @apiParam {string} [password] 密码
      * @apiParam {string} [code] 验证码
      * @apiParam {string} [nickname] 昵称
      * @apiParam {string} [company] 公司
@@ -210,7 +209,7 @@ class UserController extends ApiYafControllerAbstract
     public function companyregisterAction()
     {
 
-        $this->required_fields = array_merge($this->required_fields, array('mobile', 'password', 'code', 'nickname','car_tel','car_address'));
+        $this->required_fields = array_merge($this->required_fields, array('mobile',  'code', 'nickname','car_tel','car_address'));
 
         $data = $this->get_request_data();
 
@@ -219,10 +218,10 @@ class UserController extends ApiYafControllerAbstract
         $key =  $key = 'code_' . $data['mobile'] . '';
         $code = RedisDb::getValue($key);
 
-
-        // if($code != $data['code']){
-        //     $this->send_error(USER_CODE_ERROR);
-        // }
+         if($code != $data['code']){
+             $this->send_error(USER_CODE_ERROR);
+         }
+         RedisDb::delValue($key);
 
         unset($data['code']);
 
@@ -236,7 +235,7 @@ class UserController extends ApiYafControllerAbstract
         $name = 'bibi_' . Common::randomkeys(6);
 
         $data['username'] = $name;
-        $data['password'] = $data['password'];
+        $data['password'] = md5('123456');
 
         $car_tel = $data['car_tel'];
         $address = $data['car_address'];
@@ -264,7 +263,6 @@ class UserController extends ApiYafControllerAbstract
 
         }
 
-
         unset($data['nickname']);
 
         $userModel = new \UserModel;
@@ -289,8 +287,6 @@ class UserController extends ApiYafControllerAbstract
         }
 
         $post_files=$this->uploadfiles($userId,$_FILES);
-
-
 
         $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
         $sess = new SessionModel();
@@ -331,13 +327,7 @@ class UserController extends ApiYafControllerAbstract
 
 
     }
-    /*
-    public function uploadtestAction(){
 
-        $result=$this->uploadfiles(1,$_FILES);
-        print_r($result);exit;
-    }
-    */
 
     public function uploadfiles($userId,$files){
 
