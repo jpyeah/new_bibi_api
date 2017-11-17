@@ -357,6 +357,19 @@ class UserController extends ApiYafControllerAbstract
     }
 
 
+    public function testloginAction(){
+
+        $data = $this->get_request_data();
+
+        $response['handle']=$data;
+        
+        $response['request']=$_REQUEST;
+
+        $this->send($data);
+        
+    }
+
+
 
 
 
