@@ -169,34 +169,34 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiSampleRequest http://www.bibicar.cn:8090
      * @apiVersion 2.1.0
      *
-     * @apiParam {string} [device_identifier] 设备唯一标识
-     * @apiParam {string} [session_id] session_id
-     * @apiParam {Object} [file_type] 文字说明
-     * @apiParam {Object} [files_id] 图片
-     * @apiParam {number} [car_color] 车辆颜色
-     * @apiParam {string} [city_id] 车辆类型 0:新车 1:二手车 3:爱车
-     * @apiParam {number} [model_id] 车型id
-     * @apiParam {number} [series_id] 车系列id
-     * @apiParam {number} [action] 上传车类型
-     * @apiParam {string} [contact_phone] 联系电话
-     * @apiParam {string} [vin_no] 车架号
-     * @apiParam {string} [vin_file] 驾驶证照片
-     * @apiParam {number} [mileage] 里程
-     * @apiParam {string} [brand_id] 车品牌id
-     * @apiParam {string} [engine_no] 发动机号
-     * @apiParam {number} [is_transfer] 是否过户
-     * @apiParam {string} [contact_address] 联系地址
-     * @apiParam {string} [car_no] 车牌号码
-     * @apiParam {string} [car_intro] 车主介绍
-     * @apiParam {string} [contact_name] 联系人姓名
-     * @apiParam {string} [price] 价格
-     * @apiParam {number} [car_status] 车辆状态
-     * @apiParam {string} [board_time] 上牌时间
-     * @apiParam {string} [board_address] 上牌地点(城市:深圳)
-     * @apiParam {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
+     * @apiParam (request) {string} [device_identifier] 设备唯一标识
+     * @apiParam (request) {string} [session_id] session_id
+     * @apiParam (request) {Object} [file_type] 文字说明
+     * @apiParam (request) {Object} [files_id] 图片
+     * @apiParam (request) {number} [car_color] 车辆颜色
+     * @apiParam (request) {string} [city_id] 车辆类型 0:新车 1:二手车 3:爱车
+     * @apiParam (request) {number} [model_id] 车型id
+     * @apiParam (request) {number} [series_id] 车系列id
+     * @apiParam (request) {number} [action] 上传车类型
+     * @apiParam (request) {string} [contact_phone] 联系电话
+     * @apiParam (request) {string} [vin_no] 车架号
+     * @apiParam (request) {string} [vin_file] 驾驶证照片
+     * @apiParam (request) {number} [mileage] 里程
+     * @apiParam (request) {string} [brand_id] 车品牌id
+     * @apiParam (request) {string} [engine_no] 发动机号
+     * @apiParam (request) {number} [is_transfer] 是否过户
+     * @apiParam (request) {string} [contact_address] 联系地址
+     * @apiParam (request) {string} [car_no] 车牌号码
+     * @apiParam (request) {string} [car_intro] 车主介绍
+     * @apiParam (request) {string} [contact_name] 联系人姓名
+     * @apiParam (request) {string} [price] 价格
+     * @apiParam (request) {number} [car_status] 车辆状态
+     * @apiParam (request) {string} [board_time] 上牌时间
+     * @apiParam (request) {string} [board_address] 上牌地点(城市:深圳)
+     * @apiParam (request) {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
      *
-     * @apiParam {json} data object
-     * @apiUse Data
+     * @apiParam (response) {string} car_info.verify_status 审核状态(当等于2和11的时候，审核通过，其余都待审核)
+     *
      * @apiParamExample {json} 请求样例
      *   POST /v4/Publishcar/create
      *   {
@@ -319,30 +319,32 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiSampleRequest http://www.bibicar.cn:8090
      * @apiVersion 2.0.0
      *
-     * @apiParam {string} device_identifier 设备唯一标识
-     * @apiParam {string} session_id session_id
-     * @apiParam {Object} file_type 文字说明
-     * @apiParam {Object} files_id 图片
-     * @apiParam {number} car_color 车辆颜色
-     * @apiParam {string} city_id 车辆类型 0:新车 1:二手车 3:爱车
-     * @apiParam {string} brand_id 车品牌id
-     * @apiParam {number} model_id 车型id
-     * @apiParam {number} series_id 车系列id
-     * @apiParam {string} car_no 车牌号码
-     * @apiParam {string} car_intro 车主介绍
-     * @apiParam {number} action 上传车类型
-     * @apiParam {string} price 价格
-     * @apiParam {string} contact_phone 联系电话
-     * @apiParam {string} contact_address 联系地址
-     * @apiParam {string} contact_name 联系人姓名
-     * @apiParam {string} [vin_no] 车架号
-     * @apiParam {string} [vin_file] 驾驶证照片
-     * @apiParam {number} [mileage] 里程
-     * @apiParam {string} [engine_no] 发动机号
-     * @apiParam {number} [is_transfer] 是否过户
-     * @apiParam {number} [car_status] 车辆状态
-     * @apiParam {string} [board_time] 上牌时间
-     * @apiParam {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
+     * @apiParam (request) {string} device_identifier 设备唯一标识
+     * @apiParam (request) {string} session_id session_id
+     * @apiParam (request) {Object} file_type 文字说明
+     * @apiParam (request) {Object} files_id 图片
+     * @apiParam (request) {number} car_color 车辆颜色
+     * @apiParam (request) {string} city_id 车辆类型 0:新车 1:二手车 3:爱车
+     * @apiParam (request) {string} brand_id 车品牌id
+     * @apiParam (request) {number} model_id 车型id
+     * @apiParam (request) {number} series_id 车系列id
+     * @apiParam (request) {string} car_no 车牌号码
+     * @apiParam (request) {string} car_intro 车主介绍
+     * @apiParam (request) {number} action 上传车类型
+     * @apiParam (request) {string} price 价格
+     * @apiParam (request) {string} contact_phone 联系电话
+     * @apiParam (request) {string} contact_address 联系地址
+     * @apiParam (request) {string} contact_name 联系人姓名
+     * @apiParam (request) {string} [vin_no] 车架号
+     * @apiParam (request) {string} [vin_file] 驾驶证照片
+     * @apiParam (request) {number} [mileage] 里程
+     * @apiParam (request) {string} [engine_no] 发动机号
+     * @apiParam (request) {number} [is_transfer] 是否过户
+     * @apiParam (request) {number} [car_status] 车辆状态
+     * @apiParam (request) {string} [board_time] 上牌时间
+     * @apiParam (request) {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
+     *
+     * @apiParam (response) {string} car_info.verify_status 审核状态(当等于2和11的时候，审核通过，其余都待审核)
      *
      * @apiParamExample {json} 请求样例
      *   POST /v4/Publishcar/newCar
@@ -417,6 +419,16 @@ class PublishcarController extends ApiYafControllerAbstract
             $toId=389;
             $content = '用户:'.$userId.'上传了车，赶紧去审核吧';
             $mh->systemNotify($toId, $content);
+
+            $title = is_array($carInfo['user_info']) ?
+                $carInfo['user_info']['profile']['nickname'] . '的' . $carInfo['car_name']
+                : $carInfo['car_name'];
+
+            $response['share_title'] = $title;
+            $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id='.$properties['hash'];
+            $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
+            $response['share_img'] = isset($carInfo['files']["type1"]) ? $carInfo['files']["type1"][0]['file_url'] : '';
+
 
 
             $this->send($response);
