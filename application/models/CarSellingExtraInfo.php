@@ -74,9 +74,8 @@ class CarSellingExtraInfoModel extends PdoDb
 
         $sql .= $this->where;
 
-       // print_r($sql);exit;
-
         $list = $this->query($sql);
+
 
         return $list;
     }
@@ -90,6 +89,14 @@ class CarSellingExtraInfoModel extends PdoDb
         if($res){
 
             $str = $res[0]['ids'];
+
+            $last_str = substr($str, -1);
+
+            if($last_str == ','){
+                $str = substr($str,0,strlen($str)-1);
+
+            }
+
 
             $this->where = '  WHERE id in ('.$str.')';
 
