@@ -306,8 +306,7 @@ class UserController extends ApiYafControllerAbstract
             $this->send_error(USER_CODE_ERROR);
         }
         RedisDb::delValue($key);
-
-        unset($data['v4/user/quicklogin']);
+        unset($data['v4/User/quicklogin']);
         unset($data['code']);
         $userModel = new \UserModel;
         $user = $userModel->getInfoByMobile($data['mobile']);
