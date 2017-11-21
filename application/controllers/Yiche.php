@@ -100,6 +100,84 @@ class YicheController extends ApiYafControllerAbstract {
            
 
     }
+
+    //获取系列的分类
+    public function getSetypeAction(){
+
+        $sql = "SELECT brand_series_id,car_type  FROM bibi_car_brand_series";
+
+        $pdo = new PdoDb;
+
+        $list = $pdo->query($sql);
+
+        foreach($list as $k => $val){
+
+            if(!$val['car_type'] &&  !is_numeric($val['car_type']) ){
+
+                $url="https://carapi.ycapp.yiche.com/car/GetSerialInfo?csid=".$val['brand_series_id']."&tracker=172_ycapp";
+
+                $html=file_get_contents($url);
+
+                $data=json_decode($html,true)['data'];
+
+                //1:微型车 2:小型车 3:紧凑型 4:中型车 5:中大型 6:豪华车 7:MPV 8:SUV 9:跑车 10:微面 11:皮卡 12:电动车
+                if($data){
+
+                    switch($data['carType']){
+
+                        case '微型车':
+                            $val1=1;
+                          break;
+                        case '小型车':
+                            $val1=2;
+                          break;
+                        case '紧凑型':
+                            $val1=3;
+                            break;
+                        case '中型车':
+                            $val1=4;
+                            break;
+                        case '中大型':
+                            $val1=5;
+                            break;
+                        case '豪华车':
+                            $val1=6;
+                            break;
+                        case  'MPV':
+                            $val1=7;
+                            break;
+                        case 'SUV':
+                            $val1=8;
+                            break;
+                        case '跑车':
+                            $val1=9;
+                            break;
+                        case '微面':
+                            $val1=10;
+                            break;
+                        case '皮卡':
+                            $val1=11;
+                            break;
+                        case '电动车':
+                            $val1=12;
+                            break;
+                    }
+
+                    $sql1="UPDATE bibi_car_brand_series SET car_type =".$val1."  WHERE brand_series_id = ".$val['brand_series_id'];
+
+                    $pdo->query($sql1);
+
+
+                }
+
+
+            }
+
+
+        }
+
+
+    }
     
      public function getseAction(){
 
@@ -376,7 +454,7 @@ class YicheController extends ApiYafControllerAbstract {
 
     public function modeldetailAction () {
 
-           $seriesId=4165;
+           $seriesId=2755;
            $sql="SELECT model_id FROM `bibi_car_series_model` WHERE series_id=".$seriesId;
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
@@ -403,6 +481,11 @@ class YicheController extends ApiYafControllerAbstract {
                 }
 
                 if(isset($data["data"][0]["UnderPan_ForwardGearNum"])){
+                    $b = '手动';
+                   if(strpos($data["data"][0]["UnderPan_ForwardGearNum"], $b) !== false ){
+                      //包含
+                       //$data["data"][0]["UnderPan_ForwardGearNum_type"]=1;
+                   }
                    $arr["UnderPan_ForwardGearNum"]=$data["data"][0]["UnderPan_ForwardGearNum"];
                 }
 
@@ -419,7 +502,7 @@ class YicheController extends ApiYafControllerAbstract {
                 }
                
                if(isset($data["data"][0]["Perf_SeatNum"])){
-                  $arr["Perf_SeatNum"]=$data["data"][0]["Perf_SeatNum"];
+                  $arr["Perf_SeatNum"]=$data["data"][0]["Perf_SeatNum"][0];
                }
                
                if(isset($data["data"][0]["Perf_DriveType"])){
@@ -541,7 +624,7 @@ class YicheController extends ApiYafControllerAbstract {
 //           $pdo = new PdoDb;
 //           $list = $pdo->query($sql);
 
-          $list = ['3859'];
+          $list = ['2755'];
            foreach($list as $key => $value){
               //$serialId=$value["brand_series_id"];
               $serialId=$value;
@@ -1055,7 +1138,38 @@ class YicheController extends ApiYafControllerAbstract {
 
           echo "dsafsda";
 
-    } 
+    }
+
+
+
+    function CurlGetRequest($url,$data,$timeout = 5){
+
+        if($url == "" || $timeout <= 0){
+            return false;
+        }
+        $url = $url.'?'.http_bulid_query($data);
+        $con = curl_init((string)$url);
+        curl_setopt($con, CURLOPT_HEADER, false);
+        curl_setopt($con, CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($con, CURLOPT_TIMEOUT, (int)$timeout);
+
+        return curl_exec($con);
+    }
+
+    function doCurlPostRequest($url,$requestString,$timeout = 5){
+
+        if($url == '' || $requestString == '' || $timeout <=0){
+            return false;
+        }
+        $con = curl_init((string)$url);
+        curl_setopt($con, CURLOPT_HEADER, false);
+        curl_setopt($con, CURLOPT_POSTFIELDS, $requestString);
+        curl_setopt($con, CURLOPT_POST,true);
+        curl_setopt($con, CURLOPT_RETURNTRANSFER,true);
+        curl_setopt($con, CURLOPT_TIMEOUT,(int)$timeout);
+        return curl_exec($con);
+
+    }
     
     
     

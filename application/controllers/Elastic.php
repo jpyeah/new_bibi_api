@@ -9,7 +9,9 @@
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
 class ElasticController extends ApiYafControllerAbstract
-{
+{     
+
+      //批量导入elasticsearch
       public function createbybulkAction(){
           $pdoM = new PdoDb;
           $sql = "select * from `bibi_car_selling_list`";
@@ -44,8 +46,8 @@ class ElasticController extends ApiYafControllerAbstract
           print_r($responses);
 
       }
-
-
+      
+      //批量导入elasticsearch 删除一个库
       public function deleteindexAction(){
 
           $client=new Elasticsearch;
@@ -54,6 +56,7 @@ class ElasticController extends ApiYafControllerAbstract
           $params = ['index' => 'car'];
           $response = $client->indices()->delete($params);
       }
+      //添加一个库和一个表
       public function createAction(){
 
       	      //$elastic = new Elasticsearch\Client();
@@ -103,7 +106,7 @@ class ElasticController extends ApiYafControllerAbstract
 
     }
 
-
+      //设置一个表的索引类型
       public function putmappingAction(){
 
           $client=new Elasticsearch;
@@ -132,7 +135,8 @@ class ElasticController extends ApiYafControllerAbstract
           $this->send($result);
 
       }
-
+      
+      //搜索
       public function searchAction(){
           $client=new Elasticsearch;
           $client=$client->instance();
@@ -159,7 +163,8 @@ class ElasticController extends ApiYafControllerAbstract
           $results = $client->search($params);
           $this->send($results);
       }
-
+      
+      //添加一列数据
       public function addAction($val){
           $client=new Elasticsearch;
           $client=$client->instance();

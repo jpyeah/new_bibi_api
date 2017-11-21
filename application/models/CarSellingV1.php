@@ -13,6 +13,10 @@ class CarSellingV1Model extends PdoDb
     public $brand_info;
     public static $visit_user_id = 0;
 
+    public $left_model;
+    public $left_series;
+    public $left_extra;
+
 
     public function __construct()
     {
@@ -417,7 +421,6 @@ class CarSellingV1Model extends PdoDb
 
     }
 
-
     public function getCarList($userId = 0)
     {
 
@@ -464,7 +467,7 @@ class CarSellingV1Model extends PdoDb
             $item = $this->handlerCarByList($car,$userId);
 
             $items[$k]['car_info'] = $item;
-       //     $items[$k]['car_users'] = $this->getSameBrandUsers($brand_id);
+            //     $items[$k]['car_users'] = $this->getSameBrandUsers($brand_id);
 
         }
 
@@ -477,6 +480,71 @@ class CarSellingV1Model extends PdoDb
         $count = count($items);
 
         $list['car_list'] = $items;
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] = $total;
+        $list['number'] = $number;
+
+        return $list;
+    }
+
+
+    public function getCarListTotal($userId = 0)
+    {
+
+        $pageSize = 10;
+
+        $sql = '
+                SELECT
+                t1.*
+                FROM `bibi_car_selling_list` AS t1 ';
+
+        $sqlCnt = '
+                SELECT
+                count(*) AS total
+                FROM `bibi_car_selling_list` AS t1 ';
+        if($this->left_series){
+            $sql .= $this->left_series;
+            $sqlCnt .= $this->left_series;
+        }
+
+        if($this->left_model){
+            $sql .= $this->left_model;
+            $sqlCnt .= $this->left_model;
+        }
+
+        if($this->left_extra){
+            $sql .= $this->left_extra;
+            $sqlCnt .= $this->left_extra;
+        }
+
+        $sql .= $this->where;
+        $sql .= $this->order;
+
+        $number = ($this->page-1)*$pageSize;
+
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+
+        //print_r($sql);exit;
+
+        $cars = $this->query($sql);
+
+        $items = array();
+
+        foreach($cars as $k => $car){
+
+            $items[$k]['car_info'] = $car;
+            //     $items[$k]['car_users'] = $this->getSameBrandUsers($brand_id);
+
+        }
+
+        $sqlCnt .= $this->where;
+        $sqlCnt .= $this->order;
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+        $count = count( $items);
+
+        $list['car_list'] =$items;
         $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
         $list['total'] = $total;
         $list['number'] = $number;

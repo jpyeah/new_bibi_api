@@ -425,3 +425,68 @@ Stack trace:
 [17-Nov-2017 09:25:46 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [17-Nov-2017 09:25:47 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [17-Nov-2017 09:26:49 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 13:27:58 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 13:28:22 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 13:29:14 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 13:29:16 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 13:31:50 PRC] PHP Notice:  Undefined index: car_type in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 121
+[21-Nov-2017 13:34:00 PRC] PHP Fatal error:  Call to undefined method PdoDb::excute() in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 125
+[21-Nov-2017 13:34:17 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 13:34:46 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 114
+[21-Nov-2017 13:39:32 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 121
+[21-Nov-2017 13:39:32 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 121
+[21-Nov-2017 13:39:32 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 121
+[21-Nov-2017 13:39:32 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 121
+[21-Nov-2017 13:39:59 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 123
+[21-Nov-2017 13:39:59 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 123
+[21-Nov-2017 13:39:59 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 123
+[21-Nov-2017 13:39:59 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 123
+[21-Nov-2017 13:40:48 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:40:48 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:40:48 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:40:48 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:41:04 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:41:04 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:41:04 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:41:04 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:41:27 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:41:27 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:41:27 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 126
+[21-Nov-2017 13:41:27 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 126
+[21-Nov-2017 13:41:28 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:41:28 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 124
+[21-Nov-2017 13:41:28 PRC] PHP Warning:  Illegal string offset 'carType' in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 126
+[21-Nov-2017 13:41:28 PRC] PHP Notice:  Uninitialized string offset: 0 in /usr/local/var/www/bibi-api/application/controllers/Yiche.php on line 126
+[21-Nov-2017 14:15:04 PRC] PHP Notice:  Undefined index: page in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 395
+[21-Nov-2017 15:23:00 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 15:27:18 PRC] PHP Notice:  Undefined variable: items in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 529
+[21-Nov-2017 15:27:18 PRC] PHP Notice:  Undefined variable: items in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 531
+[21-Nov-2017 15:27:18 PRC] PHP Notice:  Undefined variable: response in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 520
+[21-Nov-2017 15:27:58 PRC] PHP Notice:  Undefined variable: response in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 520
+[21-Nov-2017 15:29:22 PRC] PHP Notice:  Undefined variable: response in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 520
+[21-Nov-2017 15:30:23 PRC] PHP Notice:  Undefined variable: response in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 520
+[21-Nov-2017 15:40:52 PRC] PHP Notice:  Undefined property: CarSellingV1Model::$left_series in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 505
+[21-Nov-2017 15:40:52 PRC] PHP Notice:  Undefined property: CarSellingV1Model::$left_model in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 509
+[21-Nov-2017 15:42:09 PRC] PHP Notice:  Undefined property: CarSellingV1Model::$left in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 513
+[21-Nov-2017 15:42:09 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 15:42:40 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 15:42:42 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 15:43:38 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 15:52:16 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 15:52:33 PRC] PHP Notice:  Undefined index: color in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 434
+[21-Nov-2017 15:52:33 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 15:52:48 PRC] PHP Notice:  Undefined index: color in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 434
+[21-Nov-2017 15:53:01 PRC] PHP Notice:  Undefined index: $car_color in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 434
+[21-Nov-2017 15:54:22 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 17:20:28 PRC] PHP Notice:  Undefined property: CarSellingV1Model::$left_extra in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 484
+[21-Nov-2017 17:21:42 PRC] PHP Notice:  Undefined property: CarSellingV1Model::$left_extra in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 484
+[21-Nov-2017 17:21:42 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 17:22:24 PRC] PHP Notice:  Undefined property: CarSellingV1Model::$left_extra in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 484
+[21-Nov-2017 17:22:24 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 17:22:49 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 17:24:51 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 17:26:45 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[21-Nov-2017 18:19:34 PRC] PHP Parse error:  syntax error, unexpected ')', expecting ']' in /usr/local/var/www/bibi-api/application/models/CarSellingExtraInfo.php on line 156
+[21-Nov-2017 18:20:00 PRC] PHP Fatal error:  Cannot unset string offsets in /usr/local/var/www/bibi-api/application/models/CarSellingExtraInfo.php on line 156
+[21-Nov-2017 18:20:19 PRC] PHP Fatal error:  Cannot unset string offsets in /usr/local/var/www/bibi-api/application/models/CarSellingExtraInfo.php on line 158
+[21-Nov-2017 18:20:20 PRC] PHP Fatal error:  Cannot unset string offsets in /usr/local/var/www/bibi-api/application/models/CarSellingExtraInfo.php on line 158

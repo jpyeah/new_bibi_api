@@ -111,6 +111,75 @@ class CarSellingExtraInfoModel extends PdoDb
     }
 
 
+    public function getExtraInfoByIds($ids){
+
+        $sql ="SELECT * FROM bibi_car_selling_list_extra_info_list";
+
+        $sql .= '  WHERE id in ('.$ids.')';
+
+        $list = $this->query($sql);
+
+        return $list;
+    }
+
+    public function addExtrainfo($car_id,$hash,$ids){
+
+
+           $infos = $this->getExtraInfoByIds($ids);
+
+           foreach($infos as $k => $val){
+               $items[$val['alias']]=1;
+           }
+           $insert = $items;
+           $insert['car_id']=$car_id;
+           $insert['hash']=$hash;
+
+           $id = $this->insert('bibi_car_selling_list_info',$insert);
+           return $id;
+
+    }
+
+    public function getInfo($car_id){
+
+           $sql ="SELECT * FROM bibi_car_selling_list_info WHERE car_id=".$car_id;
+
+           $res = $this->query($sql);
+
+           $result =  $res ? $res[0]: array();
+
+           foreach($result as $k =>$val){
+
+                  if($val){
+
+                      $items[$k]=$val;
+
+                  }
+
+
+           }
+
+            unset($items['id']);
+            unset($items['hash']);
+            unset($items['car_id']);
+
+           $sql= "SELECT * FROM bibi_car_selling_list_extra_info_list ";
+
+           $res = $this->query($sql);
+           $list=array();
+           foreach($items as $k =>$val){
+
+               foreach($res as $j =>$h){
+
+                      if($k == $h['alias']){
+                          $lists[]=$h;
+                      }
+
+               }
+
+           }
+        
+    }
+
 
 
 
