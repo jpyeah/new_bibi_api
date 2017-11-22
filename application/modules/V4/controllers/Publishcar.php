@@ -266,16 +266,20 @@ class PublishcarController extends ApiYafControllerAbstract
             $ifr = new ItemFilesRelationModel();
             $ifr->CreateBatch($carId, $data['files_id'], ITEM_TYPE_CAR, $data['files_type']);
 
+            if($car_info_ids){
+
+                $last_str = substr($car_info_ids, -1);
+
+                if($last_str == ','){
+                    $car_info_ids = substr($car_info_ids,0,strlen($car_info_ids)-1);
+                }
+                $ExtraModel = new CarSellingExtraInfoModel();
+                $ExtraModel->addExtrainfo($carId,$properties['hash'],$car_info_ids);
+            }
+            $cs = new CarSellingV1Model();
             $carInfo = $cs->GetCarInfoById($properties['hash']);
 
             $response['car_info'] = $carInfo;
-
-            if($car_info_ids){
-                $ExtraModel = new CarSellingExtraInfoModel();
-                $insert['hash']=$properties['hash'];
-                $insert['ids']=$car_info_ids;
-                $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
-            }
 
             //我的关注数据myfocus
             $UserFocusM= new MyFocusModel();
@@ -395,16 +399,21 @@ class PublishcarController extends ApiYafControllerAbstract
             $ifr = new ItemFilesRelationModel();
             $ifr->CreateBatch($carId, $data['files_id'], ITEM_TYPE_CAR, $data['files_type']);
 
+            if($car_info_ids){
+
+                $last_str = substr($car_info_ids, -1);
+
+                if($last_str == ','){
+                    $car_info_ids = substr($car_info_ids,0,strlen($car_info_ids)-1);
+                }
+                $ExtraModel = new CarSellingExtraInfoModel();
+                $ExtraModel->addExtrainfo($carId,$properties['hash'],$car_info_ids);
+            }
+            $cs = new CarSellingV1Model();
+
             $carInfo = $cs->GetCarInfoById($properties['hash']);
 
             $response['car_info'] = $carInfo;
-
-            if($car_info_ids){
-                $ExtraModel = new CarSellingExtraInfoModel();
-                $insert['hash']=$properties['hash'];
-                $insert['ids']=$car_info_ids;
-                $id = $ExtraModel->insert('bibi_car_selling_list_extra_info',$insert);
-            }
 
             //我的关注数据myfocus
             $UserFocusM= new MyFocusModel();

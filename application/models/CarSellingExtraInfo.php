@@ -16,7 +16,6 @@ class CarSellingExtraInfoModel extends PdoDb
 
     public function __construct()
     {
-
         parent::__construct();
         self::$table = 'bibi_car_selling_list_extra_info';
     }
@@ -124,7 +123,6 @@ class CarSellingExtraInfoModel extends PdoDb
 
     public function addExtrainfo($car_id,$hash,$ids){
 
-
            $infos = $this->getExtraInfoByIds($ids);
 
            foreach($infos as $k => $val){
@@ -147,37 +145,38 @@ class CarSellingExtraInfoModel extends PdoDb
 
            $result =  $res ? $res[0]: array();
 
-           foreach($result as $k =>$val){
+           if($result){
 
-                  if($val){
+               foreach($result as $k =>$val){
 
-                      $items[$k]=$val;
-
-                  }
-
-
-           }
-
-            unset($items['id']);
-            unset($items['hash']);
-            unset($items['car_id']);
-
-           $sql= "SELECT * FROM bibi_car_selling_list_extra_info_list ";
-
-           $res = $this->query($sql);
-           $list=array();
-           foreach($items as $k =>$val){
-
-               foreach($res as $j =>$h){
-
-                      if($k == $h['alias']){
-                          $lists[]=$h;
+                      if($val){
+                          $items[$k]=$val;
                       }
+               }
+                unset($items['id']);
+                unset($items['hash']);
+                unset($items['car_id']);
 
+               $sql= "SELECT * FROM bibi_car_selling_list_extra_info_list ";
+
+               $res = $this->query($sql);
+               $list=array();
+               foreach($items as $k =>$val){
+                   foreach($res as $j =>$h){
+                          if($k == $h['alias']){
+                              $list[]=$h;
+                          }
+                   }
                }
 
+               return $list;
+
+           }else{
+
+               return array();
            }
-        
+
+
     }
 
 

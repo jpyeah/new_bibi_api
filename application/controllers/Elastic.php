@@ -63,7 +63,7 @@ class ElasticController extends ApiYafControllerAbstract
               $client=new Elasticsearch;
               $client=$client->instance();
               $searchParams['index'] = 'car';
-              $searchParams['type'] = 'car_selling_list';
+              $searchParams['type'] = 'model_detail';
               $searchParams['body'] = array(
 //                  'carname' => 'abc',
 //                  'hash'=>12334,
@@ -105,9 +105,8 @@ class ElasticController extends ApiYafControllerAbstract
 
 
     }
-
-      //设置一个表的索引类型
-      public function putmappingAction(){
+    //设置一个表的索引类型
+    public function putmappingAction(){
 
           $client=new Elasticsearch;
           $client=$client->instance();
@@ -197,5 +196,108 @@ class ElasticController extends ApiYafControllerAbstract
       	     $res=$client->search();
       	     print_r($res);
       }
+
+      public function seriescreateAction(){
+
+          $client=new Elasticsearch;
+          $client=$client->instance();
+          $searchParams['index'] = 'car';
+          $searchParams['type'] = 'car_brand_series';
+          $searchParams['body'] = array(
+
+          );
+
+          $response = $client->index($searchParams);
+
+          print_r($response);
+
+      }
+
+      public function seriesputmappingAction(){
+
+          $client=new Elasticsearch;
+          $client=$client->instance();
+          $params = [
+              'index' => 'car',
+              'type' => 'car_brand_series',
+              'body' => [
+                  'car_brand_series' => [
+                      '_source' => [
+                          'enabled' => true
+                      ],
+                      'properties' => [
+                          'brand_series_name' => [
+                              'type' => 'string',
+                              "analyzer"=> "ik_max_word",
+                              "search_analyzer"=> "ik_max_word"
+                          ],
+                      ]
+                  ]
+              ]
+          ];
+          // Update the index mapping
+          $result = $client->indices()->putMapping($params);
+
+          $this->send($result);
+      }
+
+      public function seriescreatebybulkAction(){
+
+          $pdoM = new PdoDb;
+          $sql = "select t1.*,t2.brand_name from `bibi_car_brand_series` as t1 LEFT JOIN `bibi_car_brand_list` as t2 ON t1.brand_id = t2.brand_id";
+          $lists = $pdoM->query($sql);
+
+          foreach($lists as $k => $val){
+
+              $params['body'][] = [
+                  'index' => [
+                      '_index' => 'car',
+                      '_type' => 'car_brand_series',
+                      '_id' => $val['brand_series_id'],
+                  ]
+              ];
+
+              $params['body'][] = [
+                  'brand_series_name' => $val['brand_series_name'],
+                  'brand_series_id'=>$val['brand_series_id'],
+                  'makename'=>$val['makename'],
+                  'brand_id'=>$val['brand_id'],
+                  'brand_name'=>$val['brand_name'],
+              ];
+          }
+
+          $client=new Elasticsearch;
+          $client=$client->instance();
+
+          $responses = $client->bulk($params);
+      }
+
+    //搜索
+    public function seriessearchAction(){
+        $client=new Elasticsearch;
+        $client=$client->instance();
+        $params = [
+            'index' => 'car',
+            'type' => 'car_brand_series',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'brand_series_name' => '宝马 7系 ',
+                    ]
+                ],
+                'highlight' =>[
+                    "pre_tags" => ["<b>"],
+                    "post_tags" => ["</b>"],
+                    "fields" => [
+                        "brand_series_name" => new \stdClass()
+                    ]
+                ]
+            ]
+        ];
+        $params['size'] =100;
+        $params['from'] = 0;
+        $results = $client->search($params);
+        $this->send($results);
+    }
 
 }

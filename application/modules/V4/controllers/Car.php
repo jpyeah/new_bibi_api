@@ -330,10 +330,10 @@ class CarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v4/car/testlist 车辆列表
-     * @apiName car list
+     * @api {POST} /v4/car/newlist  新车辆列表
+     * @apiName car newlist
      * @apiGroup Car
-     * @apiDescription 车辆列表
+     * @apiDescription 新车辆列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
      * @apiVersion 2.0.0
@@ -350,44 +350,23 @@ class CarController extends ApiYafControllerAbstract
      * @apiParam {string} [max_mileage] 最高里程
      * @apiParam {string} [min_board_time] 最短上牌时间
      * @apiParam {string} [max_board_time] 最长上牌时间
+     * @apiParam {string} [min_forloat] 最小排量
+     * @apiParam {string} [max_forloat] 最大排量
      * @apiParam {number} [has_vr] 是否vr 1:是
      * @apiParam {number} [car_type] 是否新车二手车 1:新车  2 二手车
      * @apiParam {number} [car_source] 车辆来源(个人，商家) 1:个人 2 商家
-     * @apiParam {number} [car_level] 车辆级别 1:微型车 2:小型车 3:紧凑型 4:中型车 5:中大型 6:豪华车 7:MPV 8:SUV 9:跑车 10:微面 11:皮卡 12:电动车
-     * @apiParam {number} [car_color] 颜色 0:未知 1:黑色 2:红色 3:深灰色 4:粉红色 5:银灰色 6:紫色 7:白色 8:蓝色 9:香槟色 10:绿色11:黄色12:咖啡色13:橙色 14:多彩色
-     * @apiParam {number} [car_level] 级别
-     * @apiParam {number} [seat_num] 座位数
-     * @apiParam {number} [envirstandard] 环保标准 国1 国2 国3
-     * @apiParam {number} [fueltype] 燃油类型 汽油、柴油、油电混合动力、电动
-     * @apiParam {number} [forward] 变速箱  手动 自动
+     * @apiParam {number} [forward] 变速箱  1:手动 2:自动
      * @apiParam {number} [board_add] 车牌所在地  1：本地 2：外地
-     * @apiParam {object} [extra_info] 基本参数  ids
-     * @apiParamExample {json} 请求样例
-     *    POST /v4/car/index
-     *   {
-     *     "data": {
-     *       "device_identifier":"",
-     *       "session_id":"",
-     *       "keyword":"",
-     *       "order_id":"",
-     *       "brand_id":"",
-     *       "series_id":"",
-     *       "page":"",
-     *       "min_price":"",
-     *       "max_price":"",
-     *       "min_mileage":"",
-     *       "max_mileage":"",
-     *       "min_board_time":"",
-     *       "max_board_time":"",
-     *       "has_vr":"",
-     *       "source":"",
-     *
-     *     }
-     *   }
+     * @apiParam {number} [car_level] 车辆级别 (ids传值 1,2,3) (1:微型车 2:小型车 3:紧凑型 4:中型车 5:中大型 6:豪华车) (1,2,3,4,5,6):小轿车 7:MPV 8:SUV 9:跑车 10:微面 11:皮卡 12:电动车
+     * @apiParam {number} [car_color] 颜色 (ids传值 1,2,3) 0:未知 1:黑色 2:红色 3:深灰色 4:粉红色 5:银灰色 6:紫色 7:白色 8:蓝色 9:香槟色 10:绿色11:黄色12:咖啡色13:橙色 14:多彩色
+     * @apiParam {number} [seat_num] 座位数 (ids传值 2,3,4,5)
+     * @apiParam {number} [envirstandard] 环保标准 (ids传值 1,2,3) 1:国1 2:国2 3:国3 4:国4
+     * @apiParam {number} [fueltype] 燃油类型 (ids传值 1,2,3) 1:汽油、2:柴油、3:油电混合动力 4:电动
+     * @apiParam {string} [extra_info] 亮点配置  (ids传值 1,2,3)
      *
      */
 
-    public function testlistAction(){
+    public function newlistAction(){
         $jsonData = require APPPATH .'/configs/JsonData.php';
         $this->optional_fields = array('order_id','brand_id','series_id');
         // $this->required_fields = array_merge($this->required_fields, array('session_id'));
@@ -403,28 +382,26 @@ class CarController extends ApiYafControllerAbstract
 
         $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND t1.car_type <> 3 AND t1.car_type <> 4 AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
 
+        //品牌
         if($data['brand_id']){
 
             $where .= ' AND t1.brand_id = '.$data['brand_id'].' ';
         }
-
+        //系列
         if($data['series_id']){
             $where .= ' AND t1.series_id = '.$data['series_id'].' ';
         }
-
         //是否新车二手车
         if(@$data['car_type']){
             $where .= ' AND t1.car_type = '.$data['car_type'].' ';
         }
         //车源
         if(@$data['car_source']){
-
             $where .= ' AND t1.car_source = '.$data['car_source'].' ';
         }
         //车级别
         if(@$data['car_level']) {
-
-            $where .= ' AND t4.car_type = ' . $data['car_level'] . ' ';
+            $where .= ' AND t4.car_type in ( ' . $data['car_level'] . ')  ';
             if(!$carM->left_series){
                 $carM->left_series = 'LEFT JOIN `bibi_car_brand_series` AS t4 ON t4.brand_series_id = t1.series_id ';
             }
@@ -435,7 +412,7 @@ class CarController extends ApiYafControllerAbstract
         }
         //环保标准
         if(@$data['envirstandard']) {
-            $where .= ' AND t5.Engine_EnvirStandard = ' . $data['envirstandard'] . ' ';
+            $where .= ' AND t5.Engine_EnvirStandard_type in (' . $data['envirstandard'] . ') ';
             if(!$carM->left_model){
                 $carM->left_model = 'LEFT JOIN `bibi_car_model_detail` AS t5 ON t1.model_id = t5.model_id ';
             }
@@ -449,14 +426,14 @@ class CarController extends ApiYafControllerAbstract
         }
         //变速箱
         if(@$data['forward']) {
-            $where .= ' AND t5.UnderPan_ForwardGearNum  LIKE "%'.$data['forward'].'%" ';
+            $where .= ' AND t5.UnderPan_ForwardGearNum_type ='.$data['forward'].' ';
             if(!$carM->left_model){
                 $carM->left_model = 'LEFT JOIN `bibi_car_model_detail` AS t5 ON t1.model_id = t5.model_id ';
             }
         }
         //燃油类别
         if(@$data['fueltype']) {
-            $where .= ' AND t5.Oil_FuelType ='.$data['fueltype'] .' ';
+            $where .= ' AND t5.Oil_FuelType_type in ('.$data['fueltype'] .') ';
             if(!$carM->left_model){
                 $carM->left_model = 'LEFT JOIN `bibi_car_model_detail` AS t5 ON t1.model_id = t5.model_id ';
             }
@@ -465,30 +442,38 @@ class CarController extends ApiYafControllerAbstract
         if(@$data['board_add']){
 
         }
-
+        //基本配置
         if(@$data['extra_info']){
-
             $ExtraModel = new CarSellingExtraInfoModel();
-
             $info = $ExtraModel->getExtraInfoByIds($data['extra_info']);
-
             $item ='';
             foreach($info as $k){
-
                    $str = $k['alias'];
-
                    $item .=" AND t6.".$str." = 1 ";
-
             }
-
             $where .= $item;
-
             if(!$carM->left_extra && $item){
                 $carM->left_extra = 'LEFT JOIN `bibi_car_selling_list_info` AS t6 ON t1.id = t6.car_id ';
             }
-
         }
-
+        //排量
+        if(@$data['min_forfloat'] == 5){
+            $where .= ' AND t5.Engine_ExhaustForFloat >= '.$data['min_forfloat'] .' ';
+            if(!$carM->left_model){
+                $carM->left_model = 'LEFT JOIN `bibi_car_model_detail` AS t5 ON t1.model_id = t5.model_id ';
+            }
+        }else{
+            if(@$data['min_forfloat']){
+                $where .= ' AND t5.Engine_ExhaustForFloat >= '.$data['min_forfloat'] .' ';
+            }
+            if(@$data['max_forfloat']){
+                $where .=' AND t5.Engine_ExhaustForFloat <='.$data['max_forfloat'].' ';
+            }
+            if(!$carM->left_model){
+                $carM->left_model = 'LEFT JOIN `bibi_car_model_detail` AS t5 ON t1.model_id = t5.model_id ';
+            }
+        }
+        //价格
         if(@$data['min_price']==200){
             $where .=' AND t1.price >='.$data['min_price'].' ';
         }else{
@@ -496,12 +481,11 @@ class CarController extends ApiYafControllerAbstract
             if(@$data['min_price']){
                 $where .=' AND t1.price >='.$data['min_price'].' ';
             }
-
             if(@$data['max_price']){
                 $where .=' AND t1.price <='.$data['max_price'].' ';
             }
         }
-
+        //里程数
         if(@$data['min_mileage']==15){
             $min_mileage=$data['min_mileage']*10000;
             $where .=' AND t1.mileage >='.$min_mileage.' ';
@@ -515,13 +499,12 @@ class CarController extends ApiYafControllerAbstract
                 $where .=' AND t1.mileage <='.$max_mileage.' ';
             }
         }
-
+        //年龄
         $year=date("Y");
         if(@$data['min_board_time']==10){
             $min=$year-$data['min_board_time'];
             $where .=' AND t1.board_time <='.$min.' ';
         }else{
-
             if(@$data['min_board_time']){
                 $max=$year-$data['min_board_time'];
                 $where .=' AND t1.board_time <='.$max.' ';
@@ -530,20 +513,14 @@ class CarController extends ApiYafControllerAbstract
                 $min=$year-$data['max_board_time'];
                 $where .=' AND t1.board_time >='.$min.' ';
             }
-
         }
-
-        if(@$data['has_vr']==1){
-
+        if(@$data['has_vr'] == 1){
             $where .= 'AND t1.vr_url is not null';
         }
-
         if(isset($jsonData['order_info'][$data['order_id']])) {
-
             if(!$data['order_id']){
                 $where .= 'AND t1.user_id = 389';
             }
-
             // $carM->order  = ' ORDER BY t1.car_type ASC , ';
             $carM->order = $jsonData['order_info'][$data['order_id']];
 
@@ -822,12 +799,12 @@ class CarController extends ApiYafControllerAbstract
     public function testAction(){
 
            $ExtraModel = new CarSellingExtraInfoModel();
-//           $hash = '57837734900f4';
-//           $car_id = 123;
-//           $ids = '1,2,4,6';
-//           $res = $ExtraModel->addExtrainfo($car_id,$hash,$ids);
+           $hash = '57837734900f4';
+           $car_id = 123;
+           $ids = '2,6,8,16,18,19,26,25,30,29,34,33,';
+           $res = $ExtraModel->addExtrainfo($car_id,$hash,$ids);
 
-          $ExtraModel->getInfo(123);
+         // $ExtraModel->getInfo(123);
            print_r($res);exit;
     }
 

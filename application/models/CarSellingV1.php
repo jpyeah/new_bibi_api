@@ -89,7 +89,7 @@ class CarSellingV1Model extends PdoDb
         $brandM = new BrandModel();
 
         $ExtraModel = new CarSellingExtraInfoModel();
-        $car['car_extra_info'] = $ExtraModel->getExtra($car['car_id']);
+        $car['car_extra_info'] = $ExtraModel->getInfo($car['id']);
 
         $car['brand_info']  = $brandM->getBrandModel($car['brand_id']);
         $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);
@@ -524,8 +524,6 @@ class CarSellingV1Model extends PdoDb
 
         $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
 
-        //print_r($sql);exit;
-
         $cars = $this->query($sql);
 
         $items = array();
@@ -534,7 +532,6 @@ class CarSellingV1Model extends PdoDb
 
             $items[$k]['car_info'] = $car;
             //     $items[$k]['car_users'] = $this->getSameBrandUsers($brand_id);
-
         }
 
         $sqlCnt .= $this->where;

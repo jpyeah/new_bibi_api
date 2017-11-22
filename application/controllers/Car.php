@@ -293,6 +293,92 @@ class CarController extends ApiYafControllerAbstract
         $this->send($response);
     }
 
+    /**
+     * @api {POST} /car/gaodeprovince 获取高德省份
+     * @apiName car  gaodeprovince
+     * @apiGroup Publish
+     * @apiDescription 获取省份
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParamExample {json} 请求样例
+     *   POST /car/province
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public  function  gaodeprovinceAction(){
+
+        $pdo = new PdoDb;
+
+        $sql = 'SELECT id as province_id,cate_name as province  FROM `bibi_car_cate_area` WHERE pid = 0 AND level = 1';
+
+        $list = $pdo->query($sql);
+
+        $provinceList = array();
+
+        foreach ($list as $key => $item) {
+            $provinceList[] = $item;
+        }
+        $response = array();
+        $response['province_list'] = $provinceList;
+        $this->send($response);
+
+    }
+
+    /**
+     * @api {POST} /car/gaodecity 获取高德城市
+     * @apiName car gaodecity
+     * @apiGroup Publish
+     * @apiDescription 获取城市
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [province_id]  省份id
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /car/city
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "province_id":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public  function gaodecityAction($province_id){
+
+        if (!$province_id) {
+            $this->send_error(NOT_ENOUGH_ARGS);
+        }
+        $pdo = new PdoDb;
+
+        $sql = 'SELECT cate_name as city_name , citycode as city_code FROM `bibi_car_cate_area` WHERE  `pid` = '.$province_id.' AND level = 2';
+
+        $info = array();
+
+        $citys = $pdo->query($sql);
+
+        foreach($citys as $k => $city){
+            $city['abbr']=0;
+            $city['engineno']=0;
+            $city['classno'] = 0;
+            $info[]  = $city;
+        }
+        $response = array();
+        $response['city_list'] = $info;
+        $this->send($response);
+    }
+
 
     public function getGradeTooneAction(){
 
