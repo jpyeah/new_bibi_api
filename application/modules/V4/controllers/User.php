@@ -302,7 +302,7 @@ class UserController extends ApiYafControllerAbstract
         $key ='code_' . $data['mobile'] . '';
         $code = RedisDb::getValue($key);
 
-        if($data['mobile'] == '13218029707'){
+        if($data['mobile'] == '13218029707' || $data['mobile'] == '10000000017' || $data['mobile'] == '10000000018' || $data['mobile'] == '10000000019' || $data['mobile']== '10000002016'){
             RedisDb::setValue($key,'1234');
             $code = RedisDb::getValue($key);
         }

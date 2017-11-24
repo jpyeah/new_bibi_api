@@ -495,13 +495,19 @@ class CarSellingV1Model extends PdoDb
 
         $sql = '
                 SELECT
-                t1.*
-                FROM `bibi_car_selling_list` AS t1 ';
+                t1.*,
+                t3.avatar,t3.nickname,t3.type as user_type
+                FROM `bibi_car_selling_list` AS t1  
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t1.user_id = t3.user_id ';
 
         $sqlCnt = '
                 SELECT
                 count(*) AS total
-                FROM `bibi_car_selling_list` AS t1 ';
+                FROM `bibi_car_selling_list` AS t1 
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t1.user_id = t3.user_id ';
+
         if($this->left_series){
             $sql .= $this->left_series;
             $sqlCnt .= $this->left_series;
@@ -530,8 +536,9 @@ class CarSellingV1Model extends PdoDb
 
         foreach($cars as $k => $car){
 
-            $items[$k]['car_info'] = $car;
-            //     $items[$k]['car_users'] = $this->getSameBrandUsers($brand_id);
+            $item = $this->handlerCarByList($car,$userId);
+            $items[$k]['car_info'] =$item;
+
         }
 
         $sqlCnt .= $this->where;

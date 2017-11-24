@@ -151,9 +151,6 @@ class PublishcarController extends ApiYafControllerAbstract
                 $properties['verify_status'] = $car_type == (PLATFORM_USER_SELLING_CAR || PLATFORM_USER_NEW_CAR) ? CAR_VERIFYING : CAR_NOT_AUTH;
             }
 
-
-
-
         }
         unset($properties['action']);
 
@@ -166,7 +163,7 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiGroup Car
      * @apiDescription 发布朋友圈
      * @apiPermission anyone
-     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiSampleRequest http://testapi.bibicar.cn
      * @apiVersion 2.1.0
      *
      * @apiParam (request) {string} [device_identifier] 设备唯一标识
@@ -254,20 +251,24 @@ class PublishcarController extends ApiYafControllerAbstract
 
         $properties['hash'] = uniqid();
 
+        $profileM = new ProfileModel();
+        $profile = $profileM->getProfile($userId);
+        if($profile && $profile['type'] == 2){
+            $properties['car_source']= 2;
+        }else{
+            $properties['car_source']= 1;
+        }
         unset($properties['car_id']);
-
 
         $cs->properties = $properties;
 
         $carId = $cs->CreateM();
 
         if ($carId) {
-
             $ifr = new ItemFilesRelationModel();
             $ifr->CreateBatch($carId, $data['files_id'], ITEM_TYPE_CAR, $data['files_type']);
 
             if($car_info_ids){
-
                 $last_str = substr($car_info_ids, -1);
 
                 if($last_str == ','){
@@ -388,6 +389,14 @@ class PublishcarController extends ApiYafControllerAbstract
 
         $properties['hash'] = uniqid();
 
+        $profileM = new ProfileModel();
+        $profile = $profileM->getProfile($userId);
+        if($profile && $profile['type'] == 2){
+            $properties['car_source']= 2;
+        }else{
+            $properties['car_source']= 1;
+        }
+
         unset($properties['car_id']);
 
         $cs->properties = $properties;
@@ -437,8 +446,6 @@ class PublishcarController extends ApiYafControllerAbstract
             $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id='.$properties['hash'];
             $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
             $response['share_img'] = isset($carInfo['files']["type1"]) ? $carInfo['files']["type1"][0]['file_url'] : '';
-
-
 
             $this->send($response);
 

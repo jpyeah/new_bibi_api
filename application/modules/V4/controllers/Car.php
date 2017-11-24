@@ -525,13 +525,39 @@ class CarController extends ApiYafControllerAbstract
             $carM->order = $jsonData['order_info'][$data['order_id']];
 
         }
+
+        $sess = new SessionModel();
+        $userId = $sess->Get($data);
+
+        $carM->currentUser = $userId;
+
         $carM->where = $where;
 
         $carM->page = $data['page'];
 
-        $lists = $carM->getCarListTotal();
+        $lists = $carM->getCarListTotal($userId);
 
-        $this->send($lists);
+        $response = $lists;
+
+        $response['order_id'] = $data['order_id'];
+
+        if(@$data['city_id']){
+
+            $jsonData['city_info']['city_id'] = $data['city_id'];
+            $jsonData['city_info']['city_lat'] = $data['city_lat'];
+            $jsonData['city_info']['city_lng'] = $data['city_lng'];
+
+        }
+
+        $response['city_info'] = $jsonData['city_info'];
+        $response['keyword']   = @$data['keyword'];
+//        $bm = new BrandModel();
+//        $response['brand_info'] = $bm->getBrandModel($data['brand_id']);
+//        $response['series_info'] = $bm->getSeriesModel($data['brand_id'],$data['series_id']);
+
+        $response['custom_url'] = "http://custom.bibicar.cn/customize";
+
+        $this->send($response);
 
     }
 
@@ -672,7 +698,7 @@ class CarController extends ApiYafControllerAbstract
 
         $carM = new CarSellingV1Model();
 
-        $results = $this->search($data['keyword'], $number);
+        $results = $this->searchcar($data['keyword'], $number);
 
         if($results['hits']['hits']){
 
@@ -705,6 +731,37 @@ class CarController extends ApiYafControllerAbstract
         return $this->send($lists);
     }
 
+    public function searchseriesAction(){
+
+        $this->required_fields = array_merge($this->required_fields, array('keyword','page'));
+
+        $data = $this->get_request_data();
+
+        $data['page']     = $data['page'] ? ($data['page']+1) : 1;
+
+        $number = ($data['page']-1)*10;
+
+        $results = $this->searchseries($data['keyword'], $number);
+
+
+        if($results['hits']['hits']){
+
+              $list=$results['hits']['hits'];
+              $items =array();
+             foreach($list as $k =>$val){
+                  $items[$k]['brand_series_name'] =$val['_source']['brand_series_name'];
+                  $items[$k]['brand_series_id']=$val['_source']['brand_series_id'];
+                  $items[$k]['makename']=$val['_source']['makename'];
+                  $items[$k]['brand_id']=$val['_source']['brand_id'];
+                  $items[$k]['brand_name']=$val['_source']['brand_name'];
+             }
+        }else{
+            $items=array();
+        }
+
+        return $this->send($items);
+    }
+
     public function testInsertAction(){
 
 
@@ -713,7 +770,7 @@ class CarController extends ApiYafControllerAbstract
 
     }
 
-    public function search($keyword,$number=0){
+    public function searchcar($keyword,$number=0){
 
         $client=new Elasticsearch;
 
@@ -742,7 +799,35 @@ class CarController extends ApiYafControllerAbstract
         $results = $client->search($params);
 
         //print_r($results);exit;
+        return $results;
 
+    }
+
+    public function searchseries($keyword,$number=0){
+
+        $client=new Elasticsearch;
+        $client=$client->instance();
+        $params = [
+            'index' => 'car',
+            'type' => 'car_brand_series',
+            'body' => [
+                'query' => [
+                    'match' => [
+                        'brand_series_name' => $keyword,
+                    ]
+                ],
+                'highlight' =>[
+                    "pre_tags" => ["<b>"],
+                    "post_tags" => ["</b>"],
+                    "fields" => [
+                        "brand_series_name" => new \stdClass()
+                    ]
+                ]
+            ]
+        ];
+        $params['size'] =10;
+        $params['from'] = 0;
+        $results = $client->search($params);
         return $results;
 
     }

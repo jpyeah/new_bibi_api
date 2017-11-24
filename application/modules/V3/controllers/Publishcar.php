@@ -361,7 +361,14 @@ class PublishcarController extends ApiYafControllerAbstract
         $properties['hash'] = uniqid();
 
         unset($properties['car_id']);
-        
+
+        $profileM = new ProfileModel();
+        $profile = $profileM->getProfile($userId);
+        if($profile && $profile['type'] == 2){
+            $properties['car_source']= 2;
+        }else{
+            $properties['car_source']= 1;
+        }
 
         $cs->properties = $properties;
 
@@ -405,7 +412,6 @@ class PublishcarController extends ApiYafControllerAbstract
             $title = is_array($carInfo['user_info']) ?
                 $carInfo['user_info']['profile']['nickname'] . '的' . $carInfo['car_name']
                 : $carInfo['car_name'];
-
             $response['share_title'] = $title;
             $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id='.$properties['hash'];
             $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
@@ -491,6 +497,14 @@ class PublishcarController extends ApiYafControllerAbstract
         $properties = $this->publishProgress($data, $userId, $cs,PLATFORM_USER_NEW_CAR);
 
         $properties['hash'] = uniqid();
+
+        $profileM = new ProfileModel();
+        $profile = $profileM->getProfile($userId);
+        if($profile && $profile['type'] == 2){
+            $properties['car_source']= 2;
+        }else{
+            $properties['car_source']= 1;
+        }
 
         unset($properties['car_id']);
 

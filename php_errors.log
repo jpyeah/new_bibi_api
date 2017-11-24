@@ -534,3 +534,5 @@ Stack trace:
 [22-Nov-2017 15:00:03 PRC] PHP Warning:  Missing argument 1 for CarController::cityAction() in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 271
 [22-Nov-2017 15:00:03 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 273
 [22-Nov-2017 15:00:22 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[24-Nov-2017 11:25:03 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[24-Nov-2017 11:25:33 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
