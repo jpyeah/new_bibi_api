@@ -491,6 +491,43 @@ class CarSellingV1Model extends PdoDb
     public function getCarListTotal($userId = 0)
     {
 
+
+        $sqlCnt = '
+                SELECT
+                count(*) AS total
+                FROM `bibi_car_selling_list` AS t1 
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t1.user_id = t3.user_id ';
+
+        if($this->left_series){
+            $sqlCnt .= $this->left_series;
+        }
+
+        if($this->left_model){
+            $sqlCnt .= $this->left_model;
+        }
+
+        if($this->left_extra){
+            $sqlCnt .= $this->left_extra;
+        }
+
+        $sqlCnt .= $this->where;
+        $sqlCnt .= $this->order;
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+        $list['car_list'] =array();
+        $list['has_more'] = 1;
+        $list['total'] = $total;
+        $list['number'] = 0;
+
+        return $list;
+    }
+
+
+    public function getCarNewList($userId = 0)
+    {
+
         $pageSize = 10;
 
         $sql = '

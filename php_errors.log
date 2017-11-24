@@ -536,3 +536,4 @@ Stack trace:
 [22-Nov-2017 15:00:22 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [24-Nov-2017 11:25:03 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [24-Nov-2017 11:25:33 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[24-Nov-2017 13:36:04 PRC] PHP Notice:  Undefined index: search_type in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 382

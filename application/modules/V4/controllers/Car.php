@@ -340,10 +340,11 @@ class CarController extends ApiYafControllerAbstract
      *
      * @apiParam {string} device_identifier]设备唯一标识
      * @apiParam {string} [session_id] session_id
-     * @apiParam {string} order_id 排序Id
-     * @apiParam {string} brand_id 车品牌Id
-     * @apiParam {string} series_id 车系列Id
-     * @apiParam {string} page 页数
+     * @apiParam {number} order_id 排序Id 0:默认排序、1:最新发布、2:价格最低、3:价格最高
+     * @apiParam {number} brand_id 车品牌Id
+     * @apiParam {number} series_id 车系列Id
+     * @apiParam {number} page 页数
+     * @apiParam {number} search_type 类型 1：获取总数 2：获取列表
      * @apiParam {string} [min_price] 最低价格
      * @apiParam {string} [max_price] 最高价格
      * @apiParam {string} [min_mileage] 最低里程
@@ -370,13 +371,13 @@ class CarController extends ApiYafControllerAbstract
         $jsonData = require APPPATH .'/configs/JsonData.php';
         $this->optional_fields = array('order_id','brand_id','series_id');
         // $this->required_fields = array_merge($this->required_fields, array('session_id'));
-
         $data = $this->get_request_data();
 
         $data['order_id'] = $data['order_id'] ? $data['order_id'] : 0 ;
         $data['page']     = $data['page'] ? ($data['page']+1) : 1;
         $data['brand_id'] = $data['brand_id'] ? $data['brand_id'] : 0 ;
         $data['series_id'] = $data['series_id'] ? $data['series_id'] : 0 ;
+        $data['search_type'] = $data['search_type'] ? $data['search_type'] : 1 ;
 
         $carM = new CarSellingV1Model();
 
@@ -535,29 +536,50 @@ class CarController extends ApiYafControllerAbstract
 
         $carM->page = $data['page'];
 
-        $lists = $carM->getCarListTotal($userId);
+        if($data['search_type'] == 1 ){
 
-        $response = $lists;
+            $lists = $carM->getCarListTotal($userId);
 
-        $response['order_id'] = $data['order_id'];
+            $response = $lists;
 
-        if(@$data['city_id']){
-
-            $jsonData['city_info']['city_id'] = $data['city_id'];
-            $jsonData['city_info']['city_lat'] = $data['city_lat'];
-            $jsonData['city_info']['city_lng'] = $data['city_lng'];
-
-        }
-
-        $response['city_info'] = $jsonData['city_info'];
-        $response['keyword']   = @$data['keyword'];
+            $response['order_id'] = $data['order_id'];
+            if(@$data['city_id']){
+                $jsonData['city_info']['city_id'] = $data['city_id'];
+                $jsonData['city_info']['city_lat'] = $data['city_lat'];
+                $jsonData['city_info']['city_lng'] = $data['city_lng'];
+            }
+            $response['city_info'] = $jsonData['city_info'];
+            $response['keyword']   = @$data['keyword'];
 //        $bm = new BrandModel();
 //        $response['brand_info'] = $bm->getBrandModel($data['brand_id']);
 //        $response['series_info'] = $bm->getSeriesModel($data['brand_id'],$data['series_id']);
 
-        $response['custom_url'] = "http://custom.bibicar.cn/customize";
+            $response['custom_url'] = "http://custom.bibicar.cn/customize";
 
-        $this->send($response);
+            $this->send($response);
+
+        }else{
+
+            $lists = $carM->getCarNewList($userId);
+            $response = $lists;
+            $response['order_id'] = $data['order_id'];
+            if(@$data['city_id']){
+                $jsonData['city_info']['city_id'] = $data['city_id'];
+                $jsonData['city_info']['city_lat'] = $data['city_lat'];
+                $jsonData['city_info']['city_lng'] = $data['city_lng'];
+
+            }
+            $response['city_info'] = $jsonData['city_info'];
+            $response['keyword']   = @$data['keyword'];
+//        $bm = new BrandModel();
+//        $response['brand_info'] = $bm->getBrandModel($data['brand_id']);
+//        $response['series_info'] = $bm->getSeriesModel($data['brand_id'],$data['series_id']);
+
+            $response['custom_url'] = "http://custom.bibicar.cn/customize";
+
+            $this->send($response);
+        }
+
 
     }
 
@@ -619,7 +641,6 @@ class CarController extends ApiYafControllerAbstract
 
         $this->send($response);
     }
-
     /**
      * @api {POST} /v4/car/carvisithistory 车辆浏览历史
      * @apiName car carvisithistory
