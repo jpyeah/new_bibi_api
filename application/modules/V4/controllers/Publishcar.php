@@ -190,6 +190,11 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiParam (request) {number} [car_status] 车辆状态
      * @apiParam (request) {string} [board_time] 上牌时间
      * @apiParam (request) {string} [board_address] 上牌地点(城市:深圳)
+     * @apiParam (request) {string} [city_id] 城市id
+     * @apiParam (request) {string} [city_name] 城市名称
+     * @apiParam (request) {string} [city_code] 城市编码
+     * @apiParam (request) {string} [longitude] 经度
+     * @apiParam (request) {string} [latitude] 纬度
      * @apiParam (request) {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
      *
      * @apiParam (response) {string} car_info.verify_status 审核状态(当等于2和11的时候，审核通过，其余都待审核)
@@ -240,9 +245,12 @@ class PublishcarController extends ApiYafControllerAbstract
 
         $data = $this->get_request_data();
         $car_info_ids = @$data['car_info_ids'];
+        $city_code = @$data['city_code'];
 
         unset($data['car_info_ids']);
         unset($data["v4/publishcar/create"]);
+        unset($data['city_code']);
+
         $userId = $this->userAuth($data);
 
         $cs = new CarSellingV1Model();
@@ -250,6 +258,8 @@ class PublishcarController extends ApiYafControllerAbstract
         $properties = $this->publishProgress($data, $userId, $cs);
 
         $properties['hash'] = uniqid();
+
+        $properties['city_id']=$city_code;
 
         $profileM = new ProfileModel();
         $profile = $profileM->getProfile($userId);
@@ -321,7 +331,7 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiGroup Car
      * @apiDescription 发布朋友圈
      * @apiPermission anyone
-     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiSampleRequest http://testapi.bibicar.cn
      * @apiVersion 2.0.0
      *
      * @apiParam (request) {string} device_identifier 设备唯一标识
@@ -346,7 +356,9 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiParam (request) {string} [engine_no] 发动机号
      * @apiParam (request) {number} [is_transfer] 是否过户
      * @apiParam (request) {number} [car_status] 车辆状态
-     * @apiParam (request) {string} [board_time] 上牌时间
+     * @apiParam (request) {string} [city_code] 城市编码 (高德城市编码city_code)
+     * @apiParam (request) {string} [longitude] 经度 (高德城市经度)
+     * @apiParam (request) {string} [latitude] 纬度 (高德城市纬度)
      * @apiParam (request) {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
      *
      * @apiParam (response) {string} car_info.verify_status 审核状态(当等于2和11的时候，审核通过，其余都待审核)

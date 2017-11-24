@@ -342,6 +342,11 @@ class CarController extends ApiYafControllerAbstract
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [province_id]  省份id
+     * @apiParam {string} [city_name]    城市名称
+     * @apiParam {string} [city_code]    城市编码
+     * @apiParam {string} [adcode]       地区编码
+     * @apiParam {string} [latitude]     纬度
+     * @apiParam {string} [longitude]    经度
      *
      * @apiParamExample {json} 请求样例
      *   POST /car/city
@@ -355,27 +360,25 @@ class CarController extends ApiYafControllerAbstract
      *   }
      *
      */
-    public  function gaodecityAction($province_id){
+    public  function gaodecityAction(){
 
-        if (!$province_id) {
+        $this->required_fields = array_merge($this->required_fields, array( 'province_id'));
+
+        $data = $this->get_request_data();
+
+        if (!$data['province_id']) {
             $this->send_error(NOT_ENOUGH_ARGS);
         }
         $pdo = new PdoDb;
 
-        $sql = 'SELECT cate_name as city_name , citycode as city_code FROM `bibi_car_cate_area` WHERE  `pid` = '.$province_id.' AND level = 2';
+        $sql = 'SELECT id as city_id,cate_name as city_name , citycode as city_code ,adcode,latitude,longitude FROM `bibi_car_cate_area` WHERE  `pid` = '.$data['province_id'].' AND level = 2';
 
         $info = array();
 
         $citys = $pdo->query($sql);
 
-        foreach($citys as $k => $city){
-            $city['abbr']=0;
-            $city['engineno']=0;
-            $city['classno'] = 0;
-            $info[]  = $city;
-        }
         $response = array();
-        $response['city_list'] = $info;
+        $response['city_list'] = $citys;
         $this->send($response);
     }
 

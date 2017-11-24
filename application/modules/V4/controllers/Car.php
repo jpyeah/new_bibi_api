@@ -364,9 +364,11 @@ class CarController extends ApiYafControllerAbstract
      * @apiParam {number} [envirstandard] 环保标准 (ids传值 1,2,3) 1:国1 2:国2 3:国3 4:国4
      * @apiParam {number} [fueltype] 燃油类型 (ids传值 1,2,3) 1:汽油、2:柴油、3:油电混合动力 4:电动
      * @apiParam {string} [extra_info] 亮点配置  (ids传值 1,2,3)
+     * @apiParam {string} [city_code] 城市编码 当前城市定位
+     * @apiParam {string} [city_lat] 城市纬度
+     * @apiParam {string} [city_lng] 城市经度
      *
      */
-
     public function newlistAction(){
         $jsonData = require APPPATH .'/configs/JsonData.php';
         $this->optional_fields = array('order_id','brand_id','series_id');
@@ -440,8 +442,16 @@ class CarController extends ApiYafControllerAbstract
             }
         }
         //车牌所在地
-        if(@$data['board_add']){
+        if(@$data['board_add'] && $data['city_code']){
 
+            if( $data['board_add'] == 1 ){
+
+                $where .= ' AND t1.city_id = '.$data['city_code'].' ';
+
+            }else{
+
+                $where .= ' AND t1.city_id <> '.$data['city_code'].' ';
+            }
         }
         //基本配置
         if(@$data['extra_info']){

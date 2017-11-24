@@ -537,3 +537,17 @@ Stack trace:
 [24-Nov-2017 11:25:03 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [24-Nov-2017 11:25:33 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [24-Nov-2017 13:36:04 PRC] PHP Notice:  Undefined index: search_type in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 382
+[24-Nov-2017 14:06:15 PRC] PHP Warning:  Missing argument 1 for CarController::gaodecityAction() in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 358
+[24-Nov-2017 14:06:15 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 360
+[24-Nov-2017 14:06:34 PRC] PHP Warning:  Missing argument 1 for CarController::gaodecityAction() in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 358
+[24-Nov-2017 14:06:34 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 360
+[24-Nov-2017 14:06:35 PRC] PHP Warning:  Missing argument 1 for CarController::gaodecityAction() in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 358
+[24-Nov-2017 14:06:35 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 360
+[24-Nov-2017 14:08:42 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 368
+[24-Nov-2017 14:08:42 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[24-Nov-2017 14:09:24 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 369
+[24-Nov-2017 14:09:24 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[24-Nov-2017 14:09:42 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 369
+[24-Nov-2017 14:09:42 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[24-Nov-2017 14:09:43 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 369
+[24-Nov-2017 14:09:43 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91

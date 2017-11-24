@@ -454,7 +454,7 @@ class YicheController extends ApiYafControllerAbstract {
 
     public function modeldetailAction () {
 
-           $seriesId=2755;
+           $seriesId=2073;
            $sql="SELECT model_id FROM `bibi_car_series_model` WHERE series_id=".$seriesId;
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
@@ -484,7 +484,9 @@ class YicheController extends ApiYafControllerAbstract {
                     $b = '手动';
                    if(strpos($data["data"][0]["UnderPan_ForwardGearNum"], $b) !== false ){
                       //包含
-                       //$data["data"][0]["UnderPan_ForwardGearNum_type"]=1;
+                       $arr["UnderPan_ForwardGearNum_type"]=1;
+                   }else{
+                       $arr["UnderPan_ForwardGearNum_type"]=2;
                    }
                    $arr["UnderPan_ForwardGearNum"]=$data["data"][0]["UnderPan_ForwardGearNum"];
                 }
@@ -624,7 +626,7 @@ class YicheController extends ApiYafControllerAbstract {
 //           $pdo = new PdoDb;
 //           $list = $pdo->query($sql);
 
-          $list = ['2755'];
+          $list = ['2073'];
            foreach($list as $key => $value){
               //$serialId=$value["brand_series_id"];
               $serialId=$value;
