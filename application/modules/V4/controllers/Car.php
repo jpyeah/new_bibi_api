@@ -334,7 +334,7 @@ class CarController extends ApiYafControllerAbstract
      *
      * @apiParam {string} device_identifier]设备唯一标识
      * @apiParam {string} [session_id] session_id
-     * @apiParam {number} order_id 排序Id 0:默认排序、1:价格最低、2:价格最高 5:最新发布
+     * @apiParam {number} order_id 排序Id 0:默认排序1:最新发布 2:价格最低、3价格最高 
      * @apiParam {number} brand_id 车品牌Id
      * @apiParam {number} series_id 车系列Id
      * @apiParam {number} page 页数
@@ -520,10 +520,8 @@ class CarController extends ApiYafControllerAbstract
         if(@$data['has_vr'] == 1){
             $where .= 'AND t1.vr_url is not null';
         }
-        if(isset($jsonData['order_info'][$data['order_id']])) {
-            if(!$data['order_id']){
-                $where .= 'AND t1.user_id = 389';
-            }
+        if(isset($jsonData['new_order_info'][$data['order_id']])) {
+
             // $carM->order  = ' ORDER BY t1.car_type ASC , ';
             $carM->order = $jsonData['order_info'][$data['order_id']];
 

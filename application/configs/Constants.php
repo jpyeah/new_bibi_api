@@ -163,6 +163,13 @@ define("ORDER_BY_BOARD_TIME_ASC", 3);
 define("ORDER_BY_MILEAGE_ASC",4);
 define("ORDER_BY_TIME_DESC",5);
 
+
+define("NEW_ORDER_BY_DEFAULT", 0);
+define("NEW_ORDER_BY_TIME_DESC",1);
+define('NEW_ORDER_BY_PRICE_ASC', 2);
+define("NEW_ORDER_BY_PRICE_DESC", 3);
+
+
 define("ORDER_BY_GOODS_DEFAULT", 0);
 define("ORDER_BY_SALES_DESC", 3);
 
