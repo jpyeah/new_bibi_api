@@ -357,16 +357,16 @@ class CarController extends ApiYafControllerAbstract
      * @apiParam {number} [car_type] 是否新车二手车 1:新车  2 二手车
      * @apiParam {number} [car_source] 车辆来源(个人，商家) 1:个人 2 商家
      * @apiParam {number} [forward] 变速箱  1:手动 2:自动
-     * @apiParam {number} [board_add] 车牌所在地  1：本地 2：外地
+     * @apiParam {number} [board_add] 车牌所在地  1：本地 2：外地 (选择车牌所在地必须传city_code)
      * @apiParam {number} [car_level] 车辆级别 (ids传值 1,2,3) 6:小轿车 7:MPV 8:SUV 9:跑车 11:皮卡 13:敞篷跑车
      * @apiParam {number} [car_color] 颜色 (ids传值 1,2,3) 0:未知 1:黑色 2:红色 3:深灰色 4:粉红色 5:银灰色 6:紫色 7:白色 8:蓝色 9:香槟色 10:绿色11:黄色12:咖啡色13:橙色 14:多彩色
      * @apiParam {number} [seat_num] 座位数 (ids传值 2,3,4,5)
      * @apiParam {number} [envirstandard] 环保标准 (ids传值 1,2,3) 1:国1 2:国2 3:国3 4:国4
      * @apiParam {number} [fueltype] 燃油类型 (ids传值 1,2,3) 1:汽油、2:柴油、3:油电混合动力 4:电动
      * @apiParam {string} [extra_info] 亮点配置  (ids传值 1,2,3)
-     * @apiParam {string} [city_code] 城市编码 当前城市定位
-     * @apiParam {string} [city_lat] 城市纬度
-     * @apiParam {string} [city_lng] 城市经度
+     * @apiParam {string} [city_code] 高德地图城市编码  (选择车牌所在地必须传city_code)
+     * @apiParam {string} [city_lat] 高德地图城市纬度
+     * @apiParam {string} [city_lng] 高德城市经度
      *
      */
     public function newlistAction(){
