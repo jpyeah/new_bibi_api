@@ -67,6 +67,24 @@ class CarSellingExtraInfoModel extends PdoDb
         return $arr;
     }
 
+    public function updateExtrainfo($car_id,$hash,$ids){
+
+
+        $infos = $this->getExtraInfoByIds($ids);
+
+        foreach($infos as $k => $val){
+            $items[$val['alias']]=1;
+        }
+        $insert = $items;
+        $insert['car_id']=$car_id;
+        $insert['hash']=$hash;
+
+        $id = $this->insert('bibi_car_selling_list_info',$insert);
+        return $id;
+
+
+    }
+
     public function getExtraInfo(){
 
         $sql ="SELECT * FROM bibi_car_selling_list_extra_info_list";

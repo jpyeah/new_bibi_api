@@ -334,7 +334,7 @@ class CarController extends ApiYafControllerAbstract
      *
      * @apiParam {string} device_identifier]设备唯一标识
      * @apiParam {string} [session_id] session_id
-     * @apiParam {number} order_id 排序Id 0:默认排序1:最新发布 2:价格最低、3价格最高 
+     * @apiParam {number} order_id 排序Id 0:默认排序1:最新发布 2:价格最低、3价格最高
      * @apiParam {number} brand_id 车品牌Id
      * @apiParam {number} series_id 车系列Id
      * @apiParam {number} page 页数

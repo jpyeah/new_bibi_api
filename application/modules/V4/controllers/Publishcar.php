@@ -389,8 +389,11 @@ class PublishcarController extends ApiYafControllerAbstract
         $data = $this->get_request_data();
 
         $car_info_ids = @$data['car_info_ids'];
+        $city_code = @$data['city_code'];
+
 
         unset($data['car_info_ids']);
+        unset($data['city_code']);
 
         unset($data['v4/publishcar/newCar']);
 
@@ -519,6 +522,12 @@ class PublishcarController extends ApiYafControllerAbstract
 
         $data = $this->get_request_data();
         unset($data['v3/publishcar/update']);
+
+        $car_info_ids = @$data['car_info_ids'];
+        $city_code = @$data['city_code'];
+
+        unset($data['city_code']);
+        unset($data['car_info_ids']);
         $userId = $this->userAuth($data);
 
         $cs = new CarSellingModel();
@@ -548,6 +557,20 @@ class PublishcarController extends ApiYafControllerAbstract
         $rs = $cs->updateByPrimaryKey($cs::$table,array('hash'=>$data['car_id']),$properties);
 
         if($rs){
+
+            if($car_info_ids){
+
+                $last_str = substr($car_info_ids, -1);
+
+                if($last_str == ','){
+                    $car_info_ids = substr($car_info_ids,0,strlen($car_info_ids)-1);
+                }
+
+                $ExtraModel = new CarSellingExtraInfoModel();
+
+               // $ExtraModel->updateExtrainfo($result['id'],$data['car_id'],$car_info_ids);
+            }
+            $cs = new CarSellingModel();
 
             $carInfo = $cs->GetCarInfoById($data['car_id']);
 
