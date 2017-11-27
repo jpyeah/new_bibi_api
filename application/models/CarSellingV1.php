@@ -706,7 +706,7 @@ class CarSellingV1Model extends PdoDb
                 WHERE
                  t1.files <> "" AND t1.car_type != 3 AND t1.hash != "'.$carId.'" AND
                  t1.brand_id > 0 AND t1.series_id > 0 AND
-                t1.price BETWEEN '.$minPrice.' AND '.$maxPrice.'
+                t1.price BETWEEN '.$minPrice.' AND '.$maxPrice.' AND (t1.verify_status=2 OR t1.verify_status = 11)
 				ORDER BY t1.car_type ASC, t1.price ASC
                 LIMIT 0 , 20
                 ';

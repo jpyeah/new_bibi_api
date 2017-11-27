@@ -68,12 +68,6 @@ class CarController extends ApiYafControllerAbstract
 
         $carInfo = $carModel->GetCarInfoById($carId,$userId);
 
-        //print_r($carInfo);exit;
-
-//        $ExtraModel = new CarSellingExtraInfoModel();
-//
-//        $carInfo['car_info_ids']=$ExtraModel->getExtra($carId);
-
         $response['car_info'] = $carInfo;
 
         $brandId = isset($carInfo['brand_info']['brand_id']) ? $carInfo['brand_info']['brand_id'] : 0;
@@ -340,7 +334,7 @@ class CarController extends ApiYafControllerAbstract
      *
      * @apiParam {string} device_identifier]设备唯一标识
      * @apiParam {string} [session_id] session_id
-     * @apiParam {number} order_id 排序Id 0:默认排序、1:最新发布、2:价格最低、3:价格最高
+     * @apiParam {number} order_id 排序Id 0:默认排序、1:价格最低、2:价格最高 5:最新发布
      * @apiParam {number} brand_id 车品牌Id
      * @apiParam {number} series_id 车系列Id
      * @apiParam {number} page 页数
