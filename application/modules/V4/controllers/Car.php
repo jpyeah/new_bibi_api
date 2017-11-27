@@ -358,7 +358,7 @@ class CarController extends ApiYafControllerAbstract
      * @apiParam {number} [car_source] 车辆来源(个人，商家) 1:个人 2 商家
      * @apiParam {number} [forward] 变速箱  1:手动 2:自动
      * @apiParam {number} [board_add] 车牌所在地  1：本地 2：外地
-     * @apiParam {number} [car_level] 车辆级别 (ids传值 1,2,3) (1:微型车 2:小型车 3:紧凑型 4:中型车 5:中大型 6:豪华车) (1,2,3,4,5,6):小轿车 7:MPV 8:SUV 9:跑车 10:微面 11:皮卡 12:电动车
+     * @apiParam {number} [car_level] 车辆级别 (ids传值 1,2,3) 6:小轿车 7:MPV 8:SUV 9:跑车 11:皮卡 13:敞篷跑车
      * @apiParam {number} [car_color] 颜色 (ids传值 1,2,3) 0:未知 1:黑色 2:红色 3:深灰色 4:粉红色 5:银灰色 6:紫色 7:白色 8:蓝色 9:香槟色 10:绿色11:黄色12:咖啡色13:橙色 14:多彩色
      * @apiParam {number} [seat_num] 座位数 (ids传值 2,3,4,5)
      * @apiParam {number} [envirstandard] 环保标准 (ids传值 1,2,3) 1:国1 2:国2 3:国3 4:国4
@@ -404,10 +404,8 @@ class CarController extends ApiYafControllerAbstract
         }
         //车级别
         if(@$data['car_level']) {
-            $where .= ' AND t4.car_type in ( ' . $data['car_level'] . ')  ';
-            if(!$carM->left_series){
-                $carM->left_series = 'LEFT JOIN `bibi_car_brand_series` AS t4 ON t4.brand_series_id = t1.series_id ';
-            }
+            $where .= ' AND t1.car_level in ( ' . $data['car_level'] . ')  ';
+
         }
         //车颜色
         if(@$data['car_color']) {
@@ -733,13 +731,11 @@ class CarController extends ApiYafControllerAbstract
 
         if($results['hits']['hits']){
 
-            $values  = $this->implodeArrayByKey('_id',$results['hits']['hits']);
-
-            $inStr = "'".str_replace(",","','",$values)."'";
+            $inStr = $this->implodeArrayByKey('_id',$results['hits']['hits']);
 
             $where = '';
 
-            $where .= ' where t1.hash in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
+            $where .= ' where t1.id in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
 
             $carM = new CarSellingV1Model();
 
@@ -751,7 +747,6 @@ class CarController extends ApiYafControllerAbstract
 
             $list=array();
         }
-
         $total=$results['hits']['total'];
 
         $count = count($results['hits']['hits']);
@@ -759,6 +754,8 @@ class CarController extends ApiYafControllerAbstract
         $lists['car_list']=$list;
         $lists['has_more'] = (($number+$count) < $total) ? 1 : 2;
         $lists['total'] = $total;
+        $lists['number'] = $number;
+
         return $this->send($lists);
     }
 

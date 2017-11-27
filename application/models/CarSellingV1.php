@@ -611,6 +611,33 @@ class CarSellingV1Model extends PdoDb
         $cars = $this->query($sql);
 
         foreach($cars as $k => $car){
+            $brand_id = $car['brand_id'];
+            $item = $this->handlerCarByList($car,$userId);
+            $items[$k]['car_info'] = $item;
+        }
+        $list = $items;
+        return $list;
+
+    }
+
+    public function getCarlistByHashs($userId = 0){
+
+        $sql = '
+                SELECT
+                t1.*,
+                t3.avatar,t3.nickname,t3.type as user_type
+                FROM `bibi_car_selling_list` AS t1
+                LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+                ';
+
+        $sql .= $this->where;
+
+        $cars = $this->query($sql);
+
+        foreach($cars as $k => $car){
 
             $brand_id = $car['brand_id'];
             $item = $this->handlerCarByList($car,$userId);

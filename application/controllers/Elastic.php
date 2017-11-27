@@ -14,22 +14,22 @@ class ElasticController extends ApiYafControllerAbstract
       //批量导入elasticsearch
       public function createbybulkAction(){
           $pdoM = new PdoDb;
-          $sql = "select * from `bibi_car_selling_list`";
+          $sql = "select id,hash,car_name,brand_id,series_id,model_id,car_type,verify_status from `bibi_car_selling_list` where (verify_status=2 OR verify_status = 11) AND ( car_type =0 OR car_type = 1 OR car_type =2)";
           $lists = $pdoM->query($sql);
-
           foreach($lists as $k => $val){
 
               $params['body'][] = [
                   'index' => [
                       '_index' => 'car',
                       '_type' => 'car_selling_list',
-                      '_id' => $val['hash'],
+                      '_id' => $val['id'],
                   ]
               ];
 
               $params['body'][] = [
                   'car_name' => $val['car_name'],
-                  'hash'=>$val['hash'],
+                  'hash' => $val['hash'],
+                  'car_id'=>$val['id'],
                   'series_id'=>$val['series_id'],
                   'brand_id'=>$val['brand_id'],
                   'model_id'=>$val['model_id'],
@@ -43,27 +43,26 @@ class ElasticController extends ApiYafControllerAbstract
 
           $responses = $client->bulk($params);
 
-          print_r($responses);
+          //print_r($responses);
 
       }
-      
+
       //批量导入elasticsearch 删除一个库
       public function deleteindexAction(){
 
           $client=new Elasticsearch;
           $client=$client->instance();
-
           $params = ['index' => 'car'];
           $response = $client->indices()->delete($params);
       }
       //添加一个库和一个表
-      public function createAction(){
+      public function createindexAction(){
 
       	      //$elastic = new Elasticsearch\Client();
               $client=new Elasticsearch;
               $client=$client->instance();
               $searchParams['index'] = 'car';
-              $searchParams['type'] = 'model_detail';
+              $searchParams['type'] = 'car_selling_list';
               $searchParams['body'] = array(
 //                  'carname' => 'abc',
 //                  'hash'=>12334,
@@ -169,10 +168,11 @@ class ElasticController extends ApiYafControllerAbstract
           $client=$client->instance();
           $index['index'] = 'car'; //索引名称
           $index['type'] = 'car_selling_list'; //类型名称
-          $index['id'] = $val['hash'];   //不指定id，系统会自动生成唯一id
+          $index['id'] = $val['id'];   //不指定id，系统会自动生成唯一id
           $index['body'] = array(
               'car_name' => $val['car_name'],
               'hash'=>$val['hash'],
+              'car_id'=>$val['id'],
               'series_id'=>$val['series_id'],
               'brand_id'=>$val['brand_id'],
               'model_id'=>$val['model_id'],

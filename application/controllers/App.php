@@ -244,6 +244,54 @@ class AppController extends ApiYafControllerAbstract {
         header("Location: http://120.25.62.110/protocol.html");
 
     }
+    /**
+     * @api {POST} /app/suggest 意见反馈
+     * @apiName APP suggest
+     * @apiGroup APP
+     * @apiDescription 意见反馈
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} session_id  用户session
+     * @apiParam {string} device_identifier 设备device
+     * @apiParam {string} description  反馈意见
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /app/suggest
+     *   {
+     *     "data": {
+     *       "description":"",
+     *     }
+     *   }
+     *
+     */
+    public function SuggestAction(){
+
+        $this->required_fields = array('session_id','device_identifier','description');
+
+        $data = $this->get_request_data();
+
+        $user_id = $this->userAuth($data);
+
+        $Suggest = new SuggestModel();
+
+        $time = time();
+
+        $insert['created_at']=$time;
+
+        $insert['updated_at']=$time;
+
+        $insert['description']=$data['description'];
+
+        $insert['user_id']=$user_id;
+
+        $id = $Suggest->insert('bibi_suggest',$insert);
+
+        $response['id'] = $id;
+
+        $this->send($response);
+
+    }
 
 
 }
