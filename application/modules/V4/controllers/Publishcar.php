@@ -356,11 +356,11 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiParam (request) {number} [car_status] 车辆状态
      * @apiParam (request) {string} [city_id] 城市id
      * @apiParam (request) {string} [city_name] 城市名称 (高德地图城市名称-当前定位)
-     * @apiParam (request) {string} [city_code] 城市编码 (高德城市编码city_code-当前定位)
+     * @apiParam (request) {string} city_code 城市编码 (高德城市编码city_code-当前定位)
      * @apiParam (request) {string} [longitude] 经度 (高德城市经度-当前定位)
      * @apiParam (request) {string} [latitude] 纬度 (高德城市纬度-当前定位)
      * @apiParam (request) {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
-     * @apiParam (request) {number} [car_level] 车辆级别 6:小轿车 7:MPV 8:SUV 9:跑车 11:皮卡 13:敞篷跑车
+     * @apiParam (request) {number} car_level 车辆级别 6:小轿车 7:MPV 8:SUV 9:跑车 11:皮卡 13:敞篷跑车
      *
      * @apiParam (response) {string} car_info.verify_status 审核状态(当等于2和11的时候，审核通过，其余都待审核)
      *
@@ -467,6 +467,105 @@ class PublishcarController extends ApiYafControllerAbstract
             $this->send_error(CAR_ADDED_ERROR);
 
         }
+    }
+
+
+
+    /**
+     * @api {POST} /v4/Publishcar/update 更新车辆
+     * @apiName car update
+     * @apiGroup Car
+     * @apiDescription 更新车辆
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [session_id] session_id
+     * @apiParam {Object} [file_type] 文字说明 车辆照片类型 (1:外观 2:中控内饰 3:发动机及结构 4:更多细节)
+     *
+     * @apiParam {Object} [files_id] 图片
+     * @apiParam {string} [car_id] 车辆Id
+     * @apiParam {number} [car_type] 车辆类型 0:新车 1:二手车 3:爱车
+     *
+     * @apiParam {json} data object
+     * @apiUse Data
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/Publishcar/update
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "files_id":"",
+     *       "files_type":"",
+     *       "car_id":"",
+     *       "car_type":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+
+    public function updateAction()
+    {
+
+        $this->required_fields = array_merge(
+            $this->required_fields,
+            array('session_id','files_id', 'files_type','car_id','car_type')
+        //array_keys($this->car_info_fields),
+        //$this->vin_fields
+        );
+
+        $data = $this->get_request_data();
+        unset($data['v3/publishcar/update']);
+        $userId = $this->userAuth($data);
+
+        $cs = new CarSellingModel();
+
+        $properties = $this->publishProgress($data, $userId, $cs, $data['car_type'],'update');
+
+        unset($properties['car_id']);
+        unset($properties['created']);
+        unset($properties['verify_status']);
+
+
+        $cs->properties = $properties;
+        $result=$cs->getCarById($data['car_id']);
+
+        foreach($properties as $k =>$val){
+            if($properties[$k]!=$result[$k]){
+                $updated=array();
+                $updated['clumn']=$k;
+                $updated['value']=$val;
+                $updated['car_id']=$data['car_id'];
+                $updated['updated']=time();
+                $updated['user_id']=$userId;
+                $cs->insert('bibi_car_selling_list_updated',$updated);
+            }
+        }
+
+        $rs = $cs->updateByPrimaryKey($cs::$table,array('hash'=>$data['car_id']),$properties);
+
+        if($rs){
+
+            $carInfo = $cs->GetCarInfoById($data['car_id']);
+
+            $ifr = new ItemFilesRelationModel();
+
+            $ifr->DeleteBatch($carInfo['car_id'], ITEM_TYPE_CAR);
+            $ifr->CreateBatch($carInfo['car_id'], $data['files_id'], ITEM_TYPE_CAR, $data['files_type']);
+
+            $response['car_info'] = $carInfo;
+
+            $this->send($response);
+
+        } else {
+
+            $this->send_error(CAR_ADDED_ERROR);
+
+        }
+
     }
 
     /**

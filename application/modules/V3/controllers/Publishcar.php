@@ -160,14 +160,6 @@ class PublishcarController extends ApiYafControllerAbstract
     }
 
 
-/**
- * @apiDefine Data
- *
- * @apiParam (data) {string} [device_identifier]  设备唯一标示.
- * @apiParam (data) {string} [session_id]     用户session_id.
- * 
- * 
- */
 
 /**
  * @api {POST} /v3/Publishcar/update 更新车辆
