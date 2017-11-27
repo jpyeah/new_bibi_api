@@ -188,12 +188,12 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiParam (request) {string} [board_time] 上牌时间
      * @apiParam (request) {string} [board_address] 上牌地点(城市:深圳)
      * @apiParam (request) {string} [city_id] 城市id
-     * @apiParam (request) {string} [city_name] 城市名称 (高德地图城市名称)
-     * @apiParam (request) {number} [city_code] 城市编码 (高德地图城市编码 eg-深圳:0755)
-     * @apiParam (request) {string} [longitude] 经度 (高德地图)
-     * @apiParam (request) {string} [latitude] 纬度  (高德地图)
+     * @apiParam (request) {string} [city_name] 城市名称 (高德地图城市名称-当前定位)
+     * @apiParam (request) {number} city_code 城市编码 (高德地图城市编码-当前定位  eg-深圳:0755)
+     * @apiParam (request) {string} [longitude] 经度 (高德地图-当前定位)
+     * @apiParam (request) {string} [latitude] 纬度  (高德地图-当前定位)
      * @apiParam (request) {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
-     * @apiParam (request) {number} [car_level] 车辆级别 6:小轿车 7:MPV 8:SUV 9:跑车 11:皮卡 13:敞篷跑车
+     * @apiParam (request) {number} car_level 车辆级别 6:小轿车 7:MPV 8:SUV 9:跑车 11:皮卡 13:敞篷跑车
      *
      * @apiParam (response) {string} car_info.verify_status 审核状态(当等于2和11的时候，审核通过，其余都待审核)
      *
@@ -355,10 +355,10 @@ class PublishcarController extends ApiYafControllerAbstract
      * @apiParam (request) {number} [is_transfer] 是否过户
      * @apiParam (request) {number} [car_status] 车辆状态
      * @apiParam (request) {string} [city_id] 城市id
-     * @apiParam (request) {string} [city_name] 城市名称 (高德地图城市名称)
-     * @apiParam (request) {string} [city_code] 城市编码 (高德城市编码city_code)
-     * @apiParam (request) {string} [longitude] 经度 (高德城市经度)
-     * @apiParam (request) {string} [latitude] 纬度 (高德城市纬度)
+     * @apiParam (request) {string} [city_name] 城市名称 (高德地图城市名称-当前定位)
+     * @apiParam (request) {string} [city_code] 城市编码 (高德城市编码city_code-当前定位)
+     * @apiParam (request) {string} [longitude] 经度 (高德城市经度-当前定位)
+     * @apiParam (request) {string} [latitude] 纬度 (高德城市纬度-当前定位)
      * @apiParam (request) {string} [car_info_ids] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
      * @apiParam (request) {number} [car_level] 车辆级别 6:小轿车 7:MPV 8:SUV 9:跑车 11:皮卡 13:敞篷跑车
      *
