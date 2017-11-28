@@ -568,7 +568,7 @@ class PublishcarController extends ApiYafControllerAbstract
 
                 $ExtraModel = new CarSellingExtraInfoModel();
 
-               // $ExtraModel->updateExtrainfo($result['id'],$data['car_id'],$car_info_ids);
+                $ExtraModel->updateExtraInfo($result['id'],$data['car_id'],$car_info_ids);
             }
             $cs = new CarSellingV1Model();
 

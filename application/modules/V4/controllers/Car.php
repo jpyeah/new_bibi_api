@@ -345,8 +345,8 @@ class CarController extends ApiYafControllerAbstract
      * @apiParam {string} [max_mileage] 最高里程
      * @apiParam {string} [min_board_time] 最短上牌时间
      * @apiParam {string} [max_board_time] 最长上牌时间
-     * @apiParam {string} [min_forloat] 最小排量
-     * @apiParam {string} [max_forloat] 最大排量
+     * @apiParam {string} [min_forfloat] 最小排量
+     * @apiParam {string} [max_forfloat] 最大排量
      * @apiParam {number} [has_vr] 是否vr 1:是
      * @apiParam {number} [car_type] 是否新车二手车 1:新车  2 二手车
      * @apiParam {number} [car_source] 车辆来源(个人，商家) 1:个人 2 商家

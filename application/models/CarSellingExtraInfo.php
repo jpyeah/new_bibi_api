@@ -67,21 +67,45 @@ class CarSellingExtraInfoModel extends PdoDb
         return $arr;
     }
 
-    public function updateExtrainfo($car_id,$hash,$ids){
+    public function updateExtraInfo($car_id,$hash,$ids){
 
 
-        $infos = $this->getExtraInfoByIds($ids);
+        $sql ="SELECT * FROM bibi_car_selling_list_info WHERE car_id=".$car_id;
 
-        foreach($infos as $k => $val){
-            $items[$val['alias']]=1;
+        $res = $this->query($sql);
+
+        if($res){
+            unset($res[0]['car_id']);
+            unset($res[0]['hash']);
+            foreach($res[0] as $k => $val){
+
+                $update[$k]=0;
+            }
+
+            $id = $this->updateByPrimaryKey('bibi_car_selling_list_info',['car_id'=>$car_id],$update);
+
+            if($id)
+            {
+                $infos = $this->getExtraInfoByIds($ids);
+                $items=array();
+                foreach($infos as $k => $val){
+                    $items[$val['alias']]=1;
+                }
+                $this->updateByPrimaryKey('bibi_car_selling_list_info',['car_id'=>$car_id],$items);
+            }
+
+        }else{
+
+            $infos = $this->getExtraInfoByIds($ids);
+
+            foreach($infos as $k => $val){
+                $items[$val['alias']]=1;
+            }
+            $insert = $items;
+            $insert['car_id']=$car_id;
+            $insert['hash']=$hash;
+            $id = $this->insert('bibi_car_selling_list_info',$insert);
         }
-        $insert = $items;
-        $insert['car_id']=$car_id;
-        $insert['hash']=$hash;
-
-        $id = $this->insert('bibi_car_selling_list_info',$insert);
-        return $id;
-
 
     }
 
