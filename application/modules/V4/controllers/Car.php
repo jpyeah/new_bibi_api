@@ -348,7 +348,7 @@ class CarController extends ApiYafControllerAbstract
      * @apiParam {string} [min_forfloat] 最小排量
      * @apiParam {string} [max_forfloat] 最大排量
      * @apiParam {number} [has_vr] 是否vr 1:是
-     * @apiParam {number} [car_type] 是否新车二手车 1:新车  2 二手车
+     * @apiParam {number} [car_type] 是否新车二手车 1:新车  2: 二手车 
      * @apiParam {number} [car_source] 车辆来源(个人，商家) 1:个人 2 商家
      * @apiParam {number} [forward] 变速箱  1:手动 2:自动
      * @apiParam {number} [board_add] 车牌所在地  1：本地 2：外地 (选择车牌所在地必须传city_code)
@@ -390,7 +390,11 @@ class CarController extends ApiYafControllerAbstract
         }
         //是否新车二手车
         if(@$data['car_type']){
-            $where .= ' AND t1.car_type = '.$data['car_type'].' ';
+            if($data['car_tyep'] == 1){
+                   $where .= ' AND t1.car_type = 0  ';
+            }else{
+                  $where .= ' AND t1.car_type = 1  ';
+            }
         }
         //车源
         if(@$data['car_source']){
