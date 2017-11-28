@@ -373,19 +373,19 @@ class CarController extends ApiYafControllerAbstract
         $data['page']     = $data['page'] ? ($data['page']+1) : 1;
         $data['brand_id'] = $data['brand_id'] ? $data['brand_id'] : 0 ;
         $data['series_id'] = $data['series_id'] ? $data['series_id'] : 0 ;
-        $data['search_type'] = $data['search_type'] ? $data['search_type'] : 1 ;
+        $data['search_type'] = @$data['search_type'] ? $data['search_type'] : 1 ;
 
         $carM = new CarSellingV1Model();
 
         $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND t1.car_type <> 3 AND t1.car_type <> 4 AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
 
         //品牌
-        if($data['brand_id']){
+        if(@$data['brand_id']){
 
             $where .= ' AND t1.brand_id = '.$data['brand_id'].' ';
         }
         //系列
-        if($data['series_id']){
+        if(@$data['series_id']){
             $where .= ' AND t1.series_id = '.$data['series_id'].' ';
         }
         //是否新车二手车
