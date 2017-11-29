@@ -290,8 +290,6 @@ class CarSellingV1Model extends PdoDb
 
         $brandM = new BrandModel();
 
-
-
         $car['brand_info']  = array();//$brandM->getBrandModel($car['brand_id']);
         $car['series_info'] = array();//$brandM->getSeriesModel($car['brand_id'],$car['series_id']);
         $car['model_info']  = array();//$brandM->getModelModel($car['series_id'], $car['model_id']);
@@ -307,7 +305,6 @@ class CarSellingV1Model extends PdoDb
         unset($car['baidu_series_id']);
         unset($car['image']);
         unset($car['thumbnail']);
-
 
         if($car['user_id']){
 

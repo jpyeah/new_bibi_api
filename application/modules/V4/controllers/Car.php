@@ -472,13 +472,19 @@ class CarController extends ApiYafControllerAbstract
         }else{
             if(@$data['min_forfloat']){
                 $where .= ' AND t5.Engine_ExhaustForFloat >= '.$data['min_forfloat'] .' ';
+
+                if(!$carM->left_model){
+                    $carM->left_model = 'LEFT JOIN `bibi_car_model_detail` AS t5 ON t1.model_id = t5.model_id ';
+                }
             }
             if(@$data['max_forfloat']){
                 $where .=' AND t5.Engine_ExhaustForFloat <='.$data['max_forfloat'].' ';
+
+                if(!$carM->left_model){
+                    $carM->left_model = 'LEFT JOIN `bibi_car_model_detail` AS t5 ON t1.model_id = t5.model_id ';
+                }
             }
-            if(!$carM->left_model){
-                $carM->left_model = 'LEFT JOIN `bibi_car_model_detail` AS t5 ON t1.model_id = t5.model_id ';
-            }
+
         }
         //价格
         if(@$data['min_price']==200){
