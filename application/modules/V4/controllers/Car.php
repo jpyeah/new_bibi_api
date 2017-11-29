@@ -533,7 +533,7 @@ class CarController extends ApiYafControllerAbstract
         if(isset($jsonData['new_order_info'][$data['order_id']])) {
 
             // $carM->order  = ' ORDER BY t1.car_type ASC , ';
-            $carM->order = $jsonData['order_info'][$data['order_id']];
+            $carM->order = $jsonData['new_order_info'][$data['order_id']];
 
         }
 

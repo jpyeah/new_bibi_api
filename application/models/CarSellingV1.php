@@ -290,10 +290,15 @@ class CarSellingV1Model extends PdoDb
 
         $brandM = new BrandModel();
 
-        $car['brand_info']  = array();//$brandM->getBrandModel($car['brand_id']);
-        $car['series_info'] = array();//$brandM->getSeriesModel($car['brand_id'],$car['series_id']);
-        $car['model_info']  = array();//$brandM->getModelModel($car['series_id'], $car['model_id']);
-        $car['model_detail']= array();//$brandM->getModelDetail($car['model_id']);
+        $car['brand_info']  = $brandM->getBrandModel($car['brand_id']);
+        $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);
+        $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
+        $car['model_detail']= $brandM->getModelDetail($car['model_id']);
+
+//        $car['brand_info']  = new stdClass();//$brandM->getBrandModel($car['brand_id']);
+//        $car['series_info'] = new stdClass();//$brandM->getSeriesModel($car['brand_id'],$car['series_id']);
+//        $car['model_info']  = new stdClass();//$brandM->getModelModel($car['series_id'], $car['model_id']);
+//        $car['model_detail']= new stdClass();//$brandM->getModelDetail($car['model_id']);
 
         unset($car['brand_id']);
         unset($car['series_id']);
