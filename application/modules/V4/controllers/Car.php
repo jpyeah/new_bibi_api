@@ -390,7 +390,7 @@ class CarController extends ApiYafControllerAbstract
         }
         //是否新车二手车
         if(@$data['car_type']){
-            if($data['car_tyep'] == 1){
+            if($data['car_type'] == 1){
                    $where .= ' AND t1.car_type = 0  ';
             }else{
                   $where .= ' AND t1.car_type = 1  ';

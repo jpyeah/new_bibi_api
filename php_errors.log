@@ -551,3 +551,4 @@ Stack trace:
 [24-Nov-2017 14:09:42 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [24-Nov-2017 14:09:43 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 369
 [24-Nov-2017 14:09:43 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[29-Nov-2017 09:29:34 PRC] PHP Notice:  Undefined index: car_tyep in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 393
