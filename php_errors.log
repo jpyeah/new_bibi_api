@@ -552,3 +552,20 @@ Stack trace:
 [24-Nov-2017 14:09:43 PRC] PHP Notice:  Undefined variable: province_id in /usr/local/var/www/bibi-api/application/controllers/Car.php on line 369
 [24-Nov-2017 14:09:43 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [29-Nov-2017 09:29:34 PRC] PHP Notice:  Undefined index: car_tyep in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Car.php on line 393
+[02-Dec-2017 16:26:37 PRC] PHP Notice:  Undefined index: car_id in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 20
+[02-Dec-2017 16:26:37 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 21
+[02-Dec-2017 16:26:38 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[02-Dec-2017 16:27:13 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[02-Dec-2017 16:28:21 PRC] PHP Notice:  Undefined index: model_name in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 43
+[02-Dec-2017 16:28:21 PRC] PHP Notice:  Undefined index: series_name in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 44
+[02-Dec-2017 16:28:21 PRC] PHP Notice:  Undefined index: brand_name in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 45
+[02-Dec-2017 16:28:21 PRC] PHP Notice:  Undefined index: extra_info in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 51
+[02-Dec-2017 16:28:21 PRC] PHP Notice:  Undefined index: bank_no in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 52
+[02-Dec-2017 16:28:21 PRC] PHP Notice:  Undefined index: bank_name in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 53
+[02-Dec-2017 16:28:21 PRC] PHP Notice:  Undefined index: bank_account in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 54
+[02-Dec-2017 16:28:58 PRC] PHP Notice:  Undefined index: extra_info in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 51
+[02-Dec-2017 16:28:58 PRC] PHP Notice:  Undefined index: bank_no in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 52
+[02-Dec-2017 16:28:58 PRC] PHP Notice:  Undefined index: bank_name in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 53
+[02-Dec-2017 16:28:58 PRC] PHP Notice:  Undefined index: bank_account in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 54
+[02-Dec-2017 16:30:10 PRC] PHP Notice:  Undefined index: extra_info in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 51
+[02-Dec-2017 16:31:14 PRC] PHP Notice:  Undefined index: files in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 65

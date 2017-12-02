@@ -251,5 +251,31 @@ class ApiYafControllerAbstract extends Yaf_Controller_Abstract {
             return true;
     }
 
+     //处理 车辆列表图片数据
+    public function dealFilesWithString($files_id, $files_type)
+    {
+
+        $filesInfo = array();
+
+//        $files = explode(',', $files_id);
+//
+//        $files_type = explode(',', $files_type);
+
+        $files = json_decode($files_id, true);
+        $files_type = json_decode($files_type, true);
+
+        if($files && $files_type){
+
+            foreach ($files as $k => $fileHash) {
+
+                $filesInfo[] = array('hash' => $fileHash, 'type' => $files_type[$k], 'key' => $fileHash);
+
+            }
+        }
+
+        return $filesInfo;
+
+    }
+
 
 } 

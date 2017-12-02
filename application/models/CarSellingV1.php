@@ -96,9 +96,9 @@ class CarSellingV1Model extends PdoDb
         $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
         $car['model_detail']= $brandM->getModelDetail($car['model_id']);
 
-        unset($car['brand_id']);
-        unset($car['series_id']);
-        unset($car['model_id']);
+//        unset($car['brand_id']);
+//        unset($car['series_id']);
+//        unset($car['model_id']);
         unset($car['brand_name']);
         unset($car['series_name']);
         unset($car['model_name']);
@@ -246,7 +246,7 @@ class CarSellingV1Model extends PdoDb
         $car['files']['type3'] = $items3;
         $car['files']['type4'] = $items4;
 
-        unset($car['id']);
+//        unset($car['id']);
         unset($car['hash']);
 
        // $car['files'] = $items;

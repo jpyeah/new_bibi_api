@@ -77,6 +77,7 @@ class CarSellingExtraInfoModel extends PdoDb
         if($res){
             unset($res[0]['car_id']);
             unset($res[0]['hash']);
+            unset($res[0]['id']);
             foreach($res[0] as $k => $val){
 
                 $update[$k]=0;
@@ -84,27 +85,32 @@ class CarSellingExtraInfoModel extends PdoDb
 
             $id = $this->updateByPrimaryKey('bibi_car_selling_list_info',['car_id'=>$car_id],$update);
 
-            if($id)
-            {
+            if($ids){
                 $infos = $this->getExtraInfoByIds($ids);
-                $items=array();
-                foreach($infos as $k => $val){
-                    $items[$val['alias']]=1;
+                $items = array();
+                foreach ($infos as $k => $val) {
+                    $items[$val['alias']] = 1;
                 }
-                $this->updateByPrimaryKey('bibi_car_selling_list_info',['car_id'=>$car_id],$items);
+
+                $this->updateByPrimaryKey('bibi_car_selling_list_info', ['car_id' => $car_id], $items);
             }
 
         }else{
+            if($ids){
 
-            $infos = $this->getExtraInfoByIds($ids);
+                $infos = $this->getExtraInfoByIds($ids);
 
-            foreach($infos as $k => $val){
-                $items[$val['alias']]=1;
+                foreach($infos as $k => $val){
+                    $items[$val['alias']]=1;
+                }
+                $insert = $items;
+                $insert['car_id']=$car_id;
+                $insert['hash']=$hash;
+                $id = $this->insert('bibi_car_selling_list_info',$insert);
+
             }
-            $insert = $items;
-            $insert['car_id']=$car_id;
-            $insert['hash']=$hash;
-            $id = $this->insert('bibi_car_selling_list_info',$insert);
+
+
         }
 
     }
@@ -218,6 +224,27 @@ class CarSellingExtraInfoModel extends PdoDb
                return array();
            }
 
+
+    }
+
+
+    public function getInfobyhash($hash){
+
+        $sql ="SELECT * FROM bibi_car_selling_list_info WHERE hash= '".$hash." '";
+
+        $res = $this->query($sql);
+
+        $result =  $res ? $res[0]: array();
+
+        return $result;
+
+    }
+
+    public function deleteCarInfoById( $carId){
+
+        $sql = 'DELETE FROM `bibi_car_selling_list_info` WHERE  `hash`="'.$carId.'"';
+
+        $this->execute($sql);
 
     }
 

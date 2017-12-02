@@ -224,6 +224,16 @@ class CarController extends ApiYafControllerAbstract
 
         $carModel->deleteCarById($userId, $data['car_id']);
 
+        $ExtraModel = new CarSellingExtraInfoModel();
+
+        $res = $ExtraModel->getInfobyhash($data['car_id']);
+
+        if($res){
+
+            $ExtraModel->deleteCarInfoById($data['car_id']);
+        }
+
+
         $this->send();
     }
 

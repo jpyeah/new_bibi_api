@@ -62,6 +62,10 @@ class CarController extends ApiYafControllerAbstract
 
         $carT = $carModel::$table;
 
+        if(!$data['car_id']){
+            return $this->send_error(CAR_NOT_EXIST);
+        }
+
         $carId = $data['car_id'];
 
         $carModel->currentUser = $userId;

@@ -102,7 +102,7 @@ class YicheController extends ApiYafControllerAbstract {
     }
 
     //获取系列的分类
-    public function getSetypeAction(){
+    public function SetypeAction(){
 
         $sql = "SELECT brand_series_id,car_type  FROM bibi_car_brand_series";
 
@@ -112,7 +112,7 @@ class YicheController extends ApiYafControllerAbstract {
 
         foreach($list as $k => $val){
 
-            if(!$val['car_type'] &&  !is_numeric($val['car_type']) ){
+            //if(!$val['car_type'] &&  !is_numeric($val['car_type']) ){
 
                 $url="https://carapi.ycapp.yiche.com/car/GetSerialInfo?csid=".$val['brand_series_id']."&tracker=172_ycapp";
 
@@ -171,7 +171,7 @@ class YicheController extends ApiYafControllerAbstract {
                 }
 
 
-            }
+           // }
 
 
         }

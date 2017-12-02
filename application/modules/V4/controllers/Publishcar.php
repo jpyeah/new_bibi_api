@@ -288,6 +288,25 @@ class PublishcarController extends ApiYafControllerAbstract
             $cs = new CarSellingV1Model();
             $carInfo = $cs->GetCarInfoById($properties['hash']);
 
+            if($carInfo['verify_status'] == 2 || $carInfo['verify_status'] == 11){
+                $client=new Elasticsearch;
+                $client=$client->instance();
+                $index['index'] = 'car'; //索引名称
+                $index['type'] = 'car_selling_list'; //类型名称
+                $index['id'] = $carId;   //不指定id，系统会自动生成唯一id
+                $index['body'] = array(
+                    'car_name' => $carInfo['car_name'],
+                    'hash'=>$carInfo['car_id'],
+                    'car_id'=>$carInfo['id'],
+                    'series_id'=>$carInfo['series_id'],
+                    'brand_id'=>$carInfo['brand_id'],
+                    'model_id'=>$carInfo['model_id'],
+                    'car_type'=>$carInfo['car_type'],
+                    'verify_status'=>$carInfo['verify_status'],
+                );
+                $res = $client->index($index);
+            }
+
             $response['car_info'] = $carInfo;
 
             //我的关注数据myfocus
@@ -438,6 +457,25 @@ class PublishcarController extends ApiYafControllerAbstract
 
             $carInfo = $cs->GetCarInfoById($properties['hash']);
 
+            if($carInfo['verify_status'] == 2 || $carInfo['verify_status'] == 11){
+                $client=new Elasticsearch;
+                $client=$client->instance();
+                $index['index'] = 'car'; //索引名称
+                $index['type'] = 'car_selling_list'; //类型名称
+                $index['id'] = $carId;   //不指定id，系统会自动生成唯一id
+                $index['body'] = array(
+                    'car_name' => $carInfo['car_name'],
+                    'hash'=>$carInfo['car_id'],
+                    'car_id'=>$carInfo['id'],
+                    'series_id'=>$carInfo['series_id'],
+                    'brand_id'=>$carInfo['brand_id'],
+                    'model_id'=>$carInfo['model_id'],
+                    'car_type'=>$carInfo['car_type'],
+                    'verify_status'=>$carInfo['verify_status'],
+                );
+                $res = $client->index($index);
+            }
+
             $response['car_info'] = $carInfo;
 
             //我的关注数据myfocus
@@ -558,7 +596,7 @@ class PublishcarController extends ApiYafControllerAbstract
 
         if($rs){
 
-            if($car_info_ids){
+
 
                 $last_str = substr($car_info_ids, -1);
 
@@ -569,7 +607,7 @@ class PublishcarController extends ApiYafControllerAbstract
                 $ExtraModel = new CarSellingExtraInfoModel();
 
                 $ExtraModel->updateExtraInfo($result['id'],$data['car_id'],$car_info_ids);
-            }
+
             $cs = new CarSellingV1Model();
 
             $carInfo = $cs->GetCarInfoById($data['car_id']);
