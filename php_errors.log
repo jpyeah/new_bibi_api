@@ -569,3 +569,18 @@ Stack trace:
 [02-Dec-2017 16:28:58 PRC] PHP Notice:  Undefined index: bank_account in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 54
 [02-Dec-2017 16:30:10 PRC] PHP Notice:  Undefined index: extra_info in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 51
 [02-Dec-2017 16:31:14 PRC] PHP Notice:  Undefined index: files in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 65
+[04-Dec-2017 17:04:37 PRC] PHP Notice:  Undefined offset: 0 in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 23
+[04-Dec-2017 17:13:10 PRC] PHP Notice:  Undefined variable: car in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 67
+[04-Dec-2017 18:00:21 PRC] PHP Fatal error:  Cannot redeclare CarReportController::listAction() in /usr/local/var/www/bibi-api/application/modules/V4/controllers/Carreport.php on line 337
+[04-Dec-2017 18:01:00 PRC] PHP Parse error:  syntax error, unexpected '=' in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 33
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: brand_name in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 142
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: series_name in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 143
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: model_name in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 144
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: guide_price in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 145
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: board_fee in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 146
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: insurance_fee in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 147
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: other_fee in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 148
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: other_fee in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 149
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: insurance_fee in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 149
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: board_fee in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 149
+[04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: guide_price in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 149
