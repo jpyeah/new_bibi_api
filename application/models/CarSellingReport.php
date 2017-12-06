@@ -28,16 +28,41 @@ class CarSellingReportModel extends PdoDb
            }
     }
 
+    public function getReportByuser($report_id,$userId){
+
+        $sql = "SELECT * FROM `bibi_car_selling_list_report` where id =".$report_id." AND user_id =".$userId;
+
+        $res = $this->query($sql);
+
+        if($res){
+            $resport = $this->handleReport($res[0]);
+            return $resport;
+        }
+
+    }
+
     public function getReports(){
 
-           $sql = "SELECT * FROM `bibi_car_selling_list_report` WHERE user_id =".$this->user_id;
+        $pageSize = 10;
 
-           $res = $this->query($sql);
+        $sql = "SELECT * FROM `bibi_car_selling_list_report` WHERE user_id =".$this->user_id;
 
-           $list = $this->handleReports($res);
+        $sqlCnt = "SELECT count(*) as total FROM `bibi_car_selling_list_report` WHERE user_id =".$this->user_id;
 
-           return $list;
+        $number = ($this->page-1)*$pageSize;
 
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+        $res = $this->query($sql);
+
+        $count = count($res);
+        $list['list'] =  $this->handleReports($res);
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] = $total;
+        $list['number'] = $number;
+        return $list;
     }
 
     public function handleReport($report){
