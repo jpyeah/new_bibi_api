@@ -12,7 +12,7 @@ class CarReportController extends ApiYafControllerAbstract
     public $info_fields = array(
         'session_id', 'files_id', 'files_type','car_color','brand_id','series_id','model_id',
         'contact_phone','contact_name','contact_address','guide_price', 'board_fee','insurance_fee',
-        'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account');
+        'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account','promise','purch_fee','total_price','report_time');
 
     public function publishProgress($data,$userId){
 
@@ -54,6 +54,10 @@ class CarReportController extends ApiYafControllerAbstract
         $properties['contact_phone'] = $data['contact_phone'];
         $properties['contact_name'] = $data['contact_name'];
         $properties['contact_address'] = $data['contact_address'];
+        $properties['purch_fee'] = $data['purch_fee'];
+        $properties['promise'] = $data['promise'];
+        $properties['total_price'] = $data['total_price'];
+        $properties['report_time'] = $data['report_time'];
 
         $time = time();
         $properties['created'] = $time;
@@ -98,6 +102,10 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiParam (request) {string} [bank_name] 银行名称
      * @apiParam (request) {string} [bank_account] 开户人名称
      * @apiParam (request) {string} [extra_info] 基本配置选项(id与逗号拼接字符串 2,3,4,5)
+     * @apiParam (request) {string} promise 承诺
+     * @apiParam (request) {string} total_price 合计总价
+     * @apiParam (request) {string} purch_fee 购置税
+     * @apiParam (request) {string} report_time 报价时间 时间戳
      *
      */
     public function createAction()
@@ -188,7 +196,6 @@ class CarReportController extends ApiYafControllerAbstract
      *       "device_identifier":"",
      *       "session_id":"",
      *       "page":"",
-     *
      *
      *     }
      *   }
