@@ -12,7 +12,7 @@ class CarReportController extends ApiYafControllerAbstract
     public $info_fields = array(
         'session_id', 'files_id', 'files_type','car_color','brand_id','series_id','model_id',
         'contact_phone','contact_name','contact_address','guide_price', 'board_fee','insurance_fee',
-        'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account','promise','purch_fee','total_price','report_time','car_intro');
+        'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account','promise','purch_fee','total_price','report_time','car_intro','status');
 
     public function publishProgress($data,$userId){
 
@@ -59,6 +59,7 @@ class CarReportController extends ApiYafControllerAbstract
         $properties['total_price'] = $data['total_price'];
         $properties['report_time'] = $data['report_time'];
         $properties['car_intro'] = $data['car_intro'];
+        $properties['status'] = $data['status'];
 
         $time = time();
         $properties['created'] = $time;
@@ -108,6 +109,7 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiParam (request) {string} purch_fee 购置税
      * @apiParam (request) {string} report_time 报价时间 时间戳
      * @apiParam (request) {string} car_intro 车辆描述
+     * @apiParam (request) {number} status 是否保存 1:保存 2：不保存
      *
      */
     public function createAction()
@@ -132,17 +134,14 @@ class CarReportController extends ApiYafControllerAbstract
 
         if ($ReportId) {
             $response['info']=$csReport->getReport($ReportId);
-//            $title = is_array($carInfo['user_info']) ?
-//                $carInfo['user_info']['profile']['nickname'] . '的' . $carInfo['car_name']
-//                : $carInfo['car_name'];
-//            $response['share_title'] = $title;
-//            $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id='.$properties['hash'];
-//            $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
-//            $response['share_img'] = isset($carInfo['files']["type1"]) ? $carInfo['files']["type1"][0]['file_url'] : '';
+            $title = "吡吡汽车";
+            $response['share_title'] = $title;
+            $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id=';
+            $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
+            $response['share_img'] = isset($response['info']['files']["type1"]) ? $response['info']['files']["type1"][0]['file_url'] : '';
             $this->send($response);
         } else {
             $this->send_error(CAR_ADDED_ERROR);
-
         }
 
     }
