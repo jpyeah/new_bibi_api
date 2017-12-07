@@ -11,7 +11,7 @@ class CarReportController extends ApiYafControllerAbstract
 
     public $info_fields = array(
         'session_id', 'files_id', 'files_type','car_color','brand_id','series_id','model_id',
-        'contact_phone','contact_name','contact_address','guide_price', 'board_fee','insurance_fee',
+        'contact_phone','contact_name','guide_price', 'board_fee','insurance_fee',
         'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account','promise','purch_fee','total_price','report_time','car_intro','status');
 
     public function publishProgress($data,$userId){
@@ -53,7 +53,7 @@ class CarReportController extends ApiYafControllerAbstract
         $properties['bank_account'] = $data['bank_account'];
         $properties['contact_phone'] = $data['contact_phone'];
         $properties['contact_name'] = $data['contact_name'];
-        $properties['contact_address'] = $data['contact_address'];
+        $properties['contact_address'] = @$data['contact_address'];
         $properties['purch_fee'] = $data['purch_fee'];
         $properties['promise'] = $data['promise'];
         $properties['total_price'] = $data['total_price'];
@@ -88,6 +88,8 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiParam (request) {string} [session_id] session_id
      * @apiParam (request) {Object} [file_type] 图片类型说明 默认填写 1
      * @apiParam (request) {Object} [files_id] 七牛图片hash
+     * @apiParam (request) {number} car_id 车辆id (详情有返回)
+     * @apiParam (request) {number} hash   车辆car_id(详情有返回)
      * @apiParam (request) {number} car_color 车辆颜色
      * @apiParam (request) {number} brand_id 车品牌id
      * @apiParam (request) {number} series_id 车系列id
