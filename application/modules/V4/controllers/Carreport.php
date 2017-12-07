@@ -12,7 +12,7 @@ class CarReportController extends ApiYafControllerAbstract
     public $info_fields = array(
         'session_id', 'files_id', 'files_type','car_color','brand_id','series_id','model_id',
         'contact_phone','contact_name','contact_address','guide_price', 'board_fee','insurance_fee',
-        'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account','promise','purch_fee','total_price','report_time');
+        'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account','promise','purch_fee','total_price','report_time','car_intro');
 
     public function publishProgress($data,$userId){
 
@@ -58,6 +58,7 @@ class CarReportController extends ApiYafControllerAbstract
         $properties['promise'] = $data['promise'];
         $properties['total_price'] = $data['total_price'];
         $properties['report_time'] = $data['report_time'];
+        $properties['car_intro'] = $data['car_intro'];
 
         $time = time();
         $properties['created'] = $time;
@@ -106,6 +107,7 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiParam (request) {string} total_price 合计总价
      * @apiParam (request) {string} purch_fee 购置税
      * @apiParam (request) {string} report_time 报价时间 时间戳
+     * @apiParam (request) {string} car_intro 车辆描述
      *
      */
     public function createAction()
