@@ -584,3 +584,4 @@ Stack trace:
 [04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: insurance_fee in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 149
 [04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: board_fee in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 149
 [04-Dec-2017 18:08:12 PRC] PHP Notice:  Undefined index: guide_price in /usr/local/var/www/bibi-api/application/models/CarSellingReport.php on line 149
+[07-Dec-2017 17:43:23 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
