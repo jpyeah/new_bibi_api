@@ -732,6 +732,154 @@ class CarSellingV1Model extends PdoDb
     }
 
 
+    public function relatedPriceCarsTest($carId ,$price,$userId){
+
+        $minPrice = $price * 0.8;
+        $maxPrice = $price * 1.2;
+
+        $sql = 'SELECT
+                t1.id,t1.user_id
+                FROM `bibi_car_selling_list` AS t1
+                WHERE
+                 t1.files <> "" AND t1.car_type != 3 AND t1.hash != "'.$carId.'" AND
+                 t1.brand_id > 0 AND t1.series_id > 0 AND
+                 t1.price BETWEEN '.$minPrice.' AND '.$maxPrice.' AND (t1.verify_status=2 OR t1.verify_status = 11)';
+        $res_sql = '
+                SELECT
+                t1.*,
+                t3.avatar,t3.nickname,t3.type as user_type
+                FROM `bibi_car_selling_list` AS t1
+                LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+               
+        ';
+        $sqlOthers ='';
+        switch($userId){
+            case 389:
+                $sqlUser = $sql . ' AND t1.user_id = 389 LIMIT 0 , 6';
+                $sqlOther = $sql . ' AND t1.user_id <> 389  LIMIT 0 , 6';
+                break;
+            default:
+                $sqlUser = $sql . ' AND t1.user_id = '.$userId.' LIMIT 0 , 6';
+                $sqlOther = $sql .' AND t1.user_id = 389 LIMIT 0, 4';
+                $sqlOthers = $sql .' AND t1.user_id <> 389 AND t1.user_id <> '.$userId.' LIMIT 0, 2';
+                break;
+        }
+
+        $u_ids_res = $this->query($sqlUser);
+
+        $o_ids_res = $this->query($sqlOther);
+
+        if($sqlOthers){
+            $os_ids_res = $this->query($sqlOthers);
+        }else{
+            $os_ids_res =array();
+        }
+
+        if($u_ids_res){
+            $u_ids = $this->implodeArrayByKey('id', $u_ids_res);
+
+        }else{
+            $u_ids = '';
+        }
+
+        if($o_ids_res){
+            $o_ids = $this->implodeArrayByKey('id', $o_ids_res);
+        }else{
+            $o_ids = '';
+        }
+
+        if($os_ids_res){
+            $os_ids = $this->implodeArrayByKey('id', $os_ids_res);
+        }else{
+            $os_ids = '';
+        }
+
+        if($u_ids){
+
+            if($o_ids){
+
+                   if($os_ids){
+
+                       $ids = $u_ids.",".$o_ids.",".$os_ids;
+
+                   }else{
+
+                       $ids = $u_ids.",".$o_ids;
+
+                   }
+
+            }else{
+
+                if($os_ids){
+
+                    $ids = $u_ids.",".$os_ids;
+
+                }else{
+
+                    $ids = $u_ids;
+
+                }
+
+
+            }
+
+        }else{
+
+            if($o_ids){
+
+                if($os_ids){
+
+                    $ids = $o_ids.",".$os_ids;
+
+                }else{
+
+                    $ids = $o_ids;
+
+                }
+
+
+            }else{
+
+                if($os_ids){
+
+                    $ids = $os_ids;
+
+                }else{
+
+                    $ids = " ";
+
+                }
+
+
+            }
+
+        }
+
+      //  $ids = $u_ids.",".$o_ids.",".$os_ids;
+
+        $res_sql = $res_sql . " WHERE t1.id in ( ".$ids ." ) ORDER BY field(t1.id,".$ids.")";
+
+        $cars = $this->query($res_sql);
+
+        $items = array();
+
+        if($cars){
+
+            foreach($cars as $k => $car){
+
+                $item = $this->handlerCarByList($car);
+                $items[$k] = $item;
+            }
+        }
+
+
+        return $items;
+    }
+
+
 
     public function relatedStyleCars($carId ,$brand_id, $series_id){
 

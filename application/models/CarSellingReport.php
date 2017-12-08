@@ -45,9 +45,9 @@ class CarSellingReportModel extends PdoDb
 
         $pageSize = 10;
 
-        $sql = "SELECT * FROM `bibi_car_selling_list_report` WHERE user_id =".$this->user_id;
+        $sql = "SELECT * FROM `bibi_car_selling_list_report` WHERE status = 1 AND user_id =".$this->user_id;
 
-        $sqlCnt = "SELECT count(*) as total FROM `bibi_car_selling_list_report` WHERE user_id =".$this->user_id;
+        $sqlCnt = "SELECT count(*) as total FROM `bibi_car_selling_list_report` WHERE  status = 1 AND user_id =".$this->user_id;
 
         $number = ($this->page-1)*$pageSize;
 
@@ -61,7 +61,7 @@ class CarSellingReportModel extends PdoDb
         $list['list'] =  $this->handleReports($res);
         $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
         $list['total'] = $total;
-        $list['number'] = $number;
+        $list['number'] = $count;
         return $list;
     }
 
@@ -147,7 +147,7 @@ class CarSellingReportModel extends PdoDb
     public function handleReports($reports){
 
            $items = array();
-           foreach($reports as $k =>$report){
+           foreach($reports as $k => $report){
                $images = unserialize($report['files']);
                $car['files'] = new stdClass();
                $items1=array();
@@ -165,15 +165,11 @@ class CarSellingReportModel extends PdoDb
                    }else{
                        $items[$k]['file_img'] = "";
                }
-               $items[$k]['brand_name']=$report['brand_name'];
-               $items[$k]['series_name']=$report['series_name'];
-               $items[$k]['model_name']=$report['model_name'];
-               $items[$k]['guide_price']=$report['guide_price'];
-               $items[$k]['board_fee']=$report['board_fee'];
-               $items[$k]['insurance_fee']=$report['insurance_fee'];
-               $items[$k]['other_fee']=$report['other_fee'];
-               $items[$k]['total_fee']=$report['other_fee']+$report['insurance_fee']+$report['board_fee']+$report['guide_price'];
+               $items[$k]['report_id']=$report['id'];
+               $items[$k]['total_price']=$report['total_price'];
+               $items[$k]['car_name']=$report['brand_name']." ".$report['series_name']." ".$report['model_name'];
            }
+
            return $items;
 
     }

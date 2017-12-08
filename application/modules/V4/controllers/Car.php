@@ -76,8 +76,17 @@ class CarController extends ApiYafControllerAbstract
 
         $brandId = isset($carInfo['brand_info']['brand_id']) ? $carInfo['brand_info']['brand_id'] : 0;
 
+
+        if(!is_object($carInfo['user_info'])){
+            $car_userId = $carInfo['user_info']['user_id'];
+        }else{
+            $car_userId = 0;
+        }
+
+        //$car_userId = $carInfo['user_info'] ? $carInfo['user_info']['user_id']: 0;
         //同款车
-        $response['related_price_car_list'] = $carModel->relatedPriceCars($carId,$carInfo['price']);
+        // $response['related_price_car_list'] = $carModel->relatedPriceCars($carId,$carInfo['price']);
+        $response['related_price_car_list'] = $carModel->relatedPriceCarsTest($carId,$carInfo['price'],$car_userId);
 
         $visitCarM = new VisitCarModel();
         $visitCarM->car_id  = $carId;
