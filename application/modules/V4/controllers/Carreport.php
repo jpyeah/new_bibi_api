@@ -174,9 +174,13 @@ class CarReportController extends ApiYafControllerAbstract
         $CarReport = new CarSellingReportModel();
 
         $report = $CarReport->getReportByuser($data['report_id'],$userId);
-
-        $this->send($report);
-
+        $response['info']=$report;
+        $title = "吡吡汽车";
+        $response['share_title'] = $title;
+        $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id=';
+        $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
+        $response['share_img'] = isset($report['files']["type1"]) ? $report['files']["type1"][0]['file_url'] : '';
+        $this->send($response);
     }
 
     /**
