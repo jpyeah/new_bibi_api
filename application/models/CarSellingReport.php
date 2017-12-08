@@ -56,9 +56,13 @@ class CarSellingReportModel extends PdoDb
         $total = @$this->query($sqlCnt)[0]['total'];
 
         $res = $this->query($sql);
-
         $count = count($res);
-        $list['list'] =  $this->handleReports($res);
+        $items=array();
+        foreach($res as $k =>$val){
+
+            $items[$k]=$this->handleReports($val);
+        }
+        $list['list'] =  $items;
         $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
         $list['total'] = $total;
         $list['number'] = $count;
@@ -144,10 +148,9 @@ class CarSellingReportModel extends PdoDb
 
     }
 
-    public function handleReports($reports){
+    public function handleReports($report){
 
            $items = array();
-           foreach($reports as $k => $report){
                $images = unserialize($report['files']);
                $car['files'] = new stdClass();
                $items1=array();
@@ -158,17 +161,16 @@ class CarSellingReportModel extends PdoDb
                if($images){
                        foreach($images as $k => $val ){
                            if($k == 0){
-                               $items[$k]['file_img'] = IMAGE_DOMAIN.$val['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+                               $items['file_img'] = IMAGE_DOMAIN.$val['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
                                break;
                            }
                        }
                    }else{
-                       $items[$k]['file_img'] = "";
+                       $items['file_img'] = "";
                }
-               $items[$k]['report_id']=$report['id'];
-               $items[$k]['total_price']=$report['total_price'];
-               $items[$k]['car_name']=$report['brand_name']." ".$report['series_name']." ".$report['model_name'];
-           }
+               $items['report_id']=$report['id'];
+               $items['total_price']=$report['total_price'];
+               $items['car_name']=$report['brand_name']." ".$report['series_name']." ".$report['model_name'];
 
            return $items;
 
