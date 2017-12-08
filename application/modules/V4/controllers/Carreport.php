@@ -39,6 +39,7 @@ class CarReportController extends ApiYafControllerAbstract
         $properties['brand_id']      =$data['brand_id'];
         $properties['series_id']     =$data['series_id'];
         $properties['model_id']      =$data['model_id'];
+        $properties['car_color']      =$data['car_color'];
         $properties['model_name']    =$modelM['model_name'];
         $properties['series_name']   =$seriesM['series_name'];
         $properties['brand_name']    =$brandM['brand_name'];

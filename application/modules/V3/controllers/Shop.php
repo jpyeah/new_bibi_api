@@ -162,7 +162,7 @@ class ShopController extends ApiYafControllerAbstract
      //商品列表
     public function goodslistAction(){
          
-            $jsonData = require APPPATH . '/configs/JsonData.php';
+            $jsonData = require APPPATH .'/configs/JsonData.php';
             
             $this->optional_fields = array('goods_item');
             $this->required_fields = array_merge($this->required_fields, array('session_id'));
