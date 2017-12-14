@@ -45,9 +45,9 @@ class CarSellingReportModel extends PdoDb
 
         $pageSize = 10;
 
-        $sql = "SELECT * FROM `bibi_car_selling_list_report` WHERE status = 1 AND user_id =".$this->user_id;
+        $sql = "SELECT * FROM `bibi_car_selling_list_report` WHERE status = 1 AND user_id =".$this->user_id." AND car_id =".$this->car_id;
 
-        $sqlCnt = "SELECT count(*) as total FROM `bibi_car_selling_list_report` WHERE  status = 1 AND user_id =".$this->user_id;
+        $sqlCnt = "SELECT count(*) as total FROM `bibi_car_selling_list_report` WHERE  status = 1 AND user_id =".$this->user_id." AND car_id =".$this->car_id;
 
         $number = ($this->page-1)*$pageSize;
 

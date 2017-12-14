@@ -194,7 +194,7 @@ class RentalcarController extends ApiYafControllerAbstract
 
         $carModel->page = $data['page'] ? ($data['page']+1) : 1;
 
-        $lists = $carModel->getRentalCarList();
+        $lists = $carModel->getRenwtalCarList();
 
         $carModel->currentUser = $userId;
 

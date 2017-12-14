@@ -137,9 +137,9 @@ class CarReportController extends ApiYafControllerAbstract
 
         if ($ReportId) {
             $response['info']=$csReport->getReport($ReportId);
-            $title = "吡吡汽车";
+            $title = "【吡吡汽车】- 报价单";
             $response['share_title'] = $title;
-            $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id=';
+            $response['share_url'] ='http://share.bibicar.cn/views/detail/offer.html?session='.$data['session_id'].'&id='.$ReportId.'&ident='.$data['device_identifier'];
             $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
             $response['share_img'] = isset($response['info']['files']["type1"]) ? $response['info']['files']["type1"][0]['file_url'] : '';
             $this->send($response);
@@ -176,9 +176,9 @@ class CarReportController extends ApiYafControllerAbstract
 
         $report = $CarReport->getReportByuser($data['report_id'],$userId);
         $response['info']=$report;
-        $title = "吡吡汽车";
+        $title = "【吡吡汽车】- 报价单";
         $response['share_title'] = $title;
-        $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id=';
+        $response['share_url'] ='http://share.bibicar.cn/views/detail/offer.html?session='.$data['session_id'].'&id='.$data['report_id'].'&ident='.$data['device_identifier'];
         $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
         $response['share_img'] = isset($report['files']["type1"]) ? $report['files']["type1"][0]['file_url'] : '';
         $this->send($response);
@@ -195,6 +195,7 @@ class CarReportController extends ApiYafControllerAbstract
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
+     * @apiParam {string} car_id car_id 车辆id
      * @apiParam {number} page 页数
      *
      * @apiParamExample {json} 请求样例
@@ -203,6 +204,7 @@ class CarReportController extends ApiYafControllerAbstract
      *     "data": {
      *       "device_identifier":"",
      *       "session_id":"",
+     *       "car_id",
      *       "page":"",
      *
      *     }
@@ -211,7 +213,7 @@ class CarReportController extends ApiYafControllerAbstract
      */
     public function listAction(){
 
-        $this->required_fields = array_merge($this->required_fields, array('session_id','page'));
+        $this->required_fields = array_merge($this->required_fields, array('session_id','page','car_id'));
 
         $data = $this->get_request_data();
 
@@ -223,11 +225,12 @@ class CarReportController extends ApiYafControllerAbstract
 
         $CarReport->user_id = $userId;
 
+        $CarReport->car_id  = $data['car_id'];
+
         $reports = $CarReport->getReports();
 
         $this->send($reports);
-
-
+        
     }
 
 
