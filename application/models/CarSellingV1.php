@@ -385,7 +385,7 @@ class CarSellingV1Model extends PdoDb
             }
         }
 
-        unset($car['id']);
+        //unset($car['id']);
         unset($car['hash']);
         unset($car['files']);
         unset($car['city_id']);

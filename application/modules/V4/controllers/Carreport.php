@@ -230,7 +230,7 @@ class CarReportController extends ApiYafControllerAbstract
         $reports = $CarReport->getReports();
 
         $this->send($reports);
-        
+
     }
 
 
