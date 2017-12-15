@@ -174,7 +174,7 @@ class CarReportController extends ApiYafControllerAbstract
 
         $CarReport = new CarSellingReportModel();
 
-        $report = $CarReport->getReportByuser($data['report_id'],$userId);
+        $report = $CarReport->getReport($data['report_id']);
         $response['info']=$report;
         $title = "【吡吡汽车】- 报价单";
         $response['share_title'] = $title;
