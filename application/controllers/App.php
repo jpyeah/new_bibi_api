@@ -108,7 +108,19 @@ class AppController extends ApiYafControllerAbstract {
         return $identifier;
 
     }
-
+    /**
+     * @api {POST} /app/uploadtoken 获取token
+     * @apiName APP uploadtoken
+     * @apiGroup APP
+     * @apiDescription 获取token
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} session_id session标识
+     * @apiParam {string} device_identifier   device设备标识
+     *
+     *
+     */
     public function uploadTokenAction(){
 
 
@@ -164,6 +176,66 @@ class AppController extends ApiYafControllerAbstract {
 
         $this->send($response);
 
+
+    }
+
+    /**
+     * @api {POST} /app/rgtoken 获取token(企业注册)
+     * @apiName APP rgtoken
+     * @apiGroup APP
+     * @apiDescription 获取token(企业注册)
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} sign 签名
+     *
+     *
+     */
+
+    //企业注册file token
+    public function RgTokenAction(){
+
+
+        $this->required_fields = array('sign');
+
+        $data = $this->get_request_data();
+
+        $str = date('Y-m-d',time());
+
+        if($data['sign']  != md5($str)){
+            $this->send_error(NOT_AUTHORIZED);
+        }
+        $userId = 0;
+
+        // $token = 'b2uNBag0oxn1Kh1-3ZaX2I8PUl_o2r19RWerT3yI:7ybP6eSg1UWghOKsdYLFpUfdBWE=:eyJzY29wZSI6ImJpYmkiLCJkZWFkbGluZSI6MTQ0Njc0NzM2OH0=';
+        $accessKey = QI_NIU_AK;
+        $secretKey = QI_NIU_SK;
+
+        // 构建鉴权对象
+        $auth = new Auth($accessKey, $secretKey);
+
+        // 要上传的空间
+        $bucket = 'bibi';
+
+        // 生成上传 Token
+        //$token = $auth->uploadToken($bucket);
+
+        $expire = 3600;
+
+        $key = 'uploadToken_' . $userId;
+
+        $policy = array(
+            'callbackUrl' => 'http://120.25.62.110/index/callback',
+            'callbackBody' => '{"fname":"$(fname)", "hash":"$(key)",  "user_id":' . $userId . '}',
+            // 'mimeLimit'    => 'image/*'
+        );
+
+        $uploadToken = $auth->uploadToken($bucket, null, $expire, $policy);
+
+        $response = array();
+        $response['upload_token'] = $uploadToken;
+
+        $this->send($response);
 
     }
 

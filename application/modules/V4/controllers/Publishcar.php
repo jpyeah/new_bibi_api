@@ -133,8 +133,6 @@ class PublishcarController extends ApiYafControllerAbstract
 
         $user_type=@$userInfo['type'];
 
-
-
         if($user_type == 2){
             $properties['verify_status'] = $car_type == (PLATFORM_USER_SELLING_CAR || PLATFORM_USER_NEW_CAR) ? CAR_VERIFIED : CAR_AUTH;
 
@@ -571,6 +569,8 @@ class PublishcarController extends ApiYafControllerAbstract
         $cs = new CarSellingModel();
 
         $properties = $this->publishProgress($data, $userId, $cs, $data['car_type'],'update');
+
+        print_r($properties);exit;
 
         unset($properties['car_id']);
         unset($properties['created']);

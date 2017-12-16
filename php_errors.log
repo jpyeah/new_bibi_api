@@ -637,3 +637,6 @@ Stack trace:
 [08-Dec-2017 15:01:33 PRC] PHP Notice:  Undefined variable: os_ids_res in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 787
 [08-Dec-2017 15:01:33 PRC] PHP Notice:  Undefined variable: os_ids in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 795
 [08-Dec-2017 15:02:44 PRC] PHP Notice:  Undefined variable: os_ids in /usr/local/var/www/bibi-api/application/models/CarSellingV1.php on line 797
+[16-Dec-2017 11:04:30 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[16-Dec-2017 11:07:28 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[16-Dec-2017 11:10:03 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91

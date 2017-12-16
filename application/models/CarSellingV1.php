@@ -849,7 +849,7 @@ class CarSellingV1Model extends PdoDb
 
                 }else{
 
-                    $ids = " ";
+                    $ids = '';
 
                 }
 
@@ -860,19 +860,26 @@ class CarSellingV1Model extends PdoDb
 
       //  $ids = $u_ids.",".$o_ids.",".$os_ids;
 
-        $res_sql = $res_sql . " WHERE t1.id in ( ".$ids ." ) ORDER BY field(t1.id,".$ids.")";
+        if($ids){
 
-        $cars = $this->query($res_sql);
+            $res_sql = $res_sql . " WHERE t1.id in ( ".$ids ." ) ORDER BY field(t1.id,".$ids.")";
 
-        $items = array();
+            $cars = $this->query($res_sql);
 
-        if($cars){
+            $items = array();
 
-            foreach($cars as $k => $car){
+            if($cars){
 
-                $item = $this->handlerCarByList($car);
-                $items[$k] = $item;
+                foreach($cars as $k => $car){
+
+                    $item = $this->handlerCarByList($car);
+                    $items[$k] = $item;
+                }
             }
+
+        }else{
+
+            $items = new stdClass();
         }
 
 

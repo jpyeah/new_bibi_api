@@ -74,6 +74,7 @@ class CarController extends ApiYafControllerAbstract
 
         $response['car_info'] = $carInfo;
 
+
         $brandId = isset($carInfo['brand_info']['brand_id']) ? $carInfo['brand_info']['brand_id'] : 0;
 
 
@@ -82,7 +83,6 @@ class CarController extends ApiYafControllerAbstract
         }else{
             $car_userId = 0;
         }
-
         //$car_userId = $carInfo['user_info'] ? $carInfo['user_info']['user_id']: 0;
         //同款车
         // $response['related_price_car_list'] = $carModel->relatedPriceCars($carId,$carInfo['price']);
