@@ -170,7 +170,9 @@ class CarSellingReportModel extends PdoDb
                }
                $items['report_id']=$report['id'];
                $items['total_price']=$report['total_price'];
-               $items['car_name']=$report['brand_name']." ".$report['series_name']." ".$report['model_name'];
+                $items['car_name']=$report['brand_name']." ".$report['series_name']." ".$report['model_name'];
+                $items['brand_name']=$report['brand_name'];
+                $items['series_name']=$report['series_name'];
 
            return $items;
 
