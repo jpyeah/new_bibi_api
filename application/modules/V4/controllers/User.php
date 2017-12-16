@@ -652,6 +652,12 @@ class UserController extends ApiYafControllerAbstract
         $company = $data['company'];
         unset($data['company']);
 
+        $card_file = $data['card_file'];
+        $car_file = $data['car_file'];
+
+        unset($data['card_file']);
+        unset($data['car_file']);
+
         $len = strlen($nickname);
 
         if ($len < 4 || $len > 30) {
@@ -684,13 +690,10 @@ class UserController extends ApiYafControllerAbstract
         }
 
         $files[0]['name'] = 'card_file';
-        $files[0]['hash'] = $data['card_file'];
+        $files[0]['hash'] = $card_file;
 
         $files[1]['name'] = 'car_file';
-        $files[1]['hash'] = $data['car_file'];
-
-        unset($data['card_file']);
-        unset($data['car_file']);
+        $files[1]['hash'] = $car_file;
 
         $post_files =  serialize($files);
         $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
@@ -721,7 +724,6 @@ class UserController extends ApiYafControllerAbstract
 
         $userInfo = $userModel->getInfoById($userId);
         $userInfo['profile'] = $profileModel->getProfile($userId);
-
 
         $response = array();
         $response['session_id'] = $sessId;
