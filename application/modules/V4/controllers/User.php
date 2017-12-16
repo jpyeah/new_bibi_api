@@ -569,6 +569,166 @@ class UserController extends ApiYafControllerAbstract
     }
 
 
+    /**
+     * @api {POST} /v4/User/companyregister 企业注册
+     * @apiName user companyregister
+     * @apiGroup User
+     * @apiDescription 企业注册
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.1.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [mobile] 手机号码
+     * @apiParam {string} [code] 验证码
+     * @apiParam {string} [nickname] 昵称
+     * @apiParam {string} [company] 公司
+     * @apiParam {string} [card_file] 车行名片hash
+     * @apiParam {string} [car_file] 车行照片hash
+     *
+     * @apiParam {json} data object
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v4/User/companyregister
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "mobile":"",
+     *       "password":"",
+     *       "code":"",
+     *       "nickname":"",
+     *       "company":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function companyregisterAction()
+    {
+
+        $this->required_fields = array_merge($this->required_fields, array('mobile',  'code', 'nickname','car_tel','car_address','car_file','card_file'));
+
+        $data = $this->get_request_data();
+
+        //unset($data['code']);
+        $key =  $key = 'code_' . $data['mobile'] . '';
+        $code = RedisDb::getValue($key);
+
+        if($code != $data['code']){
+            $this->send_error(USER_CODE_ERROR);
+        }
+        RedisDb::delValue($key);
+
+        unset($data['code']);
+
+        $time = time();
+
+        $data['login_ip'] = $_SERVER['REMOTE_ADDR'];
+        $data['login_time'] = $time;
+        $data['created'] = $time;
+        $data['updated'] = $time;
+
+        $name = 'bibi_' . Common::randomkeys(6);
+
+        $data['username'] = $name;
+        $data['password'] = md5('123456');
+
+        $car_tel = $data['car_tel'];
+        $address = $data['car_address'];
+
+        unset( $data['car_tel']);
+        unset( $data['car_address']);
+
+
+        unset( $data['car_address_name']);
+        unset( $data['car_address_lat']);
+        unset( $data['car_address_lng']);
+
+
+        $nickname = $data['nickname'];
+        unset($data['nickname']);
+
+        $company = $data['company'];
+        unset($data['company']);
+
+        $len = strlen($nickname);
+
+        if ($len < 4 || $len > 30) {
+
+            $this->send_error(USER_NICKNAME_FORMAT_ERROR);
+
+        }
+
+        unset($data['nickname']);
+
+        $userModel = new \UserModel;
+
+        $user = $userModel->getInfoByMobile($data['mobile']);
+
+        if ($user) {
+            $this->send_error(USER_MOBILE_REGISTERED);
+        }
+
+        $device_identifier = $data['device_identifier'];
+
+
+        unset($data['device_identifier']);
+
+        $userId = $userModel->register($data);
+
+        if (!$userId) {
+
+            $this->send_error(USER_REGISTER_FAIL);
+
+        }
+
+        $files[0]['name'] = 'card_file';
+        $files[0]['hash'] = $data['card_file'];
+
+        $files[1]['name'] = 'car_file';
+        $files[1]['hash'] = $data['car_file'];
+
+        $post_files =  serialize($files);
+        $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
+        $sess = new SessionModel();
+        $sessId = $sess->Create($sessionData);
+
+        $CompanyUserModel = new CompanyUserModel;
+        $CompanyUserInfo = array();
+        $CompanyUserInfo['user_id']=$userId;
+        $CompanyUserInfo['name']=$nickname;
+        $CompanyUserInfo['files']=$post_files;
+        $CompanyUserInfo['company']=$company;
+        $CompanyUserInfo['created']=time();
+        $CompanyUserInfo['telenumber']=$car_tel;
+        $CompanyUserInfo['address']=$address;
+        $CompanyUserModel->initCompanyUser($CompanyUserInfo);
+
+        $profileModel = new \ProfileModel;
+        $profileInfo = array();
+        $profileInfo['user_id'] = $userId;
+        $profileInfo['user_no'] = $name;
+        $profileInfo['nickname'] = $nickname;
+        $profileInfo['avatar']   = AVATAR_DEFAULT;
+        $profileInfo['bibi_no']  =$userId+10000;
+        $profileInfo['type']  =2;
+
+        $profileModel->initProfile($profileInfo);
+
+        $userInfo = $userModel->getInfoById($userId);
+        $userInfo['profile'] = $profileModel->getProfile($userId);
+
+
+        $response = array();
+        $response['session_id'] = $sessId;
+        $response['user_info'] = $userInfo;
+        $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$nickname,AVATAR_DEFAULT);
+
+        $this->send($response);
+    }
+
+
 
 
 
