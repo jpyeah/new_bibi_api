@@ -689,6 +689,9 @@ class UserController extends ApiYafControllerAbstract
         $files[1]['name'] = 'car_file';
         $files[1]['hash'] = $data['car_file'];
 
+        unset($data['card_file']);
+        unset($data['car_file']);
+
         $post_files =  serialize($files);
         $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
         $sess = new SessionModel();

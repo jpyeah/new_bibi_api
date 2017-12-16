@@ -170,11 +170,16 @@ class CarSellingReportModel extends PdoDb
                }
                $items['report_id']=$report['id'];
                $items['total_price']=$report['total_price'];
-                $items['car_name']=$report['brand_name']." ".$report['series_name']." ".$report['model_name'];
-                $items['brand_name']=$report['brand_name'];
-                $items['series_name']=$report['series_name'];
+               $items['car_name']=$report['brand_name']." ".$report['series_name']." ".$report['model_name'];
+               $items['brand_name']=$report['brand_name'];
+               $items['series_name']=$report['series_name'];
+               $items['report_time']=$report['report_time'];
 
-           return $items;
+               $response['share_title'] = "【吡吡汽车】- 报价单";
+               $response['share_url'] ='http://share.bibicar.cn/views/detail/offer.html?session=&id='.$report['id'].'&ident=';
+               $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
+               $response['share_img'] =  $items['file_img'];
+               return $items;
 
     }
 
