@@ -76,6 +76,8 @@ class CarSellingReportModel extends PdoDb
         if($report['extra_info']){
 
             $report['extra_info']=$CarExtraInfo->getExtraInfoByIds($report['extra_info']);
+        }else{
+            $report['extra_info']=array();
         }
         $brandM = new BrandModel();
 

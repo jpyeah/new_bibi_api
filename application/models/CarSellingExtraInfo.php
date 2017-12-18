@@ -173,6 +173,7 @@ class CarSellingExtraInfoModel extends PdoDb
         }
     }
 
+
     public function addExtrainfo($car_id,$hash,$ids){
 
            $infos = $this->getExtraInfoByIds($ids);
