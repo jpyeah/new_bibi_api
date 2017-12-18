@@ -72,6 +72,10 @@ class CarController extends ApiYafControllerAbstract
 
         $carInfo = $carModel->GetCarInfoById($carId,$userId);
 
+        if(!$carInfo){
+            return $this->send_error(CAR_NOT_EXIST);
+        }
+
         $response['car_info'] = $carInfo;
 
 
@@ -770,6 +774,9 @@ class CarController extends ApiYafControllerAbstract
         $lists['has_more'] = (($number+$count) < $total) ? 1 : 2;
         $lists['total'] = $total;
         $lists['number'] = $number;
+
+        $lists['custom_url'] = "http://custom.bibicar.cn/customize";
+
 
         return $this->send($lists);
     }

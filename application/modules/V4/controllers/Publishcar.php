@@ -570,8 +570,6 @@ class PublishcarController extends ApiYafControllerAbstract
 
         $properties = $this->publishProgress($data, $userId, $cs, $data['car_type'],'update');
 
-        print_r($properties);exit;
-
         unset($properties['car_id']);
         unset($properties['created']);
         unset($properties['verify_status']);

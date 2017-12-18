@@ -170,7 +170,8 @@ class CarReportController extends ApiYafControllerAbstract
 
         $data = $this->get_request_data();
 
-        $userId = $this->userAuth($data);
+        $sess = new SessionModel();
+        $userId = $sess->Get($data);
 
         $CarReport = new CarSellingReportModel();
 

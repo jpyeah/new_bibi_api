@@ -166,7 +166,11 @@ class CarSellingExtraInfoModel extends PdoDb
 
         $list = $this->query($sql);
 
-        return $list;
+        if($list){
+            return $list;
+        }else{
+            return array();
+        }
     }
 
     public function addExtrainfo($car_id,$hash,$ids){
