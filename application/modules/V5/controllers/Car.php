@@ -20,15 +20,15 @@ class CarController extends ApiYafControllerAbstract
      * @apiSampleRequest http://www.testapi.bibicar.cn
      * @apiVersion 2.5.3
      *
-     * @apiParam {string} device_identifier 设备唯一标识
-     * @apiParam {string} session_id session_id
-     * @apiParam {number} brand_id 车品牌Id
-     * @apiParam {number} series_id 车系列id
-     * @apiParam {number} model_id 车型id
-     * @apiParam {string} vin_no   车架号
-     * @apiParam {string} vin_file 驾驶证照片
-     * @apiParam {string} car_no  车牌号
-     * @apiParam {string} file_id 车辆照片id
+     * @apiParam (request) {string} device_identifier 设备唯一标识
+     * @apiParam (request) {string} session_id session_id
+     * @apiParam (request) {number} brand_id 车品牌Id
+     * @apiParam (request) {number} series_id 车系列id
+     * @apiParam (request) {number} model_id 车型id
+     * @apiParam (request) {string} vin_no   车架号
+     * @apiParam (request) {string} vin_file 驾驶证照片
+     * @apiParam (request) {string} car_no  车牌号
+     * @apiParam (request) {string} file_id 车辆照片id
      * @apiParam (request) {Object} file_type 文字说明 ：1:侧前⽅45度、2:正前 3:正侧 4:正后 5:⻋⻔ 6:前排 7:中控 8:后排 9:仪表盘 10:变速杆 11:轮胎 12:发动机
      *
      */
@@ -148,7 +148,7 @@ class CarController extends ApiYafControllerAbstract
 
             $this->send_error(CAR_ADDED_ERROR);
         }
-        
+
     }
 
     /**
