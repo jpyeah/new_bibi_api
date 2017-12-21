@@ -12,6 +12,146 @@ class CarController extends ApiYafControllerAbstract
 {
 
     /**
+     * @api {POST} /v5/car/create 上传爱车
+     * @apiName car up
+     * @apiGroup Car
+     * @apiDescription 上传爱车
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.testapi.bibicar.cn
+     * @apiVersion 2.5.3
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} brand_id 车品牌Id
+     * @apiParam {number} series_id 车系列id
+     * @apiParam {number} model_id 车型id
+     * @apiParam {string} vin_no   车架号
+     * @apiParam {string} vin_file 驾驶证照片
+     * @apiParam {string} car_no  车牌号
+     * @apiParam {string} file_id 车辆照片id
+     * @apiParam (request) {Object} file_type 文字说明 ：1:侧前⽅45度、2:正前 3:正侧 4:正后 5:⻋⻔ 6:前排 7:中控 8:后排 9:仪表盘 10:变速杆 11:轮胎 12:发动机
+     *
+     */
+
+    public function createAction()
+    {
+        $this->required_fields = array_merge(
+            $this->required_fields,
+            array(
+                'session_id',
+                'brand_id',
+                'series_id',
+                'files_id',
+                'files_type'
+            ));
+
+        $this->optional_fields = array('model_id', 'vin_no', 'vin_file');
+
+        $data = $this->get_request_data();
+
+        $userId = $this->userAuth($data);
+
+        unset($data["v3/car/create"]);
+        unset($data['action']);
+
+        if (!json_decode($data['files_id']) || !json_decode($data['files_type'])){
+
+            $this->send_error(CAR_CREATE_FILES_ERROR);
+        }
+
+
+        if (!$data['vin_no'] && !$data['vin_file']) {
+
+            $this->send_error(CAR_DRIVE_INFO_ERROR);
+        }
+
+        $cs = new CarSellingV5Model();
+
+        $properties = $data;
+        unset($properties['device_identifier']);
+        unset($properties['session_id']);
+        unset($properties['files_id']);
+        unset($properties['files_type']);
+        unset($properties['car_id']);
+
+
+        $bm = new BrandModel();
+        $brandM  = $bm->getBrandModel($data['brand_id']);
+        $seriesM = $bm->getSeriesModel($data['brand_id'],$data['series_id']);
+        $modelM  =  $bm->getModelModel($data['series_id'], $data['model_id']);
+
+
+        if(!is_array($brandM)){
+
+            $this->send_error(CAR_BRAND_ERROR);
+        }
+
+        if(!is_array($seriesM)){
+            $this->send_error(CAR_SERIES_ERROR);
+        }
+
+        if(!is_array($modelM)){
+
+            $this->send_error(CAR_MODEL_ERROR);
+        }
+
+
+        $properties['car_name'] = $brandM['brand_name'] . ' ' . $seriesM['series_name'] . ' ' . $modelM['model_name'];
+        $properties['car_name'] = trim($properties['car_name']);
+
+
+//        if (isset($properties['vin_file'])) {
+//
+//            $vinFile = new FileModel();
+//            $vinFile = $vinFile->Get($properties['vin_file']);
+//            $properties['vin_file'] = $vinFile;
+//
+//        }
+
+        $properties['car_type'] = PLATFORM_USER_OWNER_CAR;
+        $time = time();
+        $properties['created'] = $time;
+        $properties['updated'] = $time;
+        $properties['user_id'] = $userId;
+        $properties['verify_status'] = CAR_NOT_AUTH;
+        $properties['files'] = serialize($cs->dealFilesWithString($data['files_id'], $data['files_type']));
+        $properties['hash'] = uniqid();
+        $properties['car_intro'] = @$data['car_intro']?$data['car_intro']:" ";
+
+
+        $cs->properties = $properties;
+
+        $id = $cs->CreateM();
+
+
+        if ($id) {
+
+            $mh = new MessageHelper;
+            $userM = new ProfileModel();
+            $profile = $userM->getProfile($userId);
+
+            $contentto = $profile["nickname"].'提交了爱车认证,请尽快到后台提交审核';
+            $sysId=389;
+            $mh->systemNotify($sysId, $contentto);
+
+            //插入文件
+            $ifr = new ItemFilesRelationModel();
+            $ifr->CreateBatch($id, $data['files_id'], ITEM_TYPE_CAR, $data['files_type']);
+
+            $carInfo = $cs->GetCarInfoById($properties['hash']);
+
+            $response['car_info'] = $carInfo;
+
+            $this->send($response);
+
+        } else {
+
+            $this->send_error(CAR_ADDED_ERROR);
+        }
+        
+    }
+
+    /**
      * @api {POST} /v5/car/index 车辆详情
      * @apiName car detail
      * @apiGroup Car
