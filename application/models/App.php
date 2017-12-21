@@ -80,9 +80,9 @@ class AppModel extends PdoDb{
     }
 
 
-    public function getAppVersion($version_code,$type){
+    public function getAppVersion($type){
 
-        $sql = "SELECT * FROM bibi_version WHERE `version_code`= ".$version_code."  AND type  = ".$type;
+        $sql = "SELECT * FROM bibi_version WHERE  `type` = ".$type;
 
         $result = $this->query($sql);
 
@@ -91,7 +91,6 @@ class AppModel extends PdoDb{
         }else{
             return  array();
         }
-
 
     }
 

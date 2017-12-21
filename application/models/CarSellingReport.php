@@ -28,6 +28,18 @@ class CarSellingReportModel extends PdoDb
            }
     }
 
+    public function getReportV1($report_id){
+
+        $sql = "SELECT * FROM `bibi_car_selling_list_report` where id =".$report_id;
+
+        $res = $this->query($sql);
+
+        if($res){
+            $resport = $this->handleReportV1($res[0]);
+            return $resport;
+        }
+    }
+
     public function getReportByuser($report_id,$userId){
 
         $sql = "SELECT * FROM `bibi_car_selling_list_report` where id =".$report_id." AND user_id =".$userId;
@@ -145,6 +157,41 @@ class CarSellingReportModel extends PdoDb
         $report['files']['type2'] = $items2;
         $report['files']['type3'] = $items3;
         $report['files']['type4'] = $items4;
+
+        return $report;
+
+    }
+
+
+    public function handleReportV1($report){
+
+        $CarExtraInfo = new CarSellingExtraInfoModel();
+
+        if($report['extra_info']){
+
+            $report['extra_info']=$CarExtraInfo->getExtraInfoByIds($report['extra_info']);
+        }else{
+            $report['extra_info']=array();
+        }
+        $brandM = new BrandModel();
+
+        $report['brand_info']  = $brandM->getBrandModel($report['brand_id']);
+
+        $images = unserialize($report['files']);
+        $items = array();
+        if($images){
+            foreach ($images as $k => $image) {
+                if ($image['hash']) {
+                    $item = array();
+                    $item['file_id'] = $image['hash'];
+                    $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+                    $item['file_type'] = $image['type'] ? $image['type'] : 0;
+                    $items[] = $item;
+                }
+            }
+        }
+
+        $report['files'] = $items;
 
         return $report;
 

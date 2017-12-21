@@ -6,7 +6,7 @@
  * Date: 15/11/12
  * Time: 下午7:00
  */
-class CarSellingV1Model extends PdoDb
+class CarSellingV5Model extends PdoDb
 {
 
     //public static $table = 'bibi_car_selling_list';
@@ -57,7 +57,6 @@ class CarSellingV1Model extends PdoDb
 
     }
 
-
     public function GetCarBrandInfoById($hash,$userId=0)
     {
 
@@ -83,6 +82,7 @@ class CarSellingV1Model extends PdoDb
 
     }
 
+
     public function handlerCarByOne($car,$userId=0){
 
         $car['car_id'] = $car['hash'];
@@ -97,9 +97,6 @@ class CarSellingV1Model extends PdoDb
         $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
         $car['model_detail']= $brandM->getModelDetail($car['model_id']);
 
-//        unset($car['brand_id']);
-//        unset($car['series_id']);
-//        unset($car['model_id']);
         unset($car['brand_name']);
         unset($car['series_name']);
         unset($car['model_name']);
@@ -107,7 +104,6 @@ class CarSellingV1Model extends PdoDb
         unset($car['baidu_series_id']);
         unset($car['image']);
         unset($car['thumbnail']);
-
 
         if($car['user_id']){
 
@@ -117,7 +113,6 @@ class CarSellingV1Model extends PdoDb
             $car['user_info']['username'] = '';
             $car['user_info']['mobile']   = '';
             $car['user_info']['created']  = 0;
-            //$car['user_info']['is_auth']  = 1;
             $car['user_info']['profile']['avatar']  = $car['avatar'];
             unset($car['avatar']);
             $car['user_info']['profile']['nickname']  = $car['nickname'];
@@ -134,125 +129,33 @@ class CarSellingV1Model extends PdoDb
             $car['user_info'] = new stdClass();
         }
 
-
         unset($car['car_no']);
         unset($car['vin_no']);
         unset($car['engine_no']);
         unset($car['vin_file']);
-//        unset($car['car_intro']);
-//        unset($car['verify_status']);
-        // unset($car['price']);
-//        unset($car['guide_price']);
-//        unset($car['board_time']);
-//        unset($car['mileage']);
-//        unset($car['displacement']);
-//        unset($car['gearbox']);
-//        unset($car['style']);
-//        unset($car['contact_name']);
-//        unset($car['contact_phone']);
-//        unset($car['contact_address']);
-//        unset($car['exchange_time']);
-//        unset($car['maintain']);
-//        unset($car['insurance_due_time']);
-//        unset($car['is_transfer']);
-//        unset($car['check_expiration_time']);
 
         $images = unserialize($car['files']);
-
-        $car['files'] = array();
-        $items1=array();
-        $items2=array();
-        $items3=array();
-        $items4=array();
+        $items = array();
         if($images){
-
             foreach ($images as $k => $image) {
-
                 if ($image['hash']) {
-
-                    switch ($image['type']) {
-                        case 0:
-                        case 1:
-                        case 5:
-                        case 6:
-                        case 9:
-                        case 13:
-                        case 15:
-                        case 16:
-                            $item = array();
-                            $item['file_id'] = $image['key'];
-                            if($car['car_type']==2){
-                                $item['file_url'] = "http://thirtimg.bibicar.cn/". $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                            }else{
-                                $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                            }
-
-                            $item['file_type'] =  $image['type'] ? $image['type'] : 0;
-                            $items1[] = $item;
-                            break;
-                        case 2:
-                        case 7:
-                        case 8:
-                        case 10:
-                        case 12:
-                        case 14:
-                            $item = array();
-                            $item['file_id'] = $image['key'];
-                            if($car['car_type']==2){
-                                $item['file_url'] = "http://thirtimg.bibicar.cn/". $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                            }else{
-                                $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                            }
-
-                            $item['file_type'] =  $image['type'] ? $image['type'] : 0;
-                            $items2[] = $item;
-
-                            break;
-
-                        case 3:
-                            $item = array();
-                            $item['file_id'] = $image['key'];
-                            if($car['car_type']==2){
-                                $item['file_url'] = "http://thirtimg.bibicar.cn/". $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                            }else{
-                                $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                            }
-
-                            $item['file_type'] =  $image['type'] ? $image['type'] : 0;
-                            $items3[] = $item;
-                            break;
-
-                        case 4:
-                            $item = array();
-                            $item['file_id'] = $image['key'];
-                            if($car['car_type']==2){
-                                $item['file_url'] = "http://thirtimg.bibicar.cn/". $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                            }else{
-                                $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                            }
-
-                            $item['file_type'] =  $image['type'] ? $image['type'] : 0;
-                            $items4[] = $item;
-                            break;
-                        default:
-                            break;
+                    $item = array();
+                    $item['file_id'] = $image['hash'];
+                    if($car['car_type']==2){
+                        $item['file_url'] = "http://thirtimg.bibicar.cn/". $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+                    }else{
+                        $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
                     }
-
+                    $item['file_type'] = $image['type'] ? $image['type'] : 0;
+                    $items[] = $item;
                 }
 
             }
         }
-        $car['files']['type1'] = $items1;
-        $car['files']['type2'] = $items2;
-        $car['files']['type3'] = $items3;
-        $car['files']['type4'] = $items4;
 
-//        unset($car['id']);
+        $car['files'] = $items;
+
         unset($car['hash']);
-
-       // $car['files'] = $items;
-//        unset($car['city_id']);
-//        unset($car['city_name']);
         unset($car['user_id']);
         unset($car['platform_id']);
         unset($car['platform_location']);
@@ -266,18 +169,14 @@ class CarSellingV1Model extends PdoDb
         Common::globalLogRecord('favorite key', $favkey);
         $favId = RedisDb::getValue($favkey);
 
-
         $car['is_fav'] = $favId ? 1 : 2;
         $car['car_time'] = Common::getBeforeTimes($car['created']);
-        //$car['visit_num'] = $car['visit_num'];
-        //
 
         $likeKey='favoritecarlike_'.$car['car_id'].'_'.$userId.'';
         Common::globalLogRecord('like key', $likeKey);
         $isLike = RedisDb::getValue($likeKey);
 
         $car['is_like']  = $isLike ? 1 : 2;
-
         $favCarM = null;
 
         return $car;
@@ -295,11 +194,6 @@ class CarSellingV1Model extends PdoDb
         $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);
         $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
         $car['model_detail']= $brandM->getModelDetail($car['model_id']);
-
-//        $car['brand_info']  = new stdClass();//$brandM->getBrandModel($car['brand_id']);
-//        $car['series_info'] = new stdClass();//$brandM->getSeriesModel($car['brand_id'],$car['series_id']);
-//        $car['model_info']  = new stdClass();//$brandM->getModelModel($car['series_id'], $car['model_id']);
-//        $car['model_detail']= new stdClass();//$brandM->getModelDetail($car['model_id']);
 
         unset($car['brand_id']);
         unset($car['series_id']);
@@ -342,18 +236,13 @@ class CarSellingV1Model extends PdoDb
         unset($car['vin_no']);
         unset($car['engine_no']);
         unset($car['vin_file']);
-      //  unset($car['car_intro']);
-      //  unset($car['verify_status']);
-        // unset($car['price']);
+
         unset($car['guide_price']);
-//        unset($car['board_time']);
-//        unset($car['mileage']);
+
         unset($car['displacement']);
         unset($car['gearbox']);
         unset($car['style']);
-//        unset($car['contact_name']);
-//        unset($car['contact_phone']);
-//        unset($car['contact_address']);
+
         unset($car['exchange_time']);
         unset($car['maintain']);
         unset($car['insurance_due_time']);
@@ -361,32 +250,23 @@ class CarSellingV1Model extends PdoDb
         unset($car['check_expiration_time']);
 
         $images = unserialize($car['files']);
-        $car['files'] = new stdClass();
-        $items1=array();
-        $items2=array();
-        $items3=array();
-        $items4=array();
 
         if($car['car_type']==2){
             $car['file_img'] = "http://thirtimg.bibicar.cn/". $images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
         }else{
             if($images){
 
-//                $car['file_img'] = IMAGE_DOMAIN.$images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-//
-
                 foreach($images as $k => $val ){
-                       if($k == 0){
-                           $car['file_img'] = IMAGE_DOMAIN.$val['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
-                           break;
-                       }
+                    if($k == 0){
+                        $car['file_img'] = IMAGE_DOMAIN.$val['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+                        break;
+                    }
                 }
             }else{
                 $car['file_img'] = "";
             }
         }
 
-        //unset($car['id']);
         unset($car['hash']);
         unset($car['files']);
         unset($car['city_id']);
@@ -403,6 +283,14 @@ class CarSellingV1Model extends PdoDb
         return $car;
 
     }
+
+    public function getCarById($carId){
+        $sql = 'SELECT * FROM `bibi_car_selling_list` WHERE  `hash`="'.$carId.'"';
+        $result=@$this->query($sql)[0];
+        return $result;
+
+    }
+
     public function dealFilesWithString($files_id, $files_type)
     {
 
@@ -802,15 +690,15 @@ class CarSellingV1Model extends PdoDb
 
             if($o_ids){
 
-                   if($os_ids){
+                if($os_ids){
 
-                       $ids = $u_ids.",".$o_ids.",".$os_ids;
+                    $ids = $u_ids.",".$o_ids.",".$os_ids;
 
-                   }else{
+                }else{
 
-                       $ids = $u_ids.",".$o_ids;
+                    $ids = $u_ids.",".$o_ids;
 
-                   }
+                }
 
             }else{
 
@@ -859,7 +747,7 @@ class CarSellingV1Model extends PdoDb
 
         }
 
-      //  $ids = $u_ids.",".$o_ids.",".$os_ids;
+        //  $ids = $u_ids.",".$o_ids.",".$os_ids;
 
         if($ids){
 
@@ -1024,15 +912,15 @@ class CarSellingV1Model extends PdoDb
 
     public function getUserCarTotal($userId){
 
-           $sql='
+        $sql='
                SELECT COUNT(*) as total 
                FROM `bibi_car_selling_list` 
                WHERE ( verify_status = 2 OR verify_status = 11 ) AND 
                user_id = '.$userId;
 
-           $total = $this->query($sql)[0]['total'];
+        $total = $this->query($sql)[0]['total'];
 
-           return $total;
+        return $total;
 
     }
 
@@ -1411,7 +1299,7 @@ class CarSellingV1Model extends PdoDb
             $item = $this->handlerCarByList($car);
 
             $items[$k]['car_info'] = $item;
-           // $items[$k]['car_users'] = $this->getSameBrandUsers($car['brand_id']);
+            // $items[$k]['car_users'] = $this->getSameBrandUsers($car['brand_id']);
         }
 
         $total = @$this->query($sqlCnt)[0]['total'];
@@ -1527,17 +1415,6 @@ class CarSellingV1Model extends PdoDb
         return $list;
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

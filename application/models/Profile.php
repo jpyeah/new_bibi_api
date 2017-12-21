@@ -380,11 +380,9 @@ class ProfileModel extends PdoDb{
                 $users[$k]['address']=$info['address'];
 
             }
-
             $users[$k]['saling_num']=$saling_num;
             $users[$k]['sold_num']=$sold_num;
             $users[$k]['car_list']=$sale;
-
         }
 
         $total = @$this->query($sqlCnt)[0]['total'];

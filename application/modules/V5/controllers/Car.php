@@ -11,36 +11,25 @@ use EasyWeChat\Payment\Order;
 class CarController extends ApiYafControllerAbstract
 {
 
-
     /**
-     * @api {POST} /v4/car/index 车辆详情
+     * @api {POST} /v5/car/index 车辆详情
      * @apiName car detail
      * @apiGroup Car
      * @apiDescription 车辆详情
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam (request) {string} [device_identifier] 设备唯一标识
      * @apiParam (request) {string} [session_id] session_id
-     * @apiParam (request) {string} [car_id] 车辆Id
+     * @apiParam (request) {string} [car_id] 车辆car_id
      *
      * @apiParam (response) {object} car_info_ids
      *
      *
-     * @apiParamExample {json} 请求样例
-     *   POST /v3/car/index
-     *   {
-     *     "data": {
-     *       "device_identifier":"",
-     *       "session_id":"",
-     *       "car_id":""
-     *     }
-     *   }
      *
      */
-
-    public function indexAction()
+    public function  indexAction()
     {
         $this->required_fields = array_merge($this->required_fields, array('session_id', 'car_id'));
 
@@ -57,7 +46,7 @@ class CarController extends ApiYafControllerAbstract
             $userId = 0;
         }
 
-        $carModel = new CarSellingV1Model();
+        $carModel = new CarSellingV5Model();
 
         $carT = $carModel::$table;
 
@@ -124,220 +113,48 @@ class CarController extends ApiYafControllerAbstract
 
     }
 
+
     /**
-     * @api {POST} /v4/car/list 车辆列表
-     * @apiName car list
+     * @api {POST} /v5/car/list  车辆列表
+     * @apiName car  list
      * @apiGroup Car
      * @apiDescription 车辆列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier]设备唯一标识
-     * @apiParam {string} session_id session_id
-     * @apiParam {string} keyword 关键字
-     * @apiParam {string} order_id 排序Id
-     * @apiParam {string} brand_id 车品牌Id
-     * @apiParam {string} series_id 车系列Id
-     * @apiParam {string} page 页数
+     * @apiParam {string} [session_id] session_id
+     * @apiParam {number} order_id 排序Id 0:默认排序1:最新发布 2:价格最低、3价格最高
+     * @apiParam {number} brand_id 车品牌Id
+     * @apiParam {number} series_id 车系列Id
+     * @apiParam {number} page 页数
+     * @apiParam {number} search_type 类型 1：获取总数 2：获取列表
      * @apiParam {string} [min_price] 最低价格
      * @apiParam {string} [max_price] 最高价格
      * @apiParam {string} [min_mileage] 最低里程
      * @apiParam {string} [max_mileage] 最高里程
      * @apiParam {string} [min_board_time] 最短上牌时间
      * @apiParam {string} [max_board_time] 最长上牌时间
+     * @apiParam {string} [min_forfloat] 最小排量
+     * @apiParam {string} [max_forfloat] 最大排量
      * @apiParam {number} [has_vr] 是否vr 1:是
-     * @apiParam {number} [old] 是否新车二手车 1:新车  2 二手车
-     * @apiParam {number} [source] 车辆来源(个人，商家) 1:个人 2 商家
-     *
-     * @apiParamExample {json} 请求样例
-     *    POST /v4/car/index
-     *   {
-     *     "data": {
-     *       "device_identifier":"",
-     *       "session_id":"",
-     *       "keyword":"",
-     *       "order_id":"",
-     *       "brand_id":"",
-     *       "series_id":"",
-     *       "page":"",
-     *       "min_price":"",
-     *       "max_price":"",
-     *       "min_mileage":"",
-     *       "max_mileage":"",
-     *       "min_board_time":"",
-     *       "max_board_time":"",
-     *       "has_vr":"",
-     *       "source":"",
-     *
-     *     }
-     *   }
+     * @apiParam {number} [car_type] 是否新车二手车 1:新车  2: 二手车 
+     * @apiParam {number} [car_source] 车辆来源(个人，商家) 1:个人 2 商家
+     * @apiParam {number} [forward] 变速箱  1:手动 2:自动
+     * @apiParam {number} [board_add] 车牌所在地  1：本地 2：外地 (选择车牌所在地必须传city_code)
+     * @apiParam {number} [car_level] 车辆级别 (ids传值 1,2,3) 6:小轿车 7:MPV 8:SUV 9:跑车 11:皮卡 13:敞篷跑车
+     * @apiParam {number} [car_color] 颜色 (ids传值 1,2,3) 0:未知 1:黑色 2:红色 3:深灰色 4:粉红色 5:银灰色 6:紫色 7:白色 8:蓝色 9:香槟色 10:绿色11:黄色12:咖啡色13:橙色 14:多彩色
+     * @apiParam {number} [seat_num] 座位数 (ids传值 2,3,4,5)
+     * @apiParam {number} [envirstandard] 环保标准 (ids传值 1,2,3) 1:国1 2:国2 3:国3 4:国4
+     * @apiParam {number} [fueltype] 燃油类型 (ids传值 1,2,3) 1:汽油、2:柴油、3:油电混合动力 4:电动
+     * @apiParam {string} [extra_info] 亮点配置  (ids传值 1,2,3)
+     * @apiParam {string} [city_code] 高德地图城市编码  (选择车牌所在地必须传city_code)
+     * @apiParam {string} [city_lat] 高德地图城市纬度
+     * @apiParam {string} [city_lng] 高德城市经度
      *
      */
-
-
     public function listAction(){
-        $jsonData = require APPPATH .'/configs/JsonData.php';
-        $this->optional_fields = array('keyword','order_id','brand_id','series_id');
-       // $this->required_fields = array_merge($this->required_fields, array('session_id'));
-
-        $data = $this->get_request_data();
-
-        @$data['order_id'] = $data['order_id'] ? $data['order_id'] : 0 ;
-        @$data['page']     = $data['page'] ? ($data['page']+1) : 1;
-        @$data['brand_id'] = $data['brand_id'] ? $data['brand_id'] : 0 ;
-        @$data['series_id'] = $data['series_id'] ? $data['series_id'] : 0 ;
-
-
-        $carM = new CarSellingV1Model();
-        $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND (t1.car_type = 0 OR t1.car_type = 1 OR t1.car_type = 2 ) AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
-
-        if(@$data['keyword']){
-
-
-//            $results = $this->search($data['keyword']);
-//
-//            $values  = $this->implodeArrayByKey('_id',$results['hits']['hits']);
-//
-//            $inStr = "'".str_replace(",","','",$values)."'";
-//
-//            $where .= ' AND t1.hash in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
-
-            $carM->keyword = $data['keyword'];
-            $where .= ' AND t1.car_name LIKE "%'.$carM->keyword.'%" ';
-        }
-
-        if(@$data['brand_id']){
-
-            $where .= ' AND t1.brand_id = '.$data['brand_id'].' ';
-        }
-
-        if(@$data['series_id']){
-
-            $where .= ' AND t1.series_id = '.$data['series_id'].' ';
-        }
-
-        /*  if($data['source'] == 1){
-
-              $where .= ' AND t1.car_type = 1';
-          }
-       */
-        if(@$data['min_price']==200){
-            $where .=' AND t1.price >='.$data['min_price'].' ';
-        }else{
-
-            if(@$data['min_price']){
-                $where .=' AND t1.price >='.$data['min_price'].' ';
-            }
-
-            if(@$data['max_price']){
-                $where .=' AND t1.price <='.$data['max_price'].' ';
-            }
-        }
-
-        if(@$data['min_mileage']==15){
-            $min_mileage=$data['min_mileage']*10000;
-            $where .=' AND t1.mileage >='.$min_mileage.' ';
-        }else{
-
-            if(@$data['min_mileage']){
-                $min_mileage=$data['min_mileage']*10000;
-                $where .=' AND t1.mileage >='.$min_mileage.' ';
-            }
-            if(@$data['max_mileage']){
-                $max_mileage=$data['max_mileage']*10000;
-                $where .=' AND t1.mileage <='.$max_mileage.' ';
-            }
-        }
-
-        $year=date("Y");
-        if(@$data['min_board_time']==10){
-            $min=$year-$data['min_board_time'];
-            $where .=' AND t1.board_time <='.$min.' ';
-        }else{
-
-            if(@$data['min_board_time']){
-                $max=$year-$data['min_board_time'];
-                $where .=' AND t1.board_time <='.$max.' ';
-            }
-            if(@$data['max_board_time']){
-                $min=$year-$data['max_board_time'];
-                $where .=' AND t1.board_time >='.$min.' ';
-            }
-
-        }
-
-        if(@$data['has_vr']==1){
-
-            $where .= 'AND t1.vr_url is not null';
-        }
-
-        if(@$data['old']){
-            if($data['old'] == 1){
-                $data['car_type']=0;
-                $where.=' AND t1.car_type='.$data['car_type'].' ';
-            }else if($data['old']==2){
-                if($data['source']){
-                    $data['car_type']=$data['source'];
-                    $where.=' AND t1.car_type='.$data['car_type'].' ';
-                }else{
-                    $car1=1;
-                    $car2=2;
-                    $where.=' AND t1.car_type='.$car1.' ';
-                    $where.=' OR t1.car_type='.$car2.' ';
-
-                }
-
-            }
-        }else{
-            if(@$data['source']){
-                $data['car_type']=$data['source'];
-                $where.=' AND t1.car_type='.$data['car_type'].' ';
-            }
-        }
-
-        $carM->where = $where;
-
-        if(isset($jsonData['order_info'][$data['order_id']])) {
-
-            // $carM->order  = ' ORDER BY t1.car_type ASC , ';
-            $carM->order = $jsonData['order_info'][$data['order_id']];
-
-        }
-        $carM->page = $data['page'];
-
-        $sess = new SessionModel();
-        $userId = $sess->Get($data);
-
-        $carM->currentUser = $userId;
-
-        $lists = $carM->getCarList($userId);
-
-        $response = $lists;
-        $response['order_id'] = $data['order_id'];
-
-        if(@$data['city_id']){
-
-            $jsonData['city_info']['city_id'] = $data['city_id'];
-            $jsonData['city_info']['city_lat'] = $data['city_lat'];
-            $jsonData['city_info']['city_lng'] = $data['city_lng'];
-
-        }
-
-        $response['city_info'] = $jsonData['city_info'];
-        $response['keyword']   = @$data['keyword'];
-        $bm = new BrandModel();
-        $response['brand_info'] = $bm->getBrandModel($data['brand_id']);
-        $response['series_info'] = $bm->getSeriesModel($data['brand_id'],$data['series_id']);
-
-        $response['custom_url'] = "http://custom.bibicar.cn/customize";
-
-        $this->send($response);
-
-    }
-
-
-    public function newlistAction(){
         $jsonData = require APPPATH .'/configs/JsonData.php';
         $this->optional_fields = array('order_id','brand_id','series_id');
         // $this->required_fields = array_merge($this->required_fields, array('session_id'));
@@ -349,7 +166,7 @@ class CarController extends ApiYafControllerAbstract
         $data['series_id'] = $data['series_id'] ? $data['series_id'] : 0 ;
         $data['search_type'] = @$data['search_type'] ? $data['search_type'] : 1 ;
 
-        $carM = new CarSellingV1Model();
+        $carM = new CarSellingV5Model();
 
         $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND t1.car_type <> 3 AND t1.car_type <> 4 AND (t1.verify_status = 2 OR t1.verify_status = 11 OR t1.verify_status = 4) ';
 
@@ -534,9 +351,6 @@ class CarController extends ApiYafControllerAbstract
             }
             $response['city_info'] = $jsonData['city_info'];
             $response['keyword']   = @$data['keyword'];
-//        $bm = new BrandModel();
-//        $response['brand_info'] = $bm->getBrandModel($data['brand_id']);
-//        $response['series_info'] = $bm->getSeriesModel($data['brand_id'],$data['series_id']);
 
             $response['custom_url'] = "http://custom.bibicar.cn/customize";
 
@@ -555,9 +369,7 @@ class CarController extends ApiYafControllerAbstract
             }
             $response['city_info'] = $jsonData['city_info'];
             $response['keyword']   = @$data['keyword'];
-//        $bm = new BrandModel();
-//        $response['brand_info'] = $bm->getBrandModel($data['brand_id']);
-//        $response['series_info'] = $bm->getSeriesModel($data['brand_id'],$data['series_id']);
+
 
             $response['custom_url'] = "http://custom.bibicar.cn/customize";
 
@@ -577,13 +389,13 @@ class CarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v4/car/userFavCars 用户爱车
+     * @api {POST} /v5/car/userFavCars 用户爱车
      * @apiName user favcars
      * @apiGroup Car
      * @apiDescription 用户爱车
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
@@ -592,7 +404,7 @@ class CarController extends ApiYafControllerAbstract
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v4/car/userFavCars
+     *   POST /v5/car/userFavCars
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -613,7 +425,7 @@ class CarController extends ApiYafControllerAbstract
 
         $objId = $this->getAccessId($data,$userId);
 
-        $car = new CarSellingV1Model();
+        $car = new CarSellingV5Model();
 
         $car->currentUser = $userId;
 
@@ -626,26 +438,17 @@ class CarController extends ApiYafControllerAbstract
         $this->send($response);
     }
     /**
-     * @api {POST} /v4/car/carvisithistory 车辆浏览历史
+     * @api {POST} /v5/car/carvisithistory 车辆浏览历史
      * @apiName car carvisithistory
      * @apiGroup Car
      * @apiDescription 车辆列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier]设备唯一标识
      * @apiParam {string} session_id session_id
      *
-     * @apiParamExample {json} 请求样例
-     *    POST /v4/car/index
-     *   {
-     *     "data": {
-     *       "device_identifier":"",
-     *       "session_id":"",
-     *
-     *     }
-     *   }
      *
      */
     public function carvisithistoryAction(){
@@ -658,7 +461,7 @@ class CarController extends ApiYafControllerAbstract
 
            $page = $data['page'] ? ($data['page']+1) : 1;
 
-           $carM = new CarSellingV1Model();
+           $carM = new CarSellingV5Model();
 
            $carM->page = $page;
 
@@ -667,20 +470,20 @@ class CarController extends ApiYafControllerAbstract
            $this->send($car_list);
     }
     /**
-     * @api {POST} /v4/car/search 车辆搜索
+     * @api {POST} /v5/car/search 车辆搜索
      * @apiName car search
      * @apiGroup Car
      * @apiDescription 车辆搜索
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier]设备唯一标识
      * @apiParam {string} session_id session_id
      * @apiParam {string} keyword 关键词
      *
      * @apiParamExample {json} 请求样例
-     *    POST /v4/car/search
+     *    POST /v5/car/search
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -701,7 +504,7 @@ class CarController extends ApiYafControllerAbstract
 
         $number = ($data['page']-1)*10;
 
-        $carM = new CarSellingV1Model();
+        $carM = new CarSellingV5Model();
 
         $results = $this->searchcar($data['keyword'], $number);
 
@@ -713,7 +516,7 @@ class CarController extends ApiYafControllerAbstract
 
             $where .= ' where t1.id in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
 
-            $carM = new CarSellingV1Model();
+            $carM = new CarSellingV5Model();
 
             $carM->where = $where;
 
@@ -838,38 +641,6 @@ class CarController extends ApiYafControllerAbstract
         return $results;
 
     }
-
-
-//    public function searchAction(){
-//
-//        $this->required_fields = array_merge($this->required_fields, array('keyword'));
-//
-//        $data = $this->get_request_data();
-//
-//        $client=new Elasticsearch;
-//
-//        $client=$client->instance();
-//
-//        $params = [
-//            'index' => 'car',
-//            'type' => 'car_selling_list',
-//            'body' => [
-//                'query' => [
-//                    'match' => [
-//                        'car_name' => $data['keyword'],
-//                    ]
-//                ]
-//            ]
-//        ];
-//        $results = $client->search($params);
-//
-//        $total=$results['hits']['total'];
-//
-//        $count = count($results['hits']['hits']);
-//
-//        $this->send($results['hits']['hits']);
-//
-//    }
 
     public function implodeArrayByKey($key, $result,$string=','){
 

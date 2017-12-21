@@ -79,13 +79,12 @@ class AppController extends ApiYafControllerAbstract {
      */
     public function getVersionAction(){
 
-
-        $this->required_fields = array('type','version_code');
+        $this->required_fields = array('type');
 
         $data = $this->get_request_data();
 
         $App = new AppModel();
-        $res = $App->getAppVersion($data['version_code'],$data['type']);
+        $res = $App->getAppVersion($data['type']);
 
         $this->send($res);
     }
