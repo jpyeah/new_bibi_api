@@ -67,6 +67,9 @@ class PublishcarController extends ApiYafControllerAbstract
         unset($properties['files_id']);
         unset($properties['files_type']);
 
+        unset($properties['longitude']);
+        unset($properties['latitude']);
+
         $properties['user_id'] = $userId;
 
         $bm = new BrandModel();

@@ -138,7 +138,7 @@ class CarSellingV5Model extends PdoDb
         $items = array();
         if($images){
             foreach ($images as $k => $image) {
-                if ($image['hash']) {
+                if ($image['hash'] && $image['type'] ) {
                     $item = array();
                     $item['file_id'] = $image['hash'];
                     if($car['car_type']==2){
@@ -149,7 +149,6 @@ class CarSellingV5Model extends PdoDb
                     $item['file_type'] = $image['type'] ? $image['type'] : 0;
                     $items[] = $item;
                 }
-
             }
         }
 
