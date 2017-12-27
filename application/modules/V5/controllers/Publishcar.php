@@ -683,6 +683,28 @@ class PublishcarController extends ApiYafControllerAbstract
     }
 
 
+    public function IntAction(){
+
+        $client=new Elasticsearch;
+        $client=$client->instance();
+        $index['index'] = 'car'; //索引名称
+        $index['type'] = 'car_selling_list'; //类型名称
+        $index['id'] = 5860;   //不指定id，系统会自动生成唯一id
+        $index['body'] = array(
+            'car_name' => "奔驰 G级（平行进口） 奔驰G 350 d 柴油版",
+            'hash'=>"5a1b8d733b727",
+            'car_id'=>5860,
+            'series_id'=>11755841,
+            'brand_id'=>2,
+            'model_id'=>11754776,
+            'car_type'=>0,
+            'verify_status'=>11,
+        );
+        $res = $client->index($index);
+
+    }
+
+
 
 
 
