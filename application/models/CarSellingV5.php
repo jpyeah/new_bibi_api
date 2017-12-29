@@ -109,8 +109,8 @@ class CarSellingV5Model extends PdoDb
         unset($car['engine_no']);
 
         if($userId != $car['user_id']){
-            unset($car['vin_no']);
-            unset($car['vin_file']);
+            $car['vin_no']="";
+            $car['vin_file']="";
         }
 
         if($car['user_id']){
