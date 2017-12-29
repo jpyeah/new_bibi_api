@@ -202,7 +202,6 @@ class CarRentalV1Model extends PdoDb
 
     public function handlerCar($car,$userId=0){
 
-
         $brandM = new BrandModel();
 
         $car['brand_info']  = $brandM->getBrandModel($car['brand_id']);

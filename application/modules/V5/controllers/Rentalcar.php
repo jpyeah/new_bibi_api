@@ -14,13 +14,13 @@ class RentalcarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v4/rentalcar/index 车辆详情
+     * @api {POST} /v5/rentalcar/index 车辆详情
      * @apiName rentalcar index
      * @apiGroup RentalCar
      * @apiDescription 车辆详情
      * @apiPermission anyone
      * @apiSampleRequest http://www.testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
@@ -28,7 +28,7 @@ class RentalcarController extends ApiYafControllerAbstract
      *
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v4/rentalcar/index
+     *   POST /v5/rentalcar/index
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -77,7 +77,7 @@ class RentalcarController extends ApiYafControllerAbstract
             $userId = 0;
         }
 
-        $carModel = new CarRentalV1Model();
+        $carModel = new CarRentalModel();
 
         $RentalUserModel=new CarRentalUserModel();
 
@@ -146,19 +146,19 @@ class RentalcarController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v4/rentalcar/list 可租车辆列表
+     * @api {POST} /v5/rentalcar/list 可租车辆列表
      * @apiName rentalcar list
      * @apiGroup RentalCar
      * @apiDescription 租车车辆列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {number} page 设备唯一标识
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v4/rentalcar/list
+     *    POST  /v5/rentalcar/list
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -209,13 +209,13 @@ class RentalcarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v4/rentalcar/uploadfile 提交租车资料
+     * @api {POST} /v5/rentalcar/uploadfile 提交租车资料
      * @apiName rentalcar uploadfile
      * @apiGroup RentalCar
      * @apiDescription 提交租车资料
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} contact_name 租车用户名称
@@ -227,7 +227,7 @@ class RentalcarController extends ApiYafControllerAbstract
      * @apiParam {string} drive_opp 驾驶证反面
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v4/rentalcar/uploadfile
+     *    POST  /v5/rentalcar/uploadfile
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -300,13 +300,13 @@ class RentalcarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v4/rentalcar/createrentalorder 创建租车订单
+     * @api {POST} /v5/rentalcar/createrentalorder 创建租车订单
      * @apiName rentalcar createrentalorder
      * @apiGroup RentalCar
      * @apiDescription 创建租车订单
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id 用户session
@@ -316,7 +316,7 @@ class RentalcarController extends ApiYafControllerAbstract
      * @apiParam {string} mobile 联系人电话
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v4/rentalcar/uploadfile
+     *    POST  /v5/rentalcar/uploadfile
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -403,13 +403,13 @@ class RentalcarController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v4/rentalcar/rentalorderpay 创建租车支付
+     * @api {POST} /v5/rentalcar/rentalorderpay 创建租车支付
      * @apiName rentalcar rentalorderpay
      * @apiGroup RentalCar
      * @apiDescription 创建租车支付
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id 用户session
@@ -417,7 +417,7 @@ class RentalcarController extends ApiYafControllerAbstract
      * @apiParam {number} order_sn 订单号
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v4/rentalcar/uploadfile
+     *    POST  /v5/rentalcar/uploadfile
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -471,7 +471,7 @@ class RentalcarController extends ApiYafControllerAbstract
                     'detail'           => '吡吡汽车租车押金',
                     'out_trade_no'     => $order['order_info']['order_sn'],
                     'total_fee'        => $order['order_info']['total_price']*100, // 单位：分
-                    'notify_url'       => 'http://testapi.bibicar.cn/v4/rentalcar/wxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
+                    'notify_url'       => 'http://testapi.bibicar.cn/v5/rentalcar/wxnotify', // 支付结果通知网址，如果不设置则会使用配置里的默认地址
                     // 'sub_openid'        => '当前用户的 openid', // 如果传入sub_openid, 请在实例化Application时, 同时传入$sub_app_id, $sub_merchant_id
                     // ...
                 ];
@@ -494,7 +494,7 @@ class RentalcarController extends ApiYafControllerAbstract
 
             }else{
 
-                $notifyUrl="https://testapi.bibicar.cn/v4/rentalcar/alinotify";
+                $notifyUrl="https://testapi.bibicar.cn/v5/rentalcar/alinotify";
                 $alipayM=new Alipay();
                 $order_sn=$order['order_info']['order_sn'];
                 $order_amount=$order['order_info']['total_price'];
@@ -525,13 +525,13 @@ class RentalcarController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v4/rentalcar/rentalorderlist 我的租车
+     * @api {POST} /v5/rentalcar/rentalorderlist 我的租车
      * @apiName rentalcar rentalorderlist
      * @apiGroup RentalCar
      * @apiDescription 我的租车
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id 用户session
@@ -574,20 +574,20 @@ class RentalcarController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v4/rentalcar/rentalorderindex 订单详情
+     * @api {POST} /v5/rentalcar/rentalorderindex 订单详情
      * @apiName rentalcar rentalorderindex
      * @apiGroup RentalCar
      * @apiDescription 订单详情
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.0.0
+     * @apiVersion 2.5.3
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id 用户session
      * @apiParam {number} order_sn 订单号
      *
      * @apiParamExample {json} 请求样例
-     *    POST  /v4/rentalcar/rentalorderlist
+     *    POST  /v5/rentalcar/rentalorderlist
      *   {
      *     "data": {
      *       "device_identifier":"",
