@@ -113,7 +113,7 @@ class CarSellingV5Model extends PdoDb
             $car['vin_file']="";
         }else{
 
-             $car['vin_file'] ? $car['vin_file']="http://img.bibicar.cn".$car['vin_file'] : $car['vin_file']= "";
+             $car['vin_file'] ? $car['vin_file']="http://img.bibicar.cn/".$car['vin_file'] : $car['vin_file']= "";
         }
 
         if($car['user_id']){
