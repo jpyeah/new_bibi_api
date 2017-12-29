@@ -723,7 +723,7 @@ class PublishcarController extends ApiYafControllerAbstract
         $objId = $this->getAccessId($data, $userId);
 
 
-        $carM->currentUser = $objId;
+        $carM->currentUser = $userId;
 
         if(@$data['brand_id']){
             $carM->brand_id =  $data['brand_id'];

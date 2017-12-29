@@ -105,6 +105,14 @@ class CarSellingV5Model extends PdoDb
         unset($car['image']);
         unset($car['thumbnail']);
 
+        unset($car['car_no']);
+        unset($car['engine_no']);
+
+        if($userId != $car['user_id']){
+            unset($car['vin_no']);
+            unset($car['vin_file']);
+        }
+
         if($car['user_id']){
 
             $car['user_info'] = array();
@@ -128,11 +136,6 @@ class CarSellingV5Model extends PdoDb
 
             $car['user_info'] = new stdClass();
         }
-
-        unset($car['car_no']);
-        unset($car['vin_no']);
-        unset($car['engine_no']);
-        unset($car['vin_file']);
 
         $images = unserialize($car['files']);
         $items = array();
@@ -1245,7 +1248,9 @@ class CarSellingV5Model extends PdoDb
 
             if($this->verify_status == 1){
 
-                //$sql.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.' OR t1.verify_status = 4)';
+                if($this->currentUser != $userId){
+                    $sql.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.' OR t1.verify_status = 4)';
+                }
 
             }else{
                 $sql.= ' AND t1.verify_status ='.$this->verify_status;
