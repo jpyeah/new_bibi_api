@@ -63,7 +63,7 @@ class CarSellingReportModel extends PdoDb
 
         $number = ($this->page-1)*$pageSize;
 
-        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+        $sql .= 'ORDER BY id DESC LIMIT '.$number.' , '.$pageSize.' ';
 
         $total = @$this->query($sqlCnt)[0]['total'];
 

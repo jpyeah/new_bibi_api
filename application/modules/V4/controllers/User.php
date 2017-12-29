@@ -56,6 +56,8 @@ class UserController extends ApiYafControllerAbstract
 
         $car = new CarSellingV1Model();
 
+        $car->currentUser = $userId;
+
         $response['car_info'] = $car->getUserCars($otherId);
 
         $friendShipM = new FriendShipModel();
