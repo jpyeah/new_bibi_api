@@ -111,10 +111,12 @@ class CarSellingV5Model extends PdoDb
         if($userId != $car['user_id']){
             $car['vin_no']="";
             $car['vin_file']="";
+        }else{
+
+             $car['vin_file'] ? $car['vin_file']="http://img.bibicar.cn".$car['vin_file'] : $car['vin_file']= "";
         }
 
         if($car['user_id']){
-
             $car['user_info'] = array();
             $car['user_info']['user_id']  = $car['user_id'];
             unset($car['user_id']);
