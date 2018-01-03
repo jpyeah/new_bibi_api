@@ -143,6 +143,7 @@ class CarSellingV5Model extends PdoDb
         $items = array();
         if($images){
             foreach ($images as $k => $image) {
+
                 if ($image['hash'] && $image['type'] ) {
                     $item = array();
                     $item['file_id'] = $image['hash'];
@@ -152,10 +153,12 @@ class CarSellingV5Model extends PdoDb
                         $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
                     }
                     $item['file_type'] = $image['type'] ? $image['type'] : 0;
-                    $items[] = $item;
+                    $items[$k] = $item;
                 }
             }
         }
+
+        array_multisort(array_column($items,'file_type'),SORT_ASC,$items);
 
         $car['files'] = $items;
 

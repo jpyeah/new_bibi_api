@@ -247,7 +247,7 @@ class CarController extends ApiYafControllerAbstract
         $response['share_url'] = 'http://share.bibicar.cn/views/detail/car.html?ident='.$data['device_identifier'].'&session='.$data['session_id'].'&id='.$carId;
 
         $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
-        $response['share_img'] = isset($carInfo['files']["type1"]) ? @$carInfo['files']["type1"][0]['file_url'] : '';
+        $response['share_img'] = isset($carInfo['files']) ? @$carInfo['files'][0]['file_url'] : '';
 
         $this->send($response);
 

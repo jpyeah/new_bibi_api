@@ -993,7 +993,8 @@ class CarSellingV1Model extends PdoDb
 
         if($this->currentUser != $userId){
 
-                $sql.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.' OR t1.verify_status = 4)';
+            $sql.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.' OR t1.verify_status = 4)';
+            $sqlCnt.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.' OR t1.verify_status = 4)';
         }
 
 

@@ -57,19 +57,22 @@ class CarSellingReportModel extends PdoDb
 
         $pageSize = 10;
 
-        $sql = "SELECT * FROM `bibi_car_selling_list_report` WHERE status = 1 AND user_id =".$this->user_id." AND car_id =".$this->car_id;
+        $sql = "SELECT * FROM `bibi_car_selling_list_report` WHERE status = 1 AND user_id =".$this->user_id." AND car_id ='".$this->car_id."'  ";
 
-        $sqlCnt = "SELECT count(*) as total FROM `bibi_car_selling_list_report` WHERE  status = 1 AND user_id =".$this->user_id." AND car_id =".$this->car_id;
+        $sqlCnt = "SELECT count(*) as total FROM `bibi_car_selling_list_report` WHERE  status = 1 AND user_id =".$this->user_id." AND car_id = '".$this->car_id."' ";
 
         $number = ($this->page-1)*$pageSize;
 
-        $sql .= 'ORDER BY id DESC LIMIT '.$number.' , '.$pageSize.' ';
+        $sql .= '  ORDER BY id DESC LIMIT '.$number.' , '.$pageSize.' ';
 
         $total = @$this->query($sqlCnt)[0]['total'];
 
         $res = $this->query($sql);
+
         $count = count($res);
+
         $items=array();
+
         foreach($res as $k =>$val){
 
             $items[$k]=$this->handleReports($val);
