@@ -152,7 +152,7 @@ class CarSellingV5Model extends PdoDb
                     }else{
                         $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
                     }
-                    $item['file_type'] = $image['type'] ? $image['type'] : 0;
+                    $item['file_type'] = $image['type'] ? (int)$image['type'] : 0;
                     $items[$k] = $item;
                 }
             }

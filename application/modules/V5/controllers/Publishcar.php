@@ -691,7 +691,7 @@ class PublishcarController extends ApiYafControllerAbstract
         $index['type'] = 'car_selling_list'; //类型名称
         $index['id'] = 5860;   //不指定id，系统会自动生成唯一id
         $index['body'] = array(
-            'car_name' => "奔驰 G级（平行进口） 奔驰G350 d 柴油版",
+            'car_name' => "奔驰 G级（平行进口） 奔驰 G350 d 柴油版",
             'hash'=>"5a1b8d733b727",
             'car_id'=>5860,
             'series_id'=>11755841,
