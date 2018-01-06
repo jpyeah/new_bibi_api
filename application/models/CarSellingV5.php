@@ -490,6 +490,30 @@ class CarSellingV5Model extends PdoDb
 
         return $list;
     }
+    //排序插入平台车辆
+    public function getrecommendCar(){
+
+            $sql = '
+                SELECT
+                t1.*,
+                t3.avatar,t3.nickname,t3.type as user_type
+                FROM `bibi_car_selling_list` AS t1
+                LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+                ';
+
+            $where=" WHERE  ( verify_status = 2 OR verify_status = 11 ) AND t1.user_id  = 389 ORDER BY visit_num DESC limit 1 ";
+
+            $sql .= $where;
+
+            $car = $this->query($sql);
+
+            $item = $this->handlerCarByList($car[0]);
+
+           return $item;
+    }
 
     public function getCarlistByIds($userId = 0){
 
@@ -780,6 +804,73 @@ class CarSellingV5Model extends PdoDb
 
 
         return $items;
+    }
+
+    public function recommendCars($userId){
+
+        $sql = 'SELECT brand_id,series_id FROM `bibi_dream_car` WHERE user_id ='.$userId;
+
+        $res = $this->query($sql);
+
+        if($res){
+
+            $brand_ids = $this->implodeArrayByKey('brand_id', $res);
+
+            //$series_ids = $this->implodeArrayByKey('series_id',$res);
+
+            $sql = '
+                SELECT
+                t1.*,
+                t3.avatar,t3.nickname,t3.type as user_type
+                FROM `bibi_car_selling_list` AS t1
+                LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+                ';
+
+            $where=" WHERE t1.brand_id in (".$brand_ids.") AND ( verify_status = 2 OR verify_status = 11 ) limit 10 ";
+
+            $sql .= $where;
+
+            $cars = $this->query($sql);
+
+        }else{
+
+            $sql = '
+                SELECT
+                t1.*,
+                t3.avatar,t3.nickname,t3.type as user_type
+                FROM `bibi_car_selling_list` AS t1
+                LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+                ';
+
+            $where=" WHERE  ( verify_status = 2 OR verify_status = 11 ) AND t1.user_id  = 389 limit 10 ";
+
+            $sql .= $where;
+
+            $cars = $this->query($sql);
+
+        }
+
+        foreach($cars as $k => $car){
+
+            $brand_id = $car['brand_id'];
+
+            $item = $this->handlerCarByList($car,$userId);
+
+            $items[$k]['car_info'] = $item;
+        }
+
+        $list['car_list'] =$items;
+        $list['has_more'] =  2;
+        $list['total'] =10;
+        $list['number'] = count($items);
+
+        return $list;
     }
 
 

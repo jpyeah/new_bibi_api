@@ -1,3 +1,3 @@
 #!/bin/bash
-
-php /usr/local/var/www/bibi-api/cli.php request_uri="/script/pushcar/test" 
+php cli.php request_uri="/script/pushcar/newcar"
+#php /usr/local/nginx/html/cli.php request_uri="/script/pushcar/test" 

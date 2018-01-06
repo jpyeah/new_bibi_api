@@ -10,7 +10,93 @@ use EasyWeChat\Foundation\Application;
 use EasyWeChat\Payment\Order;
 class CarController extends ApiYafControllerAbstract
 {
+    /**
+     * @api {POST} /v5/car/homepage 车市首页
+     * @apiName car homepage
+     * @apiGroup Car
+     * @apiDescription 车市首页
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.testapi.bibicar.cn
+     * @apiVersion 2.5.3
+     *
+     * @apiParam (request) {string} device_identifier 设备唯一标识
+     * @apiParam (request) {string} session_id session_id
+     *
+     * @apiParam (response) {object} car_list 车辆推荐列表
+     * @apiParam (response) {object} banners 轮播图
+     * @apiParam (response) {object} level 车辆级别
+     * @apiParam (response) {object} price_filter 价格筛选
+     *
+     */
+    public function homepageAction(){
 
+        $this->required_fields = array_merge($this->required_fields, array('session_id'));
+
+        $data = $this->get_request_data();
+
+        //$userId = $this->userAuth($data);
+        if(@$data['session_id']){
+
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+
+        }else{
+
+            $userId = 0;
+        }
+
+        $bannerM=new BannerModel();
+
+        $bm = new BrandModel();
+
+        $response['banners']=$bannerM->getbanners();
+
+        $level[0]["name"]="跑车";
+        $level[0]["car_level"]=9;
+        $level[1]["name"]="轿车";
+        $level[1]["car_level"]=6;
+        $level[2]["name"]="敞篷";
+        $level[2]["car_level"]=13;
+        $level[3]["name"]="SUV";
+        $level[3]["car_level"]=8;
+        $level[4]["name"]="MPV";
+        $level[4]["car_level"]=7;
+        $response['level'] = $level;
+
+        $price[0]["name"]="50万以下";
+        $price[0]["min_price"]=0;
+        $price[0]["max_price"]=50;
+        $price[1]["name"]="50-70万";
+        $price[1]["min_price"]=50;
+        $price[1]["max_price"]=70;
+        $price[2]["name"]="70-100万";
+        $price[2]["min_price"]=70;
+        $price[2]["max_price"]=100;
+        $price[3]["name"]="100-150万";
+        $price[3]["min_price"]=100;
+        $price[3]["max_price"]=150;
+        $price[4]["name"]="150-200万";
+        $price[4]["min_price"]=150;
+        $price[4]["max_price"]=200;
+        $price[5]["name"]="200-300万";
+        $price[5]["min_price"]=200;
+        $price[5]["max_price"]=300;
+        $price[6]["name"]="300-500万";
+        $price[6]["min_price"]=300;
+        $price[6]["max_price"]=500;
+        $price[7]["name"]="500万以上";
+        $price[7]["min_price"]=500;
+        $price[7]["max_price"]=0;
+        $response['price_filter'] = $price;
+        $response['brands']=$bm->getRecommenBrand();
+        //车辆列表
+        $carM = new CarSellingV5Model();
+        $lists = $carM->recommendCars($userId);
+        $response['car_list']=$lists;
+
+        return $this->send($response);
+
+    }
     /**
      * @api {POST} /v5/car/create 上传爱车
      * @apiName car up
@@ -461,6 +547,15 @@ class CarController extends ApiYafControllerAbstract
         if(@$data['has_vr'] == 1){
             $where .= 'AND t1.vr_url is not null';
         }
+
+        // 默认排序第一辆添加平台车辆
+//        if( $data['order_id'] == 0 ){
+//
+//            $where .= " AND t1.user_id = 389  ";
+//
+//
+//        }
+
         if(isset($jsonData['new_order_info'][$data['order_id']])) {
 
             // $carM->order  = ' ORDER BY t1.car_type ASC , ';
@@ -499,6 +594,18 @@ class CarController extends ApiYafControllerAbstract
         }else{
 
             $lists = $carM->getCarNewList($userId);
+
+            if( $data['page'] == 1){
+
+                foreach($lists['car_list'] as $k => $val){
+                    // 默认排序第一辆添加平台车辆
+
+                    $lists['car_list'][0]= $carM->getrecommendCar();
+                    $lists['car_list'][$k+1] = $val;
+                }
+
+            }
+
             $response = $lists;
             $response['order_id'] = $data['order_id'];
             if(@$data['city_id']){
@@ -526,8 +633,6 @@ class CarController extends ApiYafControllerAbstract
            return $attr;
 
     }
-
-
     /**
      * @api {POST} /v5/car/userFavCars 用户爱车
      * @apiName user favcars

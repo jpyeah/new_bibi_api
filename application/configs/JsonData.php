@@ -25,7 +25,7 @@ return array(
 
     ),
     'new_order_info' =>  array(
-        NEW_ORDER_BY_DEFAULT        => 'AND t1.user_id = 389 ORDER BY t1.updated DESC , t1.car_type ASC, t1.mileage ASC, t1.board_time ASC, t1.price ASC ',
+        NEW_ORDER_BY_DEFAULT        => ' ORDER BY t1.updated DESC , t1.car_type ASC, t1.mileage ASC, t1.board_time ASC, t1.price ASC ',
         NEW_ORDER_BY_TIME_DESC    => ' ORDER BY t1.updated DESC',
         NEW_ORDER_BY_PRICE_ASC      => ' ORDER BY t1.price ASC',
         NEW_ORDER_BY_PRICE_DESC     => ' ORDER BY t1.price DESC',

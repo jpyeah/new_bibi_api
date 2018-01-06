@@ -8,219 +8,147 @@
  */
 class ShopController extends ApiYafControllerAbstract
 {
-
-/**
- * @api {POST} /v5/shop/goodslist 店铺里商品列表
- * @apiName goods list 
- * @apiGroup GOODS
- * @apiDescription 商品列表
- * @apiPermission anyone
- * @apiSampleRequest http://testapi.bibicar.cn
- *
- * @apiParam {string} device_identifier 设备唯一标识
- * @apiParam {string} session_id session_id
- * @apiParam {number} [shop_id] 店铺id
- * @apiParam {number} [page] 页数
- * @apiParam {number} [order_id] 排序 0:默认 1最高价 2最低价 3 销量最高
- * @apiParam {string} [keyword] 关键字
- * @apiParam {string} [type] 1单品 2套餐,3有规格单品,4配料
- * @apiParam {string} goods_item 1甜筒 2圣代,3棉花糖
- *
- * @apiParamExample {json} 请求样例
- *   POST /v3/shop/shoplist
- *   {
- *     "data": {
- *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
- *       "session_id":"session5845346a59a31",
- *       "page":"0",
- *       "shop_id":"1",
- *       "order_id":"0",
- *       "keyword":"",
- *       "goods_item":"",
- *       
- *       
- *     }
- *   }
- *  @apiSuccessExample {json} Success-Response:
- *  HTTP/1.1 200 OK
- *  {
- *    "status": 1
- *    "code": 0
- *    "data": {
- *    "shop_info": {
- *       "shop_id": 1
- *       "image": "http://img.bibicar.cn/bibilogo.png"
- *       "shop_name": "吡吡小淇凌"
- *       "goods_num": 0
- *       "lat": 113.940273
- *       "lng": 22.491501
- *       "seller_id": 389
- *    }
- *    "Goods_list"[1]
- *    0:{
- *       "goods_id": 1
- *       "image_url": "http://img.bibicar.cn/bibilogo.png"
- *       "goods_name": "吡吡小淇凌"
- *       "sales": 0
- *       "stock": 1
- *       "price": 20
- *       "type": 1
- *    }
- *    "has_more": 2
- *    "total": 2
- *    "order_id":0
- *    "keyword" :"冰淇凌"
- *    }
- *  }
- *
- */
-     //商品列表
+    /**
+     * @api {POST} /v5/shop/goodslist 店铺里商品列表
+     * @apiName goods list
+     * @apiGroup GOODS
+     * @apiDescription 商品列表
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} [page] 页数
+     * @apiParam {string} goods_item 1车辆检测 2 保险服务 3上牌过户
+     *
+     * @apiUse Data
+     * @apiParamExample {json} 请求样例
+     *   POST /v5/shop/goodslist
+     *   {
+     *     "data": {
+     *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
+     *       "session_id":"session5845346a59a31",
+     *       "goods_item":"",
+     *     }
+     *   }
+     *  @apiSuccessExample {json} Success-Response:
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "status": 1
+     *    "code": 0
+     *    "data": {
+     *    "shop_info": {
+     *       "shop_id": 1
+     *       "image": "http://img.bibicar.cn/bibilogo.png"
+     *       "shop_name": "吡吡小淇凌"
+     *       "goods_num": 0
+     *       "lat": 113.940273
+     *       "lng": 22.491501
+     *       "seller_id": 389
+     *    }
+     *    "Goods_list"[1]
+     *    0:{
+     *       "goods_id": 1
+     *       "image_url": "http://img.bibicar.cn/bibilogo.png"
+     *       "goods_name": "吡吡小淇凌"
+     *       "sales": 0
+     *       "stock": 1
+     *       "price": 20
+     *       "type": 1
+     *    }
+     *    "has_more": 2
+     *    "total": 2
+     *    "order_id":0
+     *    "keyword" :"冰淇凌"
+     *    }
+     *  }
+     *
+     */
+    //商品列表
     public function goodslistAction(){
-         
-            $jsonData = require APPPATH .'/configs/JsonData.php';
-            
-            $this->optional_fields = array('goods_item');
-            $this->required_fields = array_merge($this->required_fields, array('session_id'));
-            $data = $this->get_request_data();
-            $data['shop_id'] =3;
 
-            $data['order_id'] = $data['order_id'] ? $data['order_id'] : 0 ;
-            $data['page']     = $data['page'] ? ($data['page']+1) : 1;
-            $data['shop_id'] = $data['shop_id'] ? $data['shop_id'] : 0 ;
+        $this->required_fields = array_merge($this->required_fields, array('session_id','goods_item'));
 
-            $goodsM = new ShopGoodsModel();
+        $data = $this->get_request_data();
 
-            $where = 'WHERE t1.files <> "" AND t1.stock <> 0 AND t1.status = 1 ';
+        $data['shop_id'] =3;
 
-            if($data['goods_item']){
-                 $where .= ' AND t1.goods_item = '.$data['goods_item'].' ';
-            }
+        $goodsM = new ShopGoodsModel();
+        $where = '';
+        if($data['goods_item']){
 
-            if($data['type']){
-                 $where .= ' AND t1.type = '.$data['type'].' ';
-            }
+            $where .= 'where t1.goods_item = '.$data['goods_item'].' ';
+        }
 
-            if($data['keyword']){
-                $goodsM->keyword = $data['keyword'];
-                $where .= ' AND t1.goods_name LIKE "%'.$goodsM->keyword.'%" ';
-            }
+        if($data['shop_id']){
 
-            if($data['shop_id']){
-                $where .= ' AND t1.shop_id = '.$data['shop_id'].' ';
-            }
+            $where .= ' AND t1.shop_id = '.$data['shop_id'].' ';
+        }
 
-            $goodsM->where = $where;
-            
-            if(isset($jsonData['goods_info'][$data['order_id']])) {
+        $goodsM->where = $where;
 
-                $goodsM->order = $jsonData['goods_info'][$data['order_id']];
+        $goodsM->page = $data['page'];
 
-            }
-            $goodsM->page = $data['page'];
+        $userId = $this->userAuth($data);
 
-            $userId = $this->userAuth($data);
-           
+        $goodsM->currentUser = $userId;
 
-            $goodsM->currentUser = $userId;
+        $lists = $goodsM->getGoodsList($userId);
 
-            $lists = $goodsM->getGoodsList($userId);
+        $response = $lists;
 
-            $response = $lists;
-            $response['order_id'] = $data['order_id'];
-            $response['keyword']   = $data['keyword'];
-            $this->send($response);
-     }
-/**
- * @api {POST} /v3/shop/goodsindex 商品详情
- * @apiName goods index
- * @apiGroup GOODS
- * @apiDescription  商品详情
- * @apiPermission anyone
- * @apiSampleRequest http://www.bibicar.cn:8090
- *
- * @apiParam {string} device_identifier 设备唯一标识
- * @apiParam {string} session_id session_id
- * @apiParam {number} [shop_id] 店铺id
- * @apiParam {number} goods_id 商品id
- *
- * @apiParamExample {json} 请求样例
- *   POST /v3/shop/shoplist
- *   {
- *     "data": {
- *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
- *       "session_id":"session5845346a59a31",
- *       "goods_id":"1",
- *       "shop_id":"1",
- *       
- *       
- *     }
- *   }
- *
- */
-    //商品详情
-    public function goodsindexAction(){
-                
-                $this->required_fields = array_merge($this->required_fields, array('session_id','goods_id'));
+        $response['order_id'] = $data['order_id'];
 
-                $data = $this->get_request_data();
-                $userId = $this->userAuth($data);
+        $response['keyword']   = $data['keyword'];
 
-            
-                $GoodsId=$data['goods_id'];
-                
-                $GoodsModel = new ShopGoodsModel();
-
-                $GoodsModel->currentUser = $userId;
-
-                $GoodsInfo = $GoodsModel->GetGoodsInfoById($GoodsId,$userId);
-                
-                $response['goods_info'] = $GoodsInfo;
-                
-                $this->send($response);
+        $this->send($response);
 
     }
 
-/**
- * @api {POST} /v3/shop/createorder 购物车创建订单
- * @apiName order add
- * @apiGroup GOODS
- * @apiDescription  购物车创建订单
- * @apiPermission anyone
- * @apiSampleRequest http://www.bibicar.cn:8090
- *
- * @apiParam {string} device_identifier 设备唯一标识
- * @apiParam {string} session_id session_id
- * @apiParam {number} shop_id 店铺id
- * @apiParam {json} goods_list object
- * @apiParam {string} goods_amount 商品总价
- * @apiParam {string} order_amount 订单总价
- *
- * @apiParamExample {json} 请求样例
- *   POST /v3/shop/addorder
- *   {
- *   
- *     "data": {
- *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
- *       "session_id":"session5845346a59a31",
- *       "shop_id":"",
- *       "goods_amount":"1",
- *       "order_amount":"1",
- *       "goods_list":"[{"goods_id":1,"sku_id":1,"buy_num":2},{"goods_id":2,"sku_id":2,"buy_num":2}]",
- *     }
- *   }
- *
- */
+
+
+
+    /**
+     * @api {POST} /v3/shop/createorder 创建订单
+     * @apiName order add
+     * @apiGroup GOODS
+     * @apiDescription  创建订单
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} shop_id 店铺id
+     * @apiParam {json} goods_list object
+     * @apiParam {string} contact_phone 联系人电话
+     * @apiParam {string} contact_address 联系人地址
+     * @apiParam {string} contact_name 联系人姓名
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/shop/addorder
+     *   {
+     *
+     *     "data": {
+     *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
+     *       "session_id":"session5845346a59a31",
+     *       "shop_id":"",
+     *       "goods_amount":"1",
+     *       "order_amount":"1",
+     *       "goods_list":"[{"goods_id":1,"sku_id":1,"buy_num":2},{"goods_id":2,"sku_id":2,"buy_num":2}]",
+     *     }
+     *   }
+     *
+     */
     //生成订单
      public function createorderAction(){
-        
-        
-        $this->required_fields = array_merge($this->required_fields,array('session_id','shop_id','goods_amount','order_amount'));
+
+        $this->required_fields = array_merge($this->required_fields,array('session_id'));
 
         $data = $this->get_request_data();
         
         $userId = $this->userAuth($data);
          
-        $shop_id=3;
+        $shop_id=4;
 
         $data['goods_list']=str_replace( '\\', '',$data['goods_list']);
        
@@ -230,25 +158,30 @@ class ShopController extends ApiYafControllerAbstract
         }
 
         $files=json_decode($data['goods_list'], true);
+
+        $ShopGoodsM = new ShopGoodsModel();
+
+        $goods_amount =  $ShopGoodsM->getGoodsAmount($files);
+
         $goods_serialize=serialize($files);
 
         $order_sn=date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
-
         $ShopOrderM = new ShopOrderModel;
         $time = time();
         $properties['order_time']       = $time;
         $properties['user_id']          = $userId;
-        $properties['shop_id']          = $data['shop_id'];
+        $properties['shop_id']          = $shop_id;
         $properties['goods_serialize']  = $goods_serialize;
-        $properties['goods_amount']     = $data['goods_amount'];
-        $properties['order_amount']     = $data['order_amount'];
+        $properties['goods_amount']     = $goods_amount;
+        $properties['order_amount']     = $goods_amount;
         $properties['order_status']     = 1;
         $properties['order_sn']         = $order_sn;
+        $properties['contact_name']     = $data['contact_name'];
+        $properties['contact_phone']    = $data['contact_phone'];
+        $properties['contact_address']  = $data['contact_address'];
         $ShopOrderM->properties         = $properties;
         $order_id = $ShopOrderM->CreateM();
-
         if($order_id){
-
             foreach($files as $k => $value){ 
                 $properties=array();
                 $ShopOrderGoodsM = new ShopOrderGoodsModel;
@@ -262,146 +195,146 @@ class ShopController extends ApiYafControllerAbstract
                 $properties['created']           = $time;
                 $ShopOrderGoodsM->properties         = $properties;
                 $order_goods_id = $ShopOrderGoodsM->CreateM();
-
-                if($order_goods_id){
-                    $ShopCarM = new ShopCartModel;
-                    $result=$ShopCarM->deleteCart($userId,$value['goods_id'],$value['sku_id']);
-                }
-
             } 
         }                                                                 
         $ShopOrderM = new ShopOrderModel;
         $info=$ShopOrderM->getOrderinfo($userId,$order_id);
+        if($goods_amount){
+            $info['need_pay'] = 1;
+        }else{
+            $info['need_pay'] = 2;
+        }
         $this->send($info);
      }
-
-
-/**
- * @api {POST} /v5/shop/orderpay 支付订单
- * @apiName order pay
- * @apiGroup GOODS
- * @apiDescription  调起支付
- * @apiPermission anyone
- * @apiSampleRequest http://testapi.bibicar.cn
- *
- * @apiParam {string} device_identifier 设备唯一标识
- * @apiParam {string} session_id session_id
- * @apiParam {number} pay_code 支付方式 1微信 2支付宝
- * @apiParam {number} order_id 订单ID
- * @apiParam {number} order_sn 订单号
- * @apiParam {number} pay_fee  支付款数
- *
- * @apiParamExample {json} 请求样例
- *   POST /v3/shop/orderpay
- *   {
- *   
- *     "data": {
- *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
- *       "session_id":"session5845346a59a31",
- *       "pay_code":"1",
- *       "pay_fee":"1",
- *       "order_id":"",
- *     }
- *   }
- *  @apiSuccessExample {json} 成功返回:
- *  HTTP/1.1 200 OK
- *  {
- *    "status": 1
- *    "code": 0
- *    "data": {
- *    "appid":"wx8bac6dd603d47d15",
- *    "partnerid":"1424297802",
- *    "nonce_str":"rCXyg8Xdx9oC6PLF"
- *    "package":"Sign=WXP"
- *    "prepay_id":"wx201612230953071fffad40c90251562174",
- *    "timestamp":"14856652552"
- *    "sign": "D8C01AC2916EEB29AD8C66AF150B1047",
- *    }
- *  }
- *
- */
+    /**
+     * @api {POST} /v5/shop/orderpay 支付订单
+     * @apiName order pay
+     * @apiGroup GOODS
+     * @apiDescription  调起支付
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} pay_code 支付方式 1微信 2支付宝
+     * @apiParam {number} order_id 订单ID
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/shop/orderpay
+     *   {
+     *
+     *     "data": {
+     *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
+     *       "session_id":"session5845346a59a31",
+     *       "pay_code":"1",
+     *       "pay_fee":"1",
+     *       "order_id":"",
+     *     }
+     *   }
+     *  @apiSuccessExample {json} 成功返回:
+     *  HTTP/1.1 200 OK
+     *  {
+     *    "status": 1
+     *    "code": 0
+     *    "data": {
+     *    "appid":"wx8bac6dd603d47d15",
+     *    "partnerid":"1424297802",
+     *    "nonce_str":"rCXyg8Xdx9oC6PLF"
+     *    "package":"Sign=WXP"
+     *    "prepay_id":"wx201612230953071fffad40c90251562174",
+     *    "timestamp":"14856652552"
+     *    "sign": "D8C01AC2916EEB29AD8C66AF150B1047",
+     *    }
+     *  }
+     *
+     */
      public function orderpayAction(){ 
         
-                $this->required_fields = array_merge($this->required_fields,array('session_id','order_id','order_sn','pay_fee','pay_code'));
+                $this->required_fields = array_merge($this->required_fields,array('session_id','order_id','pay_code'));
 
                 $data = $this->get_request_data();
                 
                 $userId = $this->userAuth($data);
                
                 $ShopOrderM = new ShopOrderModel;
+
                 $info=$ShopOrderM->getOrderinfo($userId,$data['order_id']);
               
-                if($info && $data['order_sn'] == $info['order_sn'] && $info['order_status'] == 1){
-                  
-                        if($data['pay_code'] == 1){
+                if($info && $info['order_status'] == 1){
 
-                                $info['order_sn']=$data['order_sn'];
-                                $info['pay_fee']= $info['order_amount'];
-                                $info['name']='吡吡商品';
-                              
+                        if($info['order_amount']) {
+
+                            if ($data['pay_code'] == 1) {
+
+                                $infos['order_sn'] = $info['order_sn'];
+                                $infos['pay_fee'] = $info['order_amount'];
+                                $infos['name'] = '吡吡商品';
+
                                 $notify = new Wxpay();
-                               
-                                $result=$notify->unifiedorder($info);
-                                
-                                $sign=$notify->settoSign($result);
-                               
-                                if($sign == $result['sign']){
-                                      $num = $this->GetRandStr(4);  
-                                      
-                                      
-                                      $where['order_sn']=$data['order_sn'];
-                                      $attr['pay_code']=1;
-                                      $attr['pay_name']=$result['prepay_id'];
-                                      $attr['pay_fee'] =$data['pay_fee'];
-                                      $attr['pay_time'] =time();
-                                      $attr['coupon'] =$num;
-                                      $ShopOrderM = new ShopOrderModel;
-                                      $resultinfo=$ShopOrderM->update($where,$attr);
+
+                                $result = $notify->unifiedorder($infos);
+
+                                $sign = $notify->settoSign($result);
+
+                                if ($sign == $result['sign']) {
+                                    $num = $this->GetRandStr(4);
+
+                                    $where['order_sn'] = $data['order_sn'];
+                                    $attr['pay_code'] = 1;
+                                    $attr['pay_name'] = $result['prepay_id'];
+                                    $attr['pay_fee'] = $data['pay_fee'];
+                                    $attr['pay_time'] = time();
+                                    $attr['coupon'] = $num;
+                                    $ShopOrderM = new ShopOrderModel;
+                                    $resultinfo = $ShopOrderM->update($where, $attr);
 
 
-                                      $response['appid']    =$result['appid'];
-                                      $response['partnerid']=$result['mch_id'];
-                                      $response['noncestr']= WxPayApi::getNonceStr();
-                                      $response['package']  ="Sign=WXPay";
-                                      $response['prepayid']=$result['prepay_id'];
-                                      $response['timestamp']=time();
-                                    
-                                      $sign=$notify->settoSign($response);
-                                      $response['sign']=$sign;
-                                      $response['type']="Wxpay";
-                                      $this->send($response);
-                                }else{
-                                      $this->send_error(CAR_CREATE_FILES_ERROR);
+                                    $response['appid'] = $result['appid'];
+                                    $response['partnerid'] = $result['mch_id'];
+                                    $response['noncestr'] = WxPayApi::getNonceStr();
+                                    $response['package'] = "Sign=WXPay";
+                                    $response['prepayid'] = $result['prepay_id'];
+                                    $response['timestamp'] = time();
+
+                                    $sign = $notify->settoSign($response);
+                                    $response['sign'] = $sign;
+                                    $response['type'] = "Wxpay";
+                                    $this->send($response);
+                                } else {
+                                    $this->send_error(CAR_CREATE_FILES_ERROR);
 
                                 }
-                        }elseif($data['pay_code'] == 2){
+                            } elseif ($data['pay_code'] == 2) {
 
                                 //待优化
-                                $num = $this->GetRandStr(4);  
-                                $where['order_sn']=$data['order_sn'];
-                                $attr['pay_code']=2;
-                                $attr['pay_time']=time();
-                                $attr['coupon']=$num;
+                                $num = $this->GetRandStr(4);
+                                $where['order_sn'] = $info['order_sn'];
+                                $attr['pay_code'] = 2;
+                                $attr['pay_time'] = time();
+                                $attr['coupon'] = $num;
                                 $ShopOrderM = new ShopOrderModel;
-                                $result=$ShopOrderM->update($where,$attr);
+                                $result = $ShopOrderM->update($where, $attr);
 
-                                $alipayM=new Alipay();
-                                $order_sn=$data['order_sn'];
-                                $order_amount=$info['order_amount'];
-                                $goods_name='吡吡商品';
-                                $result=$alipayM->alipay($order_sn,$order_amount,$goods_name);
-                                $response['orderstr']=$result;
-                                $response['type']="Alipay";
+                                $alipayM = new Alipay();
+                                $order_sn = $data['order_sn'];
+                                $order_amount = $info['order_amount'];
+                                $goods_name = '吡吡商品';
+                                $result = $alipayM->alipay($order_sn, $order_amount, $goods_name);
+                                $response['orderstr'] = $result;
+                                $response['type'] = "Alipay";
                                 $this->send($response);
-                               
+                            }
+
+                        }else{
+
+                            $this->send_error(CAR_CREATE_FILES_ERROR);
+
                         }
 
                 }else{
                         
                         $this->send_error(CAR_CREATE_FILES_ERROR);//订单支付出现错误
                 }
-                
-
      }
      //微信回调通知
 public function renotifyAction(){

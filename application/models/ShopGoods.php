@@ -50,7 +50,6 @@ class ShopGoodsModel extends PdoDb
     {
 
         $pageSize = 10;
-
         $sql = '
                 SELECT
                 t1.goods_id,t1.goods_item,t1.goods_name,t1.image_url,t1.sales,t1.stock,t1.price,t1.type,t1.title
@@ -308,6 +307,26 @@ class ShopGoodsModel extends PdoDb
 
            return $info;
 
+    }
+
+
+    public function getGoodsAmount($data){
+
+
+           $Goods_amount =0;
+           foreach($data as $k => $val){
+
+
+               $goods = $this->GetGoodsInfo($val['goods_id']);
+
+               if($goods){
+
+                   $Goods_amount = $Goods_amount + $val['buy_num'] * $goods['price'];
+
+               }
+           }
+
+           return $Goods_amount;
     }
 
 

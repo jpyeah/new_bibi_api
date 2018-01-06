@@ -504,12 +504,21 @@ class CarController extends ApiYafControllerAbstract
         if(@$data['has_vr'] == 1){
             $where .= 'AND t1.vr_url is not null';
         }
+
+        if(!$data['car_source'] && $data['order_id'] == 0 ){
+
+            $where .= " AND t1.user_id = 389  ";
+        }
+
         if(isset($jsonData['new_order_info'][$data['order_id']])) {
 
             // $carM->order  = ' ORDER BY t1.car_type ASC , ';
             $carM->order = $jsonData['new_order_info'][$data['order_id']];
 
         }
+
+
+
 
         $sess = new SessionModel();
         $userId = $sess->Get($data);

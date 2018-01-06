@@ -640,3 +640,34 @@ Stack trace:
 [16-Dec-2017 11:04:30 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [16-Dec-2017 11:07:28 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [16-Dec-2017 11:10:03 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[05-Jan-2018 11:03:10 PRC] PHP Warning:  print_r() expects at least 1 parameter, 0 given in /usr/local/var/www/bibi-api/application/models/CarSellingV5.php on line 789
+[05-Jan-2018 13:35:00 PRC] PHP Fatal error:  Call to undefined method BannerModel::getRecommentsBrand() in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 46
+[05-Jan-2018 13:35:38 PRC] PHP Fatal error:  Call to undefined method BannerModel::recommentsBrand() in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 46
+[05-Jan-2018 13:37:25 PRC] PHP Fatal error:  Call to undefined method BannerModel::getRecommenBrand() in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 46
+[06-Jan-2018 10:46:28 PRC] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 334
+[06-Jan-2018 10:50:11 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/models/ShopGoods.php on line 321
+[06-Jan-2018 10:50:11 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/models/ShopGoods.php on line 321
+[06-Jan-2018 10:50:11 PRC] PHP Notice:  Undefined index: shop_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 174
+[06-Jan-2018 10:50:11 PRC] PHP Notice:  Undefined index: goods_amount in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 176
+[06-Jan-2018 10:50:11 PRC] PHP Notice:  Undefined index: order_amount in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 177
+[06-Jan-2018 10:50:41 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/models/ShopGoods.php on line 321
+[06-Jan-2018 10:50:41 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/models/ShopGoods.php on line 321
+[06-Jan-2018 10:51:11 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/models/ShopGoods.php on line 321
+[06-Jan-2018 10:51:11 PRC] PHP Notice:  Undefined index: price in /usr/local/var/www/bibi-api/application/models/ShopGoods.php on line 321
+[06-Jan-2018 10:54:35 PRC] PHP Notice:  Undefined index: shop_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 174
+[06-Jan-2018 10:55:54 PRC] PHP Notice:  Undefined index: shop_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 174
+[06-Jan-2018 10:55:54 PRC] PHP Notice:  Undefined variable: info in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 201
+[06-Jan-2018 10:56:23 PRC] PHP Notice:  Undefined index: shop_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 173
+[06-Jan-2018 14:19:11 PRC] PHP Notice:  Undefined index: brand_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 391
+[06-Jan-2018 14:19:11 PRC] PHP Notice:  Undefined index: series_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 392
+[06-Jan-2018 14:19:29 PRC] PHP Notice:  Undefined index: brand_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 391
+[06-Jan-2018 14:19:29 PRC] PHP Notice:  Undefined index: series_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 392
+[06-Jan-2018 14:27:04 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[06-Jan-2018 14:27:26 PRC] PHP Notice:  Undefined index: hash in /usr/local/var/www/bibi-api/application/models/CarSellingV5.php on line 196
+[06-Jan-2018 14:27:26 PRC] PHP Notice:  Undefined index: brand_id in /usr/local/var/www/bibi-api/application/models/CarSellingV5.php on line 200
+[06-Jan-2018 14:27:26 PRC] PHP Notice:  Undefined index: brand_id in /usr/local/var/www/bibi-api/application/models/CarSellingV5.php on line 201
+[06-Jan-2018 14:27:26 PRC] PHP Notice:  Undefined index: series_id in /usr/local/var/www/bibi-api/application/models/CarSellingV5.php on line 201
+[06-Jan-2018 14:27:26 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[06-Jan-2018 15:36:50 PRC] PHP Notice:  Undefined index: contact_name in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 179
+[06-Jan-2018 15:36:50 PRC] PHP Notice:  Undefined index: contact_phone in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 180
+[06-Jan-2018 15:36:50 PRC] PHP Notice:  Undefined index: contact_address in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 181

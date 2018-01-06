@@ -907,6 +907,7 @@ class CarSellingModel extends PdoDb
                       `bibi_car_selling_list` 
                     WHERE
                     `car_type` <> 3 AND series_id = '.$series_id.'
+                    AND verify_status = 11 OR verify_status = 2
                     ORDER BY id DESC LIMIT 0, 1 
                     ';
 
@@ -926,6 +927,7 @@ class CarSellingModel extends PdoDb
                   `bibi_car_selling_list` 
                 WHERE
                 `car_type` <> 3 AND brand_id = '.$brand_id.'
+                AND verify_status = 11 OR verify_status = 2
                 ORDER BY id DESC LIMIT 0, 1
                 ';
 
