@@ -15,13 +15,13 @@ class ShopController extends ApiYafControllerAbstract
      * @apiDescription 商品列表
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.5.4
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
      * @apiParam {number} [page] 页数
      * @apiParam {string} goods_item 1车辆检测 2 保险服务 3上牌过户
      *
-     * @apiUse Data
      * @apiParamExample {json} 请求样例
      *   POST /v5/shop/goodslist
      *   {
@@ -115,6 +115,7 @@ class ShopController extends ApiYafControllerAbstract
      * @apiDescription  创建订单
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.5.4
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
@@ -125,7 +126,7 @@ class ShopController extends ApiYafControllerAbstract
      * @apiParam {string} contact_name 联系人姓名
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/shop/addorder
+     *   POST /v5/shop/addorder
      *   {
      *
      *     "data": {
@@ -174,7 +175,7 @@ class ShopController extends ApiYafControllerAbstract
         $properties['goods_serialize']  = $goods_serialize;
         $properties['goods_amount']     = $goods_amount;
         $properties['order_amount']     = $goods_amount;
-        $properties['order_status']     = 1;
+        $properties['order_status']     = $goods_amount ? 1 : 2;
         $properties['order_sn']         = $order_sn;
         $properties['contact_name']     = $data['contact_name'];
         $properties['contact_phone']    = $data['contact_phone'];
@@ -213,6 +214,7 @@ class ShopController extends ApiYafControllerAbstract
      * @apiDescription  调起支付
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.5.4
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
@@ -220,7 +222,7 @@ class ShopController extends ApiYafControllerAbstract
      * @apiParam {number} order_id 订单ID
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/shop/orderpay
+     *   POST /v5/shop/orderpay
      *   {
      *
      *     "data": {
@@ -316,7 +318,7 @@ class ShopController extends ApiYafControllerAbstract
                                 $result = $ShopOrderM->update($where, $attr);
 
                                 $alipayM = new Alipay();
-                                $order_sn = $data['order_sn'];
+                                $order_sn = $info['order_sn'];
                                 $order_amount = $info['order_amount'];
                                 $goods_name = '吡吡商品';
                                 $result = $alipayM->alipay($order_sn, $order_amount, $goods_name);
@@ -332,8 +334,8 @@ class ShopController extends ApiYafControllerAbstract
                         }
 
                 }else{
-                        
-                        $this->send_error(CAR_CREATE_FILES_ERROR);//订单支付出现错误
+
+                    $this->send_error(CAR_CREATE_FILES_ERROR);//订单支付出现错误
                 }
      }
      //微信回调通知
@@ -404,65 +406,25 @@ public function alinotifyAction(){
         }
         
 }
-
-
-/**
- * @api {POST} /v3/shop/orderindex 订单详情
- * @apiName order index
- * @apiGroup GOODS
- * @apiDescription  订单详情
- * @apiPermission anyone
- * @apiSampleRequest http://www.bibicar.cn:8090
- *
- * @apiParam {string} device_identifier 设备唯一标识
- * @apiParam {string} session_id session_id
- * @apiParam {number} order_id 订单id
- * 
- * @apiUse Data
- * @apiParamExample {json} 请求样例
- *   POST /v3/shop/shoplist
- *   {
- *   
- *     "data": {
- *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
- *       "session_id":"session5845346a59a31",
- *       "order_id":"",
- *     }
- *   }
- *
- */
-public function orderindexAction(){
-      
-        $time = time();
-        $this->required_fields = array_merge(
-            $this->required_fields,
-            array('session_id','order_sn')
-        );
-        $data = $this->get_request_data();
-        $userId = $this->userAuth($data);
-
-        $ShopOrderM = new ShopOrderModel;
-        $info=$ShopOrderM->getinfo($data['order_sn']);
-        
-        $this->send($info);
-            
-}
-
-
 /**
  * @api {POST} /v3/shop/orderlist 订单列表
  * @apiName order list
  * @apiGroup GOODS
  * @apiDescription  订单列表
  * @apiPermission anyone
- * @apiSampleRequest http://www.bibicar.cn:8090
+ * @apiSampleRequest http://testapi.bibicar.cn
+ * @apiVersion 2.5.4
  *
- * @apiParam {string} device_identifier 设备唯一标识
- * @apiParam {string} session_id session_id
- * 
+ * @apiParam (request)   {string} device_identifier 设备唯一标识
+ * @apiParam (request)   {string} session_id session_id
+ * @apiParam (response)  {string} order_status 2:待办理 3:办理成功
+ * @apiParam (response)  {string} order_amount 订单总价
+ * @apiParam (response)  {object} goodslist 商品列表
+ * @apiParam (response)  {string} goodslist.goods_name 商品名称
+ *
  * @apiUse Data
  * @apiParamExample {json} 请求样例
- *   POST /v3/shop/shoplist
+ *   POST /v5/shop/shoplist
  *   {
  *     "data": {
  *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
@@ -478,10 +440,13 @@ public function orderlistAction(){
             array('session_id')
         );
         $data = $this->get_request_data();
+
         $userId = $this->userAuth($data);
 
         $ShopOrderM = new ShopOrderModel;
+
         $info=$ShopOrderM->getOrderlist($userId);
+
         $this->send($info);
             
 }

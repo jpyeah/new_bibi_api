@@ -671,3 +671,4 @@ Stack trace:
 [06-Jan-2018 15:36:50 PRC] PHP Notice:  Undefined index: contact_name in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 179
 [06-Jan-2018 15:36:50 PRC] PHP Notice:  Undefined index: contact_phone in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 180
 [06-Jan-2018 15:36:50 PRC] PHP Notice:  Undefined index: contact_address in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 181
+[08-Jan-2018 13:34:12 PRC] PHP Notice:  Undefined index: order_sn in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 319

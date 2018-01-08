@@ -17,7 +17,7 @@ class CarController extends ApiYafControllerAbstract
      * @apiDescription 车市首页
      * @apiPermission anyone
      * @apiSampleRequest http://www.testapi.bibicar.cn
-     * @apiVersion 2.5.3
+     * @apiVersion 2.5.4
      *
      * @apiParam (request) {string} device_identifier 设备唯一标识
      * @apiParam (request) {string} session_id session_id
