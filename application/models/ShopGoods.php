@@ -77,10 +77,49 @@ class ShopGoodsModel extends PdoDb
         $total = @$this->query($sqlCnt)[0]['total'];
 
         $count = count($goods);
-        
 
         $shopM=new ShopModel();
         $list['shop_info'] =$shopM->getshop(1,0,1);
+
+        foreach($goods as $key =>$value){
+            $goods[$key]['sku_info']  =$this->getskuinfo($value['goods_id']);
+        }
+        $list['goods_list'] = $goods;
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] = $total;
+        //$list['number'] = $number;
+        return $list;
+    }
+
+    public function getGoodsListV1($userId =0,$order=0)
+    {
+
+        $pageSize = 10;
+        $sql = '
+                SELECT
+                t1.goods_id,t1.goods_item,t1.goods_name,t1.image_url,t1.sales,t1.stock,t1.price,t1.type,t1.title
+                FROM `bibi_shop_goods` AS t1
+                ';
+        $sqlCnt = '
+                SELECT
+                count(t1.goods_id) AS total
+                FROM `bibi_shop_goods` AS t1
+                ';
+
+        $sql .= $this->where;
+        $number = ($this->page-1)*$pageSize;
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+
+        $goods = $this->query($sql);
+
+        $sqlCnt .= $this->where;
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+        $count = count($goods);
+
+        $shopM=new ShopModel();
+        $list['shop_info'] =$shopM->getshop(1,0,4);
 
         foreach($goods as $key =>$value){
             $goods[$key]['sku_info']  =$this->getskuinfo($value['goods_id']);
@@ -90,7 +129,6 @@ class ShopGoodsModel extends PdoDb
         $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
         $list['total'] = $total;
         //$list['number'] = $number;
-
         return $list;
     }
     

@@ -19,16 +19,24 @@ class ShopController extends ApiYafControllerAbstract
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
-     * @apiParam {number} [page] 页数
-     * @apiParam {string} goods_item 1车辆检测 2 保险服务 3上牌过户
+     * @apiParam {number} shop_id 店铺id (4)
+     * @apiParam {number} page 页数
+     * @apiParam {string} goods_item 1:车辆检测 2：保险服务 3:上牌过户
      *
+     * @apiUse Data
      * @apiParamExample {json} 请求样例
-     *   POST /v5/shop/goodslist
+     *   POST /v5/shop/shoplist
      *   {
      *     "data": {
      *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
      *       "session_id":"session5845346a59a31",
+     *       "page":"0",
+     *       "shop_id":"1",
+     *       "order_id":"0",
+     *       "keyword":"",
      *       "goods_item":"",
+     *
+     *
      *     }
      *   }
      *  @apiSuccessExample {json} Success-Response:
@@ -67,19 +75,16 @@ class ShopController extends ApiYafControllerAbstract
     //商品列表
     public function goodslistAction(){
 
-        $this->required_fields = array_merge($this->required_fields, array('session_id','goods_item'));
 
+        $this->required_fields = array_merge($this->required_fields, array('session_id','page','goods_item','shop_id'));
         $data = $this->get_request_data();
 
-        $data['shop_id'] =3;
-
         $goodsM = new ShopGoodsModel();
-        $where = '';
+        $data['shop_id'] = 4;
+        $where = 'WHERE  t1.status = 1 ';
         if($data['goods_item']){
-
-            $where .= 'where t1.goods_item = '.$data['goods_item'].' ';
+            $where .= ' AND t1.goods_item = '.$data['goods_item'].' ';
         }
-
         if($data['shop_id']){
 
             $where .= ' AND t1.shop_id = '.$data['shop_id'].' ';
@@ -93,23 +98,13 @@ class ShopController extends ApiYafControllerAbstract
 
         $goodsM->currentUser = $userId;
 
-        $lists = $goodsM->getGoodsList($userId);
+        $lists = $goodsM->getGoodsListV1($userId);
 
         $response = $lists;
-
-        $response['order_id'] = $data['order_id'];
-
-        $response['keyword']   = $data['keyword'];
-
         $this->send($response);
-
     }
-
-
-
-
     /**
-     * @api {POST} /v3/shop/createorder 创建订单
+     * @api {POST} /v5/shop/createorder 创建订单
      * @apiName order add
      * @apiGroup GOODS
      * @apiDescription  创建订单
@@ -117,10 +112,13 @@ class ShopController extends ApiYafControllerAbstract
      * @apiSampleRequest http://testapi.bibicar.cn
      * @apiVersion 2.5.4
      *
-     * @apiParam {string} device_identifier 设备唯一标识
-     * @apiParam {string} session_id session_id
-     * @apiParam {number} shop_id 店铺id
-     * @apiParam {json} goods_list object
+     * @apiParam (request) {string} device_identifier 设备唯一标识
+     * @apiParam (request) {string} session_id session_id
+     * @apiParam (request) {number} shop_id 店铺id
+     * @apiParam (request) {object} goods_list 商品列表
+     * @apiParam (request) {number} goods_list.goods_id 商品Id
+     * @apiParam (request) {number} goods_list.sku_id 商品sku_id
+     * @apiParam (request) {number} goods_list.bue_num 购买数量
      * @apiParam {string} contact_phone 联系人电话
      * @apiParam {string} contact_address 联系人地址
      * @apiParam {string} contact_name 联系人姓名
@@ -407,7 +405,7 @@ public function alinotifyAction(){
         
 }
 /**
- * @api {POST} /v3/shop/orderlist 订单列表
+ * @api {POST} /v5/shop/orderlist 订单列表
  * @apiName order list
  * @apiGroup GOODS
  * @apiDescription  订单列表

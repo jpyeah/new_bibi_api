@@ -672,3 +672,15 @@ Stack trace:
 [06-Jan-2018 15:36:50 PRC] PHP Notice:  Undefined index: contact_phone in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 180
 [06-Jan-2018 15:36:50 PRC] PHP Notice:  Undefined index: contact_address in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 181
 [08-Jan-2018 13:34:12 PRC] PHP Notice:  Undefined index: order_sn in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 319
+[09-Jan-2018 14:11:21 PRC] PHP Notice:  Undefined index: shop_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 84
+[09-Jan-2018 14:11:21 PRC] PHP Notice:  Undefined index: goods_item in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 88
+[09-Jan-2018 14:11:21 PRC] PHP Notice:  Undefined index: page in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 98
+[09-Jan-2018 14:11:21 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[09-Jan-2018 14:11:50 PRC] PHP Notice:  Undefined index: goods_item in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 86
+[09-Jan-2018 14:11:50 PRC] PHP Notice:  Undefined index: page in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 96
+[09-Jan-2018 14:11:50 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[09-Jan-2018 14:12:00 PRC] PHP Notice:  Undefined index: page in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 96
+[09-Jan-2018 14:12:00 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[09-Jan-2018 14:12:21 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
+[09-Jan-2018 14:19:55 PRC] PHP Notice:  Undefined index: order_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 105
+[09-Jan-2018 14:19:55 PRC] PHP Notice:  Undefined index: keyword in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 106
