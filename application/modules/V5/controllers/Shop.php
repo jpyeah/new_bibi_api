@@ -92,7 +92,7 @@ class ShopController extends ApiYafControllerAbstract
 
         $goodsM->where = $where;
 
-        $goodsM->page = $data['page'];
+        $goodsM->page = $data['page'] ? $data['page']+1 :1;
 
         $userId = $this->userAuth($data);
 
