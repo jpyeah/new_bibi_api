@@ -106,7 +106,7 @@ class CarRentalOrderModel extends PdoDb {
 
         $items = array();
 
-        $Rentalcar = new CarRentalV1Model();
+        $Rentalcar = new CarRentalModel();
         foreach($orders as $k => $order){
 
             $car_id = $order['car_id'];

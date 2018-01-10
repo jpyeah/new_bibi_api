@@ -613,9 +613,7 @@ class RentalcarController extends ApiYafControllerAbstract
         }
 
         $CarRentalOrder = new CarRentalOrderModel();
-
-        $CarRentalOrder->page = $data['page'] ? ($data['page']+1) : 1;
-
+        
         $CarRentalOrder->currentUser = $userId;
 
         $order=$CarRentalOrder->getRentalOrderInfo($data['order_sn']);
