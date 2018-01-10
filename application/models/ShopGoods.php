@@ -146,7 +146,7 @@ class ShopGoodsModel extends PdoDb
        
         if (!$goods) {
 
-            return array();
+            return new stdClass();
         }
 
         return $goods;
@@ -168,7 +168,7 @@ class ShopGoodsModel extends PdoDb
         
         if (!$goods) {
 
-            return array();
+            return new stdClass();
         }
 
         $goods = $this->handlerGood($goods,$userId);
@@ -325,7 +325,7 @@ class ShopGoodsModel extends PdoDb
                $info["price"]=$sku['price'];
                $info["sku_id"]=$sku['sku_id'];
                $info["goods_id"]=$sku['goods_id'];
-               $info["skuinfo"]=array();
+               $info["skuinfo"]=new stdClass();
 
          }
 

@@ -35,7 +35,7 @@ class UserCarPactSellerModel extends PdoDb{
 
         $result = $this->query($sql);
 
-        return $result ? $result[0] :array();
+        return $result ? $result[0] : new stdClass();
     }
 
     public function getSellerPactList($user_id){
@@ -47,7 +47,7 @@ class UserCarPactSellerModel extends PdoDb{
         if($result){
             return $result;
         }else{
-            return array();
+            return new stdClass();
         }
 
     }

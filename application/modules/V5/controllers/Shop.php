@@ -189,7 +189,7 @@ class ShopController extends ApiYafControllerAbstract
                 $properties['order_sn']          = $order_sn;
                 $properties['goods_id']          = $value['goods_id'];
                 $properties['sku_id']            = $value['sku_id'];
-                $properties['buy_num']           = $value['buy_num'];
+                $properties['buy_num']           = $value['buy_num'] ? $value['buy_num'] : 1;
                 $properties['user_id']           = $userId;
                 $properties['created']           = $time;
                 $ShopOrderGoodsM->properties         = $properties;

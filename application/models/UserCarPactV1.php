@@ -85,7 +85,7 @@ class UserCarPactV1Model extends PdoDb{
 
         }else{
 
-            return array();
+            return new stdClass();
         }
 
 
@@ -100,7 +100,7 @@ class UserCarPactV1Model extends PdoDb{
         if($result){
             return $result[0];
         }else{
-            return array();
+            return new stdClass();
         }
 
     }
@@ -135,6 +135,34 @@ class UserCarPactV1Model extends PdoDb{
            }
 
            return $lists;
+
+    }
+
+
+    public function getPactCarV1($userId,$seller_id){
+
+        $car = new CarSellingV5Model();
+
+        $car->is_pacted = 1;
+
+        $lists=$car->getUserPublishCar($seller_id);
+
+        foreach($lists['car_list'] as $k => $list ){
+            //   $lists['car_list'][$k]['car_info'][]
+            $car_id = $lists['car_list'][$k]['car_info']['car_id'];
+
+            $res=$this->getPactbyUser($userId,$car_id);
+
+            if($res){
+                // $lists['car_list'][$k]['car_info']['pact_id']=1;
+                $lists['car_list'][$k]['pact_info']=$res;
+            }else{
+                $lists['car_list'][$k]['pact_info']=new stdClass();
+            }
+
+        }
+
+        return $lists;
 
     }
 
