@@ -167,7 +167,7 @@ class CarRentalOrderModel extends PdoDb {
             return $info[0];
         }else{
 
-            return array();
+            return new stdClass();
         }
 
 
@@ -193,7 +193,7 @@ class CarRentalOrderModel extends PdoDb {
             return $Info;
         }else{
 
-            return array();
+            return new stdClass();
         }
 
     }
@@ -219,7 +219,7 @@ class CarRentalOrderModel extends PdoDb {
             return $Info;
         }else{
 
-            return array();
+            return new stdClass();
         }
 
     }
