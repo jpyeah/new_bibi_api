@@ -449,6 +449,48 @@ public function orderlistAction(){
             
 }
 
+    /**
+     * @api {POST} /v5/shop/orderindex 订单详情
+     * @apiName order index
+     * @apiGroup GOODS
+     * @apiDescription  订单详情
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.5.4
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {number} order_sn 订单号
+     *
+     * @apiUse Data
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/shop/shoplist
+     *   {
+     *
+     *     "data": {
+     *       "device_identifier":"ce32eaab37220890a063845bf6b6dc1a",
+     *       "session_id":"session5845346a59a31",
+     *       "order_sn":"",
+     *     }
+     *   }
+     *
+     */
+    public function orderindexAction(){
+
+        $this->required_fields = array_merge(
+            $this->required_fields,
+            array('session_id','order_sn')
+        );
+        $data = $this->get_request_data();
+        $userId = $this->userAuth($data);
+
+        $ShopOrderM = new ShopOrderModel;
+        $info=$ShopOrderM->getinfo($data['order_sn']);
+
+        $this->send($info);
+
+    }
+
 
  public function GetRandStr($len)   
 {  

@@ -43,7 +43,7 @@ class ShopOrderModel extends PdoDb {
     public function getinfo($ordersn){
 
             $sql = 'SELECT
-                order_id,order_sn,shop_id,goods_amount,order_time,order_amount,order_status,pay_code,pay_name,pay_time,user_id,order_time
+                order_id,order_sn,shop_id,goods_amount,order_time,order_amount,order_status,pay_code,pay_name,pay_time,user_id,order_time,contact_phone,contact_name,contact_address
                 FROM
                   bibi_shop_order
                 WHERE
@@ -54,7 +54,6 @@ class ShopOrderModel extends PdoDb {
             $info['goods_list']=$this->getordergoods($info['order_id']);
 
             return $info;
-
     }
     
     public function getOrderinfobyordersn($order_sn){
@@ -135,7 +134,7 @@ class ShopOrderModel extends PdoDb {
     public function getOrderlist($userId){
 
            $sql='SELECT
-            order_id,order_sn,shop_id,goods_amount,order_time,order_amount,pay_fee,pay_code,pay_name,pay_time,user_id,order_status,coupon
+            order_id,order_sn,shop_id,goods_amount,order_time,order_amount,pay_fee,pay_code,pay_name,pay_time,user_id,order_status,coupon,contact_phone,contact_name,contact_address
             FROM
             bibi_shop_order
             WHERE
@@ -147,9 +146,7 @@ class ShopOrderModel extends PdoDb {
             foreach($list as $key =>$value){
                     $list[$key]['goodslist']=$this->getordergoods($value['order_id']);
             }
-           
             return $list;
-
     }
 
 

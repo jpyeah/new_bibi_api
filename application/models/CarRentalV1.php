@@ -423,12 +423,13 @@ class CarRentalV1Model extends PdoDb
             WHERE t1.hash = "' . $hash . '" 
         ';
 
+        $res = $this->query($sql);
 
-        $car = $this->query($sql)[0];
+        $car = $res ? $res[0] : array();
 
         if (!$car) {
 
-            return array();
+            return new stdClass();
         }
 
         $car = $this->handlerCar($car,$userId);
@@ -454,7 +455,7 @@ class CarRentalV1Model extends PdoDb
 
         }else{
 
-            return array();
+            return new stdClass();
 
 
         }
