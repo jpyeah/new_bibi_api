@@ -829,7 +829,7 @@ class CarSellingV5Model extends PdoDb
                 ON t2.user_id = t3.user_id
                 ';
 
-            $where=" WHERE t1.brand_id in (".$brand_ids.") AND ( verify_status = 2 OR verify_status = 11 ) limit 10 ";
+            $where=" WHERE t1.brand_id in (".$brand_ids.") AND (t1.car_type <> 3 ) AND ( t1.verify_status = 2 OR t1.verify_status = 11 ) limit 10 ";
 
             $sql .= $where;
 
@@ -848,7 +848,7 @@ class CarSellingV5Model extends PdoDb
                 ON t2.user_id = t3.user_id
                 ';
 
-            $where=" WHERE  ( verify_status = 2 OR verify_status = 11 ) AND t1.user_id  = 389 limit 10 ";
+            $where=" WHERE  ( t1.verify_status = 2 OR t1.verify_status = 11 ) AND (t1.car_type <> 3 ) AND  t1.user_id  = 389 limit 10 ";
 
             $sql .= $where;
 
