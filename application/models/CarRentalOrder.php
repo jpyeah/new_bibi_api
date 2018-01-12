@@ -187,9 +187,13 @@ class CarRentalOrderModel extends PdoDb {
 
         if($info){
 
-            $Info['order_info']=$info['0'];
+            $Info['order_info']=$info[0];
             $CarRentalM =new CarRentalModel();
+            $RentalUserModel=new CarRentalUserModel();
+
             $Info['car_info']  = $CarRentalM->GetCarInfoById($Info['order_info']['car_id']);
+
+            $Info['rental_user'] = $RentalUserModel->getRentalUserById($Info['order_info']['user_id']);
             return $Info;
         }else{
 

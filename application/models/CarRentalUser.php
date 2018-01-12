@@ -64,7 +64,7 @@ class CarRentalUserModel extends PdoDb
         if($result){
             return $result['0'];
         }else{
-            return array();
+            return new stdClass();
         }
 
 
