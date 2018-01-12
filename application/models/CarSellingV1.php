@@ -187,7 +187,7 @@ class CarSellingV1Model extends PdoDb
                                 $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
                             }
 
-                            $item['file_type'] =  $image['type'] ? $image['type'] : 0;
+                            $item['file_type'] =  $image['type'] ? (int)$image['type'] : 0;
                             $items1[] = $item;
                             break;
                         case 2:
@@ -204,7 +204,7 @@ class CarSellingV1Model extends PdoDb
                                 $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
                             }
 
-                            $item['file_type'] =  $image['type'] ? $image['type'] : 0;
+                            $item['file_type'] =  $image['type'] ? (int)$image['type'] : 0;
                             $items2[] = $item;
 
                             break;
@@ -218,7 +218,7 @@ class CarSellingV1Model extends PdoDb
                                 $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
                             }
 
-                            $item['file_type'] =  $image['type'] ? $image['type'] : 0;
+                            $item['file_type'] =  $image['type'] ? (int)$image['type'] : 0;
                             $items3[] = $item;
                             break;
 
@@ -231,7 +231,7 @@ class CarSellingV1Model extends PdoDb
                                 $item['file_url'] = IMAGE_DOMAIN . $image['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
                             }
 
-                            $item['file_type'] =  $image['type'] ? $image['type'] : 0;
+                            $item['file_type'] =  $image['type'] ? (int)$image['type'] : 0;
                             $items4[] = $item;
                             break;
                         default:
