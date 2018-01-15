@@ -1590,7 +1590,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
        $userId = $this->userAuth($data);
 
-       $UserCarPact = new UserCarPactV1Model();
+       $UserCarPact = new UserCarPactModel();
 
        $UserCarPact->type = 1;
 
