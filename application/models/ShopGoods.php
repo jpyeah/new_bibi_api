@@ -52,7 +52,7 @@ class ShopGoodsModel extends PdoDb
         $pageSize = 10;
         $sql = '
                 SELECT
-                t1.goods_id,t1.goods_item,t1.goods_name,t1.image_url,t1.sales,t1.stock,t1.price,t1.type,t1.title
+                t1.goods_id,t1.goods_item,t1.goods_name,t1.image_url,t1.sales,t1.stock,t1.price,t1.type,t1.title,t1.desc
                 FROM `bibi_shop_goods` AS t1
                 ';
         $sqlCnt = '
@@ -97,7 +97,7 @@ class ShopGoodsModel extends PdoDb
         $pageSize = 10;
         $sql = '
                 SELECT
-                t1.goods_id,t1.goods_item,t1.goods_name,t1.image_url,t1.sales,t1.stock,t1.price,t1.type,t1.title
+                t1.goods_id,t1.goods_item,t1.goods_name,t1.image_url,t1.sales,t1.stock,t1.price,t1.type,t1.title,t1.desc
                 FROM `bibi_shop_goods` AS t1
                 ';
         $sqlCnt = '
