@@ -140,6 +140,7 @@ class ShopOrderModel extends PdoDb {
             WHERE
             user_id =' .$userId. '
             AND (order_status = 2 OR order_status = 3)
+            ORDER BY order_time DESC
             ';
             $list=$this->query($sql);
            
