@@ -362,8 +362,6 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         $info=$UserCarPact->initProfile($PactInfo);
 
-       // print_r($info);exit;
-
         $response['pact_info'] = $UserCarPact->getPactInfoByPactNo($PactInfo['pact_no']);
         $response['car_info']   =$CarInfo;
 

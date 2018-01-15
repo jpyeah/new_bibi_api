@@ -100,7 +100,7 @@ class UserCarPactV1Model extends PdoDb{
         if($result){
             return $result[0];
         }else{
-            return new stdClass();
+            return  array();
         }
 
     }
