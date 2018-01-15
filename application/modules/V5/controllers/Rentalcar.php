@@ -494,7 +494,7 @@ class RentalcarController extends ApiYafControllerAbstract
 
             }else{
 
-                $notifyUrl="https://testapi.bibicar.cn/v5/rentalcar/alinotify";
+                $notifyUrl="http://testapi.bibicar.cn/v5/rentalcar/alinotify";
                 $alipayM=new Alipay();
                 $order_sn=$order['order_info']['order_sn'];
                 $order_amount=$order['order_info']['total_price'];

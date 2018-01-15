@@ -471,7 +471,7 @@ class UsercarpactController extends ApiYafControllerAbstract {
 
         }else{
 
-            $notifyUrl="https://api.bibicar.cn/v3/usercarpact/alinotify";
+            $notifyUrl="http://testapi.bibicar.cn/v3/usercarpact/alinotify";
             $info['pact_no']=$pact_info['pact_no'];
             $alipayM=new Alipay();
             $order_sn=$pact_info['pact_no'];
