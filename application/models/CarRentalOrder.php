@@ -167,7 +167,7 @@ class CarRentalOrderModel extends PdoDb {
             return $info[0];
         }else{
 
-            return new stdClass();
+            return array();
         }
 
 
