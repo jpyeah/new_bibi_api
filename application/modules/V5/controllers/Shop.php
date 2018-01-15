@@ -319,7 +319,8 @@ class ShopController extends ApiYafControllerAbstract
                                 $order_sn = $info['order_sn'];
                                 $order_amount = $info['order_amount'];
                                 $goods_name = '吡吡商品';
-                                $result = $alipayM->alipay($order_sn, $order_amount, $goods_name);
+                                $notify_url = "http://testapi.bibicar.cn/v5/shop/alinotify";
+                                $result = $alipayM->alipay($order_sn, $order_amount, $goods_name,$notify_url);
                                 $response['orderstr'] = $result;
                                 $response['type'] = "Alipay";
                                 $this->send($response);

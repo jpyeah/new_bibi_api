@@ -18,7 +18,7 @@ class Wxpay extends WxPayNotify
 		$input->SetTime_start(date("YmdHis"));
 		$input->SetTime_expire(date("YmdHis", time() + 600));
 		//$input->SetGoods_tag("test");
-		$input->SetNotify_url("https://api.bibicar.cn/v3/shop/renotify");
+		$input->SetNotify_url("http://testapi.bibicar.cn/v3/shop/renotify"); //https://api.bibicar.cn/v3/shop/renotify
 		$input->SetTrade_type("APP");
 		$result = WxPayApi::unifiedOrder($input);
 		return $result;
