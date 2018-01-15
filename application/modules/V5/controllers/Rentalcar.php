@@ -103,8 +103,8 @@ class RentalcarController extends ApiYafControllerAbstract
 
         }else{
 
-            $reponnse['is_auth'] = 2;
-            $response['rental_user']=$Rental_user;
+            $response['is_auth'] = 2;
+            $response['rental_user']= new stdClass();
         }
 
         $visitCarM = new VisitCarModel();
