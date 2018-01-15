@@ -400,6 +400,8 @@ class CarSellingV1Model extends PdoDb
         unset($car['nickname']);
         unset($car['type']);
 
+        $car['mileage'] = (int)$car['mileage'];
+
         return $car;
 
     }
