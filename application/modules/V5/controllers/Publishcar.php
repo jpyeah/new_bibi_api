@@ -256,35 +256,39 @@ class PublishcarController extends ApiYafControllerAbstract
             $cs = new CarSellingV5Model();
             $carInfo = $cs->GetCarInfoById($properties['hash']);
 
+            $client=new Elasticsearch;
+            $client=$client->instance();
+            $index['index'] = 'car'; //索引名称
+            $index['type'] = 'car_selling_list'; //类型名称
+            $index['id'] = $carId;   //不指定id，系统会自动生成唯一id
+            $index['body'] = array(
+                'car_name' => $carInfo['car_name'],
+                'hash'=>$carInfo['car_id'],
+                'car_id'=>$carInfo['id'],
+                'series_id'=>$carInfo['series_id'],
+                'brand_id'=>$carInfo['brand_id'],
+                'model_id'=>$carInfo['model_id'],
+                'car_type'=>$carInfo['car_type'],
+                'verify_status'=>$carInfo['verify_status'],
+            );
+            $res = $client->index($index);
+
             if($carInfo['verify_status'] == 2 || $carInfo['verify_status'] == 11){
-                $client=new Elasticsearch;
-                $client=$client->instance();
-                $index['index'] = 'car'; //索引名称
-                $index['type'] = 'car_selling_list'; //类型名称
-                $index['id'] = $carId;   //不指定id，系统会自动生成唯一id
-                $index['body'] = array(
-                    'car_name' => $carInfo['car_name'],
-                    'hash'=>$carInfo['car_id'],
-                    'car_id'=>$carInfo['id'],
-                    'series_id'=>$carInfo['series_id'],
-                    'brand_id'=>$carInfo['brand_id'],
-                    'model_id'=>$carInfo['model_id'],
-                    'car_type'=>$carInfo['car_type'],
-                    'verify_status'=>$carInfo['verify_status'],
-                );
-                $res = $client->index($index);
+
+
+                //我的关注数据myfocus
+                $UserFocusM= new MyFocusModel();
+                $UserFocusM->created_at =time();
+                $UserFocusM->type = 1;
+                $UserFocusM->type_id = $properties['hash'];
+                $UserFocusM->user_id =  $userId;
+                $UserFocusM->saveProperties();
+                $id = $UserFocusM->CreateM();
             }
 
             $response['car_info'] = $carInfo;
 
-            //我的关注数据myfocus
-            $UserFocusM= new MyFocusModel();
-            $UserFocusM->created_at =time();
-            $UserFocusM->type = 1;
-            $UserFocusM->type_id = $properties['hash'];
-            $UserFocusM->user_id =  $userId;
-            $UserFocusM->saveProperties();
-            $id = $UserFocusM->CreateM();
+
 
             $mh = new MessageHelper;
             $toId=389;
@@ -434,14 +438,16 @@ class PublishcarController extends ApiYafControllerAbstract
 
             $response['car_info'] = $carInfo;
 
-            //我的关注数据myfocus
-            $UserFocusM= new MyFocusModel();
-            $UserFocusM->created_at =time();
-            $UserFocusM->type = 1;
-            $UserFocusM->type_id = $properties['hash'];
-            $UserFocusM->user_id =  $userId;
-            $UserFocusM->saveProperties();
-            $id = $UserFocusM->CreateM();
+            if($carInfo['verify_status'] == 2 || $carInfo['verify_status'] == 11){
+                //我的关注数据myfocus
+                $UserFocusM= new MyFocusModel();
+                $UserFocusM->created_at =time();
+                $UserFocusM->type = 1;
+                $UserFocusM->type_id = $properties['hash'];
+                $UserFocusM->user_id =  $userId;
+                $UserFocusM->saveProperties();
+                $id = $UserFocusM->CreateM();
+            }
 
             $mh = new MessageHelper;
             $toId=389;

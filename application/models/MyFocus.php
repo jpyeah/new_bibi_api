@@ -110,7 +110,7 @@ class MyFocusModel extends PdoDb
             SELECT
             car_name,price,hash,files,car_type,car_intro
             FROM `bibi_car_selling_list`
-            WHERE hash = "' . $hash . '"
+            WHERE hash = "' . $hash . '" 
         ';
         $car = @$this->query($sql)[0];
 

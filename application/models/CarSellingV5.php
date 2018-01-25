@@ -140,6 +140,7 @@ class CarSellingV5Model extends PdoDb
         }
 
         $images = unserialize($car['files']);
+
         $items = array();
         if($images){
             foreach ($images as $k => $image) {
@@ -159,6 +160,8 @@ class CarSellingV5Model extends PdoDb
         }
 
         array_multisort(array_column($items,'file_type'),SORT_ASC,$items);
+
+        $car['files']=array();
 
         $car['files'] = $items;
 
@@ -856,6 +859,33 @@ class CarSellingV5Model extends PdoDb
 
         }
 
+        if(count($cars) < 10 ){
+
+            $limit  =  10 - count($cars);
+
+            $sql = '
+                SELECT
+                t1.*,
+                t3.avatar,t3.nickname,t3.type as user_type
+                FROM `bibi_car_selling_list` AS t1
+                LEFT JOIN `bibi_user` AS t2
+                ON t1.user_id = t2.user_id
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t2.user_id = t3.user_id
+                ';
+
+            $where=" WHERE  ( t1.verify_status = 2 OR t1.verify_status = 11 ) AND (t1.car_type <> 3 ) ORDER BY created DESC limit ".$limit;
+
+            $sql .= $where;
+
+            $res = $this->query($sql);
+
+            foreach($res as $k => $car){
+                $cars[]=$car;
+            }
+
+        };
+
         foreach($cars as $k => $car){
 
             $brand_id = $car['brand_id'];
@@ -972,6 +1002,14 @@ class CarSellingV5Model extends PdoDb
             $sql .= ' AND car_type = '.$this->car_type;
 
             $sqlCnt .= ' AND car_type = '.$this->car_type;
+
+        }
+
+        if(@$this->currentUser != $userId){
+
+            $sql .= ' AND ( verify_status = 2 OR verify_status = 11 )  ';
+
+            $sqlCnt .= ' AND ( verify_status = 2 OR verify_status = 11 ) ';
 
         }
 

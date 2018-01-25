@@ -49,7 +49,7 @@ class CarController extends ApiYafControllerAbstract
 
         $bm = new BrandModel();
 
-        $response['banners']=$bannerM->getbanners();
+        $response['banners']=$bannerM->getbanners(2);
 
         $level[0]["name"]="跑车";
         $level[0]["car_level"]=9;
@@ -290,6 +290,12 @@ class CarController extends ApiYafControllerAbstract
             return $this->send_error(CAR_NOT_EXIST);
         }
 
+
+        if($carInfo['verify_status'] != 2 && $carInfo['verify_status'] != 11 && $carInfo['user_info']['user_id'] != $userId ){
+
+                return $this->send_error(CAR_WAITING_CHECK);
+        }
+
         $response['car_info'] = $carInfo;
 
 
@@ -386,10 +392,10 @@ class CarController extends ApiYafControllerAbstract
         // $this->required_fields = array_merge($this->required_fields, array('session_id'));
         $data = $this->get_request_data();
 
-        $data['order_id'] = $data['order_id'] ? $data['order_id'] : 0 ;
-        $data['page']     = $data['page'] ? ($data['page']+1) : 1;
-        $data['brand_id'] = $data['brand_id'] ? $data['brand_id'] : 0 ;
-        $data['series_id'] = $data['series_id'] ? $data['series_id'] : 0 ;
+        $data['order_id'] = @$data['order_id'] ? $data['order_id'] : 0 ;
+        $data['page']     = @$data['page'] ? ($data['page']+1) : 1;
+        $data['brand_id'] = @$data['brand_id'] ? $data['brand_id'] : 0 ;
+        $data['series_id'] = @$data['series_id'] ? $data['series_id'] : 0 ;
         $data['search_type'] = @$data['search_type'] ? $data['search_type'] : 1 ;
 
         $carM = new CarSellingV5Model();
@@ -595,12 +601,13 @@ class CarController extends ApiYafControllerAbstract
 
             $lists = $carM->getCarNewList($userId);
 
-            if( $data['page'] == 1){
+            if( $data['order_id']==0 &&$data['page'] == 1 && !$data['brand_id']){
 
                 foreach($lists['car_list'] as $k => $val){
                     // 默认排序第一辆添加平台车辆
 
-                    $lists['car_list'][0]= $carM->getrecommendCar();
+                    $lists['car_list'][0]['car_info']= $carM->getrecommendCar();
+
                     $lists['car_list'][$k+1] = $val;
                 }
 

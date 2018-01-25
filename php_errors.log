@@ -684,3 +684,16 @@ Stack trace:
 [09-Jan-2018 14:12:21 PRC] PHP Fatal error:  Call to a member function execute() on boolean in /usr/local/var/www/bibi-api/application/library/PdoDb.php on line 91
 [09-Jan-2018 14:19:55 PRC] PHP Notice:  Undefined index: order_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 105
 [09-Jan-2018 14:19:55 PRC] PHP Notice:  Undefined index: keyword in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Shop.php on line 106
+[15-Jan-2018 19:31:44 PRC] PHP Notice:  Undefined index: order_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 389
+[15-Jan-2018 19:31:44 PRC] PHP Notice:  Undefined index: page in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 390
+[15-Jan-2018 19:31:44 PRC] PHP Notice:  Undefined index: brand_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 391
+[15-Jan-2018 19:31:44 PRC] PHP Notice:  Undefined index: series_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 392
+[15-Jan-2018 19:32:10 PRC] PHP Notice:  Undefined index: order_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 389
+[15-Jan-2018 19:32:10 PRC] PHP Notice:  Undefined index: page in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 390
+[15-Jan-2018 19:32:10 PRC] PHP Notice:  Undefined index: brand_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 391
+[15-Jan-2018 19:32:10 PRC] PHP Notice:  Undefined index: series_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 392
+[15-Jan-2018 19:32:20 PRC] PHP Notice:  Undefined index: order_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 389
+[15-Jan-2018 19:32:20 PRC] PHP Notice:  Undefined index: page in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 390
+[15-Jan-2018 19:32:20 PRC] PHP Notice:  Undefined index: brand_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 391
+[15-Jan-2018 19:32:20 PRC] PHP Notice:  Undefined index: series_id in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 392
+[15-Jan-2018 19:32:20 PRC] PHP Fatal error:  Call to undefined function printr_() in /usr/local/var/www/bibi-api/application/modules/V5/controllers/Car.php on line 565

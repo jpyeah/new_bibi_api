@@ -152,7 +152,7 @@ class BrandModel extends PdoDb{
 
     public function getRecommenBrand(){
 
-        $ids = "2,3,82,93,91,94,9,85,96,7";
+        $ids = "2,3,82,93,91,94,9,85,96,80";
 
         $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_car_brand_list` WHERE `brand_id` in ( '.$ids.') ';
 

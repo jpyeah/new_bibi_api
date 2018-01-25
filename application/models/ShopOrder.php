@@ -105,10 +105,7 @@ class ShopOrderModel extends PdoDb {
                return array();
             }
 
-            
-
     }
-
 
     public function getordergoods($orderId){
             $sql='SELECT
@@ -139,7 +136,7 @@ class ShopOrderModel extends PdoDb {
             bibi_shop_order
             WHERE
             user_id =' .$userId. '
-            AND (order_status = 2 OR order_status = 3)
+            AND (order_status = 2 OR order_status = 3) AND shop_id = 4
             ORDER BY order_time DESC
             ';
             $list=$this->query($sql);

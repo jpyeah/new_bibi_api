@@ -235,6 +235,14 @@ class CarSellingReportModel extends PdoDb
 
     }
 
+    public function deleteReport($ReportId){
+
+        $sql = ' DELETE FROM `bibi_car_selling_list_report` WHERE `id` = '.$ReportId;
+
+        $this->execute($sql);
+
+    }
+
 
 
 

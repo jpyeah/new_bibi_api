@@ -236,6 +236,65 @@ class CarReportController extends ApiYafControllerAbstract
     }
 
 
+    /**
+     * @api {POST} /v5/carreport/delete 删除报价单
+     * @apiName carreport delete
+     * @apiGroup Carreport
+     * @apiDescription 删除报价单
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.5.3
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {string} report_id 报价单id
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v5/carreport/delete
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "report_id",
+     *
+     *     }
+     *   }
+     *
+     */
+
+    public function deleteAction(){
+
+        $this->required_fields = array_merge($this->required_fields, array( 'session_id','report_id'));
+
+        $data = $this->get_request_data();
+
+        $sess = new SessionModel();
+
+        $userId = $sess->Get($data);
+
+        $CarReport = new CarSellingReportModel();
+
+        $report = $CarReport->getReportV1($data['report_id']);
+
+        if($report && $report['user_id'] == $userId ){
+
+            $CarReport->deleteReport($data['report_id']);
+
+            $response['message']="删除成功";
+
+            $this->send($response);
+        }else{
+            $this->send_error(NOT_FOUND);
+
+
+        }
+
+    }
+
+
+
+
+
 
 
 

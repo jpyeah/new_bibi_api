@@ -1039,7 +1039,7 @@ class CarSellingV1Model extends PdoDb
            $sql='
                SELECT COUNT(*) as total 
                FROM `bibi_car_selling_list` 
-               WHERE ( verify_status = 2 OR verify_status = 11 ) AND 
+               WHERE
                user_id = '.$userId;
 
            $total = $this->query($sql)[0]['total'];

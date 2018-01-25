@@ -66,15 +66,15 @@ class BannerModel extends PdoDb
 //        return  $banners;
 //    }
 
-    public function getbanners(){
+    public function getbanners($tag=1){
 
         $sql ='
                SELECT 
                id,post_file,user_id,type,type_id,theme,title,created,sort,is_skip,feed_num,address
                FROM `bibi_banner`
-               WHERE is_hot=1  
-               ';
-        $sql .= ' ORDER BY sort DESC';
+               WHERE is_hot=1 AND tag = '.$tag
+               ;
+        $sql .= '  ORDER BY sort DESC';
 
         $bannerlist = $this->query($sql);
 

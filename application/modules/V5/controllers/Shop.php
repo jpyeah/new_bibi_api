@@ -79,6 +79,16 @@ class ShopController extends ApiYafControllerAbstract
         $this->required_fields = array_merge($this->required_fields, array('session_id','page','goods_item','shop_id'));
         $data = $this->get_request_data();
 
+        if(@$data['session_id']){
+
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }
+        else{
+
+            $userId = 0;
+        }
+
         $goodsM = new ShopGoodsModel();
         $data['shop_id'] = 4;
         $where = 'WHERE  t1.status = 1 ';
@@ -94,7 +104,7 @@ class ShopController extends ApiYafControllerAbstract
 
         $goodsM->page = $data['page'] ? $data['page']+1 :1;
 
-        $userId = $this->userAuth($data);
+      //  $userId = $this->userAuth($data);
 
         $goodsM->currentUser = $userId;
 
@@ -319,7 +329,7 @@ class ShopController extends ApiYafControllerAbstract
                                 $order_sn = $info['order_sn'];
                                 $order_amount = $info['order_amount'];
                                 $goods_name = '吡吡商品';
-                                $notify_url = "http://testapi.bibicar.cn/v5/shop/alinotify";
+                                $notify_url = "https://api.bibicar.cn/v5/shop/alinotify";
                                 $result = $alipayM->alipay($order_sn, $order_amount, $goods_name,$notify_url);
                                 $response['orderstr'] = $result;
                                 $response['type'] = "Alipay";
