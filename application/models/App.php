@@ -87,11 +87,32 @@ class AppModel extends PdoDb{
         $result = $this->query($sql);
 
         if($result){
-            return $result;
+            return $result[0];
         }else{
             return  array();
         }
 
+    }
+
+    public function getStartImg(){
+
+        $sql="SELECT * FROM bibi_app_start_img WHERE `status` = 1";
+
+        $result = $this->query($sql);
+
+        if($result){
+
+              $list = array();
+              foreach($result as $k){
+                     $list[]=$k['img_href'];
+              }
+
+              return $list;
+
+        }else{
+
+            return array();
+        }
     }
 
 

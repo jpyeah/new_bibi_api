@@ -398,7 +398,7 @@ class YicheController extends ApiYafControllerAbstract {
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
            */
-           $list = ['4130'];
+           $list = ['2716'];
            $year =['2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018'];
            
            foreach($list as $key => $value){
@@ -454,7 +454,7 @@ class YicheController extends ApiYafControllerAbstract {
 
     public function modeldetailAction () {
 
-           $seriesId=4130;
+           $seriesId=2716;
            $sql="SELECT model_id FROM `bibi_car_series_model` WHERE series_id=".$seriesId;
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
@@ -626,7 +626,7 @@ class YicheController extends ApiYafControllerAbstract {
 //           $pdo = new PdoDb;
 //           $list = $pdo->query($sql);
 
-          $list = ['4130'];
+          $list = ['2716'];
            foreach($list as $key => $value){
               //$serialId=$value["brand_series_id"];
               $serialId=$value;

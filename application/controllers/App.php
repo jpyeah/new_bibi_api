@@ -84,6 +84,7 @@ class AppController extends ApiYafControllerAbstract {
         $data = $this->get_request_data();
 
         $App = new AppModel();
+
         $res = $App->getAppVersion($data['type']);
 
         $this->send($res);
@@ -93,10 +94,13 @@ class AppController extends ApiYafControllerAbstract {
 
         //$response['url']=['http://img.bibicar.cn/bling.png','http://img.bibicar.cn/qiuyue.png','http://img.bibicar.cn/yub.png'];http://img.bibicar.cn/chezhuzhaoweijia.jpeg
        // $response['url']=['http://img.bibicar.cn/bibichepaidang.jpg','http://img.bibicar.cn/chezhuzhaoweijia.jpeg','http://img.bibicar.cn/chezhustory002.jpeg','http://img.bibicar.cn/chezhustory003.jpeg'];
-        $response['url']=['http://img.bibicar.cn/bibichepaidang.jpg','http://img.bibicar.cn/bibichepaidang1.jpg','http://img.bibicar.cn/bibichepaidang2.jpg'];
+       // $response['url']=['http://img.bibicar.cn/bibichepaidang.jpg','http://img.bibicar.cn/bibichepaidang1.jpg','http://img.bibicar.cn/bibichepaidang2.jpg'];
+        $App = new AppModel();
+        $response['url'] = $App->getStartImg();
         $this->send($response);
-         
+
     }
+
 
     public function generateIdentifier($data){
 
