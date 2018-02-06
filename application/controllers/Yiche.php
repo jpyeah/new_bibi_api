@@ -398,8 +398,8 @@ class YicheController extends ApiYafControllerAbstract {
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
            */
-           $list = ['2716'];
-           $year =['2002','2003','2004','2005','2006','2007','2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018'];
+           $list = ['2087'];
+           $year =['2017'];
            
            foreach($list as $key => $value){
               $serialId=$value;
@@ -454,7 +454,7 @@ class YicheController extends ApiYafControllerAbstract {
 
     public function modeldetailAction () {
 
-           $seriesId=2716;
+           $seriesId=4961;
            $sql="SELECT model_id FROM `bibi_car_series_model` WHERE series_id=".$seriesId;
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
@@ -626,15 +626,17 @@ class YicheController extends ApiYafControllerAbstract {
 //           $pdo = new PdoDb;
 //           $list = $pdo->query($sql);
 
-          $list = ['2716'];
+          $list = ['4961'];
            foreach($list as $key => $value){
               //$serialId=$value["brand_series_id"];
               $serialId=$value;
               $url="http://carapi.ycapp.yiche.com/car/GetCarListV61?csid=".$serialId."&cityId=502";
              // print_r($url);exit;
               $html=file_get_contents($url);
-              $data=json_decode($html,true)['data'];
-             
+
+               $data=json_decode($html,true)['data'];
+
+
                 foreach($data as $key =>$value){
                   if(!empty($value["CarGroup"]["CarList"])){
                          $Name=$value["CarGroup"]["Name"];

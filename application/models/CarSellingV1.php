@@ -1276,7 +1276,8 @@ class CarSellingV1Model extends PdoDb
             ON t2.user_id = t3.user_id
         ';
 
-        $sql .= ' WHERE t1.hash in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
+        $sql .= ' WHERE t1.hash in (' . $inStr . ') AND ( t1.verify_status = 2 OR t1.verify_status = 11 ) order by field(hash,'.$inStr.')'; //ORDER BY t3.comment_id DESC
+
 
         $cars = $this->query($sql);
 

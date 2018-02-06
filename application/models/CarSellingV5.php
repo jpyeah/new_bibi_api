@@ -97,6 +97,10 @@ class CarSellingV5Model extends PdoDb
         $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
         $car['model_detail']= $brandM->getModelDetail($car['model_id']);
 
+       // $car['model_detail']['Engine_ExhaustForFloat']=(float)$car['model_detail']['Engine_ExhaustForFloat'];
+
+
+
         unset($car['brand_name']);
         unset($car['series_name']);
         unset($car['model_name']);
@@ -204,6 +208,8 @@ class CarSellingV5Model extends PdoDb
         $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);
         $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
         $car['model_detail']= $brandM->getModelDetail($car['model_id']);
+
+       // $car['model_detail']['Engine_ExhaustForFloat']=(float)$car['model_detail']['Engine_ExhaustForFloat'];
 
         unset($car['brand_id']);
         unset($car['series_id']);
@@ -1288,7 +1294,7 @@ class CarSellingV5Model extends PdoDb
             ON t2.user_id = t3.user_id
         ';
 
-        $sql .= ' WHERE t1.hash in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
+        $sql .= ' WHERE  t1.hash in (' . $inStr . ') AND ( t1.verify_status = 2 OR t1.verify_status = 11 ) order by field(hash,'.$inStr.')'; //ORDER BY t3.comment_id DESC
 
         $cars = $this->query($sql);
 

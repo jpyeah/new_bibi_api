@@ -146,14 +146,14 @@ class DreamCarController extends ApiYafControllerAbstract
             $mh->recommendNotify($toId,$carId);
         }
 
-
         $brandModel = new BrandModel();
 
         $response = array();
 
         $response['dc_id'] = $data['dc_id'];
         $response['brand_info']  = $brandModel->getBrandModel($data['brand_id']);
-        $response['series_info'] = $brandModel->getSeriesModel($data['brand_id'],$data['series_id']);
+        //print
+        $response['series_info'] = new stdClass();
 
         $this->send($response);
 

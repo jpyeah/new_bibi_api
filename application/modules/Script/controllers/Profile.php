@@ -6,9 +6,24 @@
 * 
  */ 
 class ProfileController extends ApiYafControllerAbstract{
-      
- 
-      //
+
+
+    public function sendCodeAction()
+    {
+
+        $code = rand(1000,9999);
+
+        $response = array(
+            'code' => $code
+        );
+
+        Common::sendSMS('18676340510',array($code),"184610");
+
+        $this->send($response);
+
+    }
+
+    //
   public function updatebibiAction(){
      
         $db=new ProfileModel();

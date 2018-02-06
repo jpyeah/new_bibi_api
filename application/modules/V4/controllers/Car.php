@@ -720,7 +720,7 @@ class CarController extends ApiYafControllerAbstract
 
             $where = '';
 
-            $where .= ' where t1.id in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
+            $where .= ' where t1.id in (' . $inStr . ') ORDER By field(t1.id,'.$inStr.')'; //ORDER BY t3.comment_id DESC
 
             $carM = new CarSellingV1Model();
 

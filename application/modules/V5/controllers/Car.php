@@ -329,6 +329,13 @@ class CarController extends ApiYafControllerAbstract
             );
 
             $visitCarM->insert($visitCarM->tableName, $properties);
+        }else{
+
+            $visitCarM->updateByPrimaryKey(
+                'bibi_visit_car',
+                array('visit_id'=>$id),
+                array('created'=>time())
+            );
         }
 
         $title = is_array($carInfo['user_info']) ?
@@ -569,6 +576,12 @@ class CarController extends ApiYafControllerAbstract
 
         }
 
+        if($data['order_id'] == 2 || $data['order_id'] == 3){
+
+            $where .=' AND t1.price !=0 ';
+
+        }
+
         $sess = new SessionModel();
         $userId = $sess->Get($data);
 
@@ -601,15 +614,15 @@ class CarController extends ApiYafControllerAbstract
 
             $lists = $carM->getCarNewList($userId);
 
-            if( $data['order_id']==0 &&$data['page'] == 1 && !$data['brand_id']){
+            if( $data['order_id']==0 &&$data['page'] == 1 && !$data['brand_id'] && $data['car_source'] != 1 ){
 
-                foreach($lists['car_list'] as $k => $val){
-                    // 默认排序第一辆添加平台车辆
+                    foreach($lists['car_list'] as $k => $val){
+                        // 默认排序第一辆添加平台车辆
 
-                    $lists['car_list'][0]['car_info']= $carM->getrecommendCar();
+                        $lists['car_list'][0]['car_info']= $carM->getrecommendCar();
 
-                    $lists['car_list'][$k+1] = $val;
-                }
+                        $lists['car_list'][$k+1] = $val;
+                    }
 
             }
 
@@ -760,13 +773,14 @@ class CarController extends ApiYafControllerAbstract
 
         $results = $this->searchcar($data['keyword'], $number);
 
+
         if($results['hits']['hits']){
 
             $inStr = $this->implodeArrayByKey('_id',$results['hits']['hits']);
 
             $where = '';
 
-            $where .= ' where t1.id in (' . $inStr . ')'; //ORDER BY t3.comment_id DESC
+            $where .= ' where t1.id in (' . $inStr . ') ORDER By field(t1.id,'.$inStr.')'; //ORDER BY t3.comment_id DESC
 
             $carM = new CarSellingV5Model();
 

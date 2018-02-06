@@ -604,7 +604,7 @@ class CarSellingModel extends PdoDb
                 ON t2.user_id = t3.user_id
                 LEFT JOIN `bibi_visit_car` AS t4
                 ON t1.hash = t4.car_id
-                WHERE t4.user_id = '.$userId.'
+                WHERE t4.user_id = '.$userId.' AND ( t1.verify_status = 2 OR t1.verify_status = 11 )
                 ORDER BY t4.`created` DESC
         ';
 
@@ -622,7 +622,7 @@ class CarSellingModel extends PdoDb
                 ON t2.user_id = t3.user_id
                 LEFT JOIN `bibi_visit_car` AS t4
                 ON t1.hash = t4.car_id
-                WHERE t4.user_id = '.$userId.'
+                WHERE t4.user_id = '.$userId.' AND ( t1.verify_status = 2 OR t1.verify_status = 11 )
         ';
 
         $cars = $this->query($sql);
