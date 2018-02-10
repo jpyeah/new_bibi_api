@@ -524,6 +524,65 @@ class CarSellingV5Model extends PdoDb
            return $item;
     }
 
+    //获取价格面议的车辆
+    public function getPriceMeetList($userId = 0)
+    {
+        $pageSize = 10;
+        $sql = '
+                SELECT
+                t1.*,
+                t3.avatar,t3.nickname,t3.type as user_type
+                FROM `bibi_car_selling_list` AS t1  
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t1.user_id = t3.user_id ';
+
+        $sqlCnt = '
+                SELECT
+                count(*) AS total
+                FROM `bibi_car_selling_list` AS t1 
+                LEFT JOIN `bibi_user_profile` AS t3
+                ON t1.user_id = t3.user_id ';
+        if($this->left_series){
+            $sql .= $this->left_series;
+            $sqlCnt .= $this->left_series;
+        }
+        if($this->left_model){
+            $sql .= $this->left_model;
+            $sqlCnt .= $this->left_model;
+        }
+        if($this->left_extra){
+            $sql .= $this->left_extra;
+            $sqlCnt .= $this->left_extra;
+        }
+        $sql .= $this->where;
+
+        $number = ($this->page-1)*$pageSize;
+
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+
+        $cars = $this->query($sql);
+
+        $items = array();
+
+        foreach($cars as $k => $car){
+            $item = $this->handlerCarByList($car,$userId);
+            $items[$k]['car_info'] =$item;
+        }
+
+        $sqlCnt .= $this->where;
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+        $count = count( $items);
+
+        $list['car_list'] =$items;
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] = $total;
+        $list['number'] = $number;
+
+        return $list;
+    }
+
     public function getCarlistByIds($userId = 0){
 
         $sql = '

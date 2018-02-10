@@ -1102,7 +1102,7 @@ class CarSellingV1Model extends PdoDb
             ON t2.user_id = t1.user_id
             LEFT JOIN `bibi_car_model_detail` AS t3
             ON t3.model_id = t1.model_id
-            WHERE t2.type = 1
+            WHERE t2.type = 1  AND ( t1.verify_status = 2 OR  t1.verify_status = 11 )
             GROUP BY t1.user_id
             ORDER BY total_money DESC 
         ';

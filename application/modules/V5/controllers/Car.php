@@ -576,7 +576,10 @@ class CarController extends ApiYafControllerAbstract
 
         }
 
+        $otherwhere = $where;
+
         if($data['order_id'] == 2 || $data['order_id'] == 3){
+
 
             $where .=' AND t1.price !=0 ';
 
@@ -614,7 +617,7 @@ class CarController extends ApiYafControllerAbstract
 
             $lists = $carM->getCarNewList($userId);
 
-            if( $data['order_id']==0 &&$data['page'] == 1 && !$data['brand_id'] && $data['car_source'] != 1 ){
+            if( $data['order_id']==0 && $data['page'] == 1 && !$data['brand_id'] && $data['car_source'] != 1 ){
 
                     foreach($lists['car_list'] as $k => $val){
                         // 默认排序第一辆添加平台车辆
@@ -624,6 +627,27 @@ class CarController extends ApiYafControllerAbstract
                         $lists['car_list'][$k+1] = $val;
                     }
 
+            }
+            if( ($data['order_id'] == 2 || $data['order_id'] == 3 ) &&  $lists['has_more'] == 2 &&  count($lists['car_list']) != 0 ){
+
+                        $carM = new CarSellingV5Model();
+
+                        $carM->order = $jsonData['new_order_info'][$data['order_id']];
+
+                        $otherwhere .= ' AND t1.price = 0 ';
+
+                        $carM->currentUser = $userId;
+
+                        $carM->where = $otherwhere;
+
+                        $carM->page =1;
+
+                        $otherlists = $carM->getPriceMeetList($userId);
+
+                        foreach($otherlists['car_list'] as $j){
+
+                             $lists['car_list'][] = $j;
+                        }
             }
 
             $response = $lists;

@@ -281,7 +281,7 @@ class Feedv1Model extends PdoDb
                         t1.feed_id
                         FROM
                         `bibi_feeds` AS t1
-                        WHERE ( t1.feed_type = 3 OR t1.feed_type = 4 )
+                        WHERE ( t1.feed_type = 3 OR t1.feed_type = 4 OR t1.feed_type = 6 )
                         ORDER BY
                         created DESC,feed_id
                         LIMIT ' .$number. ' , ' . $pageSize . '
@@ -291,7 +291,7 @@ class Feedv1Model extends PdoDb
                         COUNT(t1.feed_id) AS total
                         FROM
                         `bibi_feeds` AS t1
-                        WHERE ( t1.feed_type = 3 OR t1.feed_type = 4 )
+                        WHERE ( t1.feed_type = 3 OR t1.feed_type = 4 OR t1.feed_type = 6  )
                         ORDER BY
                         created DESC,feed_id
                     ';
@@ -499,7 +499,7 @@ class Feedv1Model extends PdoDb
 
                 if($feed['feed_type'] == 6){
 
-                    $items[$k]['title'] = $feed["post_content"];
+                    $items[$k]['title'] = "";//$feed["post_content"];
 
                 }else{
 
