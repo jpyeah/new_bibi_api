@@ -98,7 +98,7 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiDescription 生成报价单
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 2.5.3
+     * @apiVersion 2.6.3
      *
      * @apiParam (request) {string} [device_identifier] 设备唯一标识
      * @apiParam (request) {string} [session_id] session_id
@@ -134,11 +134,11 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiParam (request) {string} car_no  车牌号
      * @apiParam (request) {string} exchange_time 过户次数
      * @apiParam (request) {string} mileage  公里数
-     * @apiParam (request) {string} board_time 上牌时间
+     * @apiParam (request) {string} board_time 上牌时间 11位时间戳
      * @apiParam (request) {string} board_address  上牌地址
-     * @apiParam (request) {string} ins_type  种类
-     * @apiParam (request) {string} tci_time  交强险
-     * @apiParam (request) {string} vci_time  商业险
+     * @apiParam (request) {string} ins_type  险种 1 交强险 2：商业险
+     * @apiParam (request) {string} tci_time  交强险过期时间 11位时间戳
+     * @apiParam (request) {string} vci_time  商业险过期时间 11位时间戳
      * @apiParam (request) {string} envirstandard 环保标准 国1 国2 国3 国4 国5
      * @apiParam (request) {string} car_type 车辆类型 0 新车 1 二手车
      *
@@ -152,7 +152,7 @@ class CarReportController extends ApiYafControllerAbstract
         );
 
         $data = $this->get_request_data();
-        
+
         $userId = $this->userAuth($data);
 
         $properties = $this->publishProgress($data, $userId);
