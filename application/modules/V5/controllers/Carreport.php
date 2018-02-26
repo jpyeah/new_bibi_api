@@ -62,6 +62,18 @@ class CarReportController extends ApiYafControllerAbstract
         $properties['car_intro'] = $data['car_intro'];
         $properties['status'] = $data['status'];
 
+        $properties['last_price'] = $data['last_price'];
+        $properties['transfer_fee'] = $data['transfer_fee'];
+        $properties['car_no'] = $data['car_no'];
+        $properties['exchange_time'] = $data['exchange_time'];
+        $properties['mileage'] = $data['mileage'];
+        $properties['board_time'] = $data['board_time'];
+        $properties['board_address'] = $data['board_address'];
+        $properties['ins_type'] = $data['ins_type'];
+        $properties['tci_time'] = $data['tci_time'];
+        $properties['vci_time'] = $data['vci_time'];
+        $properties['envirstandard'] = $data['envirstandard'];
+
         $time = time();
         $properties['created'] = $time;
         $properties['updated'] = $time;
@@ -113,6 +125,18 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiParam (request) {string} report_time 报价时间 时间戳
      * @apiParam (request) {string} car_intro 车辆描述
      * @apiParam (request) {number} status 是否保存 1:保存 2：不保存
+     *
+     * @apiParam (request) {string} last_price 新车4s店最低价
+     * @apiParam (request) {string} transfer_fee 过户费
+     * @apiParam (request) {string} car_no  车牌号
+     * @apiParam (request) {string} exchange_time 过户次数
+     * @apiParam (request) {string} mileage  公里数
+     * @apiParam (request) {string} board_time 上牌时间
+     * @apiParam (request) {string} board_address  上牌地址
+     * @apiParam (request) {string} ins_type  种类
+     * @apiParam (request) {string} tci_time  交强险
+     * @apiParam (request) {string} vci_time  商业险
+     * @apiParam (request) {string} envirstandard 环保标准 国1 国2 国3 国4 国5
      *
      */
     public function createAction()
