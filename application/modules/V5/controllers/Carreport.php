@@ -13,7 +13,7 @@ class CarReportController extends ApiYafControllerAbstract
         'session_id', 'files_id', 'files_type','car_color','brand_id','series_id','model_id',
         'contact_phone','contact_name','guide_price', 'board_fee','insurance_fee',
         'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account','promise','purch_fee','total_price','report_time','car_intro','status',
-        'last_price','transfer_fee','car_no','exchange_time','mileage','board_time','board_address','ins_type','tci_time','vci_time','envirstandard','car_type'
+        'transfer_fee','car_no','exchange_time','mileage','board_time','board_address','ins_type','tci_time','vci_time','envirstandard','car_type'
     );
 
     public function publishProgress($data,$userId){
@@ -64,7 +64,7 @@ class CarReportController extends ApiYafControllerAbstract
         $properties['car_intro'] = $data['car_intro'];
         $properties['status'] = $data['status'];
 
-        $properties['last_price'] = @$data['last_price'];
+        //$properties['last_price'] = @$data['last_price'];
         $properties['transfer_fee'] = @$data['transfer_fee'];
         $properties['car_no'] = @$data['car_no'];
         $properties['exchange_time'] = @$data['exchange_time'];
@@ -129,7 +129,6 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiParam (request) {string} car_intro 车辆描述
      * @apiParam (request) {number} status 是否保存 1:保存 2：不保存
      *
-     * @apiParam (request) {string} last_price 新车4s店最低价
      * @apiParam (request) {string} transfer_fee 过户费
      * @apiParam (request) {string} car_no  车牌号
      * @apiParam (request) {string} exchange_time 过户次数
