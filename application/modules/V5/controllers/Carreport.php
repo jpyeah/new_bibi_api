@@ -12,7 +12,9 @@ class CarReportController extends ApiYafControllerAbstract
     public $info_fields = array(
         'session_id', 'files_id', 'files_type','car_color','brand_id','series_id','model_id',
         'contact_phone','contact_name','guide_price', 'board_fee','insurance_fee',
-        'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account','promise','purch_fee','total_price','report_time','car_intro','status');
+        'other_fee','other_fee_intro','extra_info','bank_no','bank_name','bank_account','promise','purch_fee','total_price','report_time','car_intro','status',
+        'last_price','transfer_fee','car_no','exchange_time','mileage','board_time','board_address','ins_type','tci_time','vci_time','envirstandard','car_type'
+    );
 
     public function publishProgress($data,$userId){
 
@@ -62,17 +64,18 @@ class CarReportController extends ApiYafControllerAbstract
         $properties['car_intro'] = $data['car_intro'];
         $properties['status'] = $data['status'];
 
-        $properties['last_price'] = $data['last_price'];
-        $properties['transfer_fee'] = $data['transfer_fee'];
-        $properties['car_no'] = $data['car_no'];
-        $properties['exchange_time'] = $data['exchange_time'];
-        $properties['mileage'] = $data['mileage'];
-        $properties['board_time'] = $data['board_time'];
-        $properties['board_address'] = $data['board_address'];
-        $properties['ins_type'] = $data['ins_type'];
-        $properties['tci_time'] = $data['tci_time'];
-        $properties['vci_time'] = $data['vci_time'];
-        $properties['envirstandard'] = $data['envirstandard'];
+        $properties['last_price'] = @$data['last_price'];
+        $properties['transfer_fee'] = @$data['transfer_fee'];
+        $properties['car_no'] = @$data['car_no'];
+        $properties['exchange_time'] = @$data['exchange_time'];
+        $properties['mileage'] = @$data['mileage'];
+        $properties['board_time'] = @$data['board_time'];
+        $properties['board_address'] = @$data['board_address'];
+        $properties['ins_type'] = @$data['ins_type'];
+        $properties['tci_time'] = @$data['tci_time'];
+        $properties['vci_time'] = @$data['vci_time'];
+        $properties['envirstandard'] = @$data['envirstandard'];
+        $properties['car_type'] = @$data['car_type'];
 
         $time = time();
         $properties['created'] = $time;
@@ -137,8 +140,10 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiParam (request) {string} tci_time  交强险
      * @apiParam (request) {string} vci_time  商业险
      * @apiParam (request) {string} envirstandard 环保标准 国1 国2 国3 国4 国5
+     * @apiParam (request) {string} car_type 车辆类型 0 新车 1 二手车
      *
      */
+
     public function createAction()
     {
         $this->required_fields = array_merge(
@@ -147,7 +152,7 @@ class CarReportController extends ApiYafControllerAbstract
         );
 
         $data = $this->get_request_data();
-
+        
         $userId = $this->userAuth($data);
 
         $properties = $this->publishProgress($data, $userId);
