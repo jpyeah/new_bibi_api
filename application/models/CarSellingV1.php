@@ -1058,7 +1058,12 @@ class CarSellingV1Model extends PdoDb
             ON t1.user_id = t2.user_id
             LEFT JOIN `bibi_car_model_detail` AS t3
             ON t3.model_id = t1.model_id
-            WHERE t1.user_id = '.$userId;
+            WHERE t1.user_id = '.$userId ;
+
+        if($this->currentUser != $userId){
+            $sql.= ' AND (t1.verify_status = '.CAR_VERIFIED.' OR t1.verify_status = '.CAR_AUTH.' OR t1.verify_status = 4)';
+        }
+
         $res = $this->query($sql);
 
         $total_price = 0;
