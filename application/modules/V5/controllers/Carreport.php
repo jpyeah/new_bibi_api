@@ -76,6 +76,7 @@ class CarReportController extends ApiYafControllerAbstract
         $properties['vci_time'] = @$data['vci_time'];
         $properties['envirstandard'] = @$data['envirstandard'];
         $properties['car_type'] = @$data['car_type'];
+        $properties['price'] = @$data['price'];
 
         $time = time();
         $properties['created'] = $time;
@@ -140,6 +141,7 @@ class CarReportController extends ApiYafControllerAbstract
      * @apiParam (request) {string} vci_time  商业险过期时间 11位时间戳
      * @apiParam (request) {string} envirstandard 环保标准 国1 国2 国3 国4 国5
      * @apiParam (request) {string} car_type 车辆类型 0 新车 1 二手车
+     * @apiParam (request) {string} price 车辆价格
      *
      */
 
