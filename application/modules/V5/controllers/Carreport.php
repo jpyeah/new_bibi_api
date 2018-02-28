@@ -170,7 +170,7 @@ class CarReportController extends ApiYafControllerAbstract
             $response['share_title'] = $title;
             $response['share_url'] ='http://share.bibicar.cn/views/detail/offer.html?session='.$data['session_id'].'&id='.$ReportId.'&ident='.$data['device_identifier'];
             $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
-            $response['share_img'] = isset($response['info']['files']["type1"]) ? $response['info']['files']["type1"][0]['file_url'] : '';
+            $response['share_img'] = isset($response['info']['files']) ? $response['info']['files'][0]['file_url'] : 'http://img.bibicar.cn/bibilogo.png';
             $this->send($response);
         } else {
             $this->send_error(CAR_ADDED_ERROR);
@@ -212,7 +212,7 @@ class CarReportController extends ApiYafControllerAbstract
         $response['share_title'] = $title;
         $response['share_url'] ='http://share.bibicar.cn/views/detail/offer.html?session='.$data['session_id'].'&id='.$data['report_id'].'&ident='.$data['device_identifier'];
         $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
-        $response['share_img'] = isset($report['files']["type1"]) ? $report['files']["type1"][0]['file_url'] : '';
+        $response['share_img'] = isset($report['files']) ? $report['files'][0]['file_url'] : 'http://img.bibicar.cn/bibilogo.png';
         $this->send($response);
     }
 
