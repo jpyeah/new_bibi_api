@@ -82,7 +82,7 @@ class AppModel extends PdoDb{
 
     public function getAppVersion($type){
 
-        $sql = "SELECT * FROM bibi_version WHERE  `type` = ".$type;
+        $sql = "SELECT * FROM bibi_version WHERE  type =".$type;
 
         $result = $this->query($sql);
 

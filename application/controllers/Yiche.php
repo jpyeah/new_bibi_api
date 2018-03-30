@@ -182,7 +182,7 @@ class YicheController extends ApiYafControllerAbstract {
      public function getseAction(){
 
 
-        $masterId=212;
+        $masterId=26;
 
            $url="http://carapi.ycapp.yiche.com/car/getseriallist?masterid=".$masterId."&allserial=true";
            $html=file_get_contents($url);
@@ -268,7 +268,7 @@ class YicheController extends ApiYafControllerAbstract {
     public function createseriesAction(){
 
 
-        $serialId=4165;
+        $serialId=2750;
 
         $url="http://carapi.ycapp.yiche.com/car/GetCarListV61?csid=".$serialId."&cityId=502";
         $html=file_get_contents($url);
@@ -398,8 +398,8 @@ class YicheController extends ApiYafControllerAbstract {
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
            */
-           $list = ['2087'];
-           $year =['2017'];
+           $list = ['2750'];
+        $year=['2010','2011','2012','2013','2014','2015','2016','2017','2018'];
            
            foreach($list as $key => $value){
               $serialId=$value;
@@ -454,7 +454,7 @@ class YicheController extends ApiYafControllerAbstract {
 
     public function modeldetailAction () {
 
-           $seriesId=4961;
+           $seriesId=2750;
            $sql="SELECT model_id FROM `bibi_car_series_model` WHERE series_id=".$seriesId;
            $pdo = new PdoDb;
            $list = $pdo->query($sql);
@@ -584,7 +584,7 @@ class YicheController extends ApiYafControllerAbstract {
          //通过品牌id获取车型
          public function getsebybranAction(){
 
-           $masterId=189;
+           $masterId=26;
 
            $url="http://carapi.ycapp.yiche.com/car/getseriallist?masterid=".$masterId."&allserial=true";
            $html=file_get_contents($url);
@@ -626,7 +626,7 @@ class YicheController extends ApiYafControllerAbstract {
 //           $pdo = new PdoDb;
 //           $list = $pdo->query($sql);
 
-          $list = ['4961'];
+          $list = ['2750'];
            foreach($list as $key => $value){
               //$serialId=$value["brand_series_id"];
               $serialId=$value;

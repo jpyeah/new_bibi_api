@@ -119,6 +119,22 @@ class CarRentalModel extends PdoDb
             }
         }
 
+        if($car['car_type']==2){
+            $car['file_img'] = "http://thirtimg.bibicar.cn/". $images[0]['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+        }else{
+            if($images){
+
+                foreach($images as $k => $val ){
+                    if($k == 0){
+                        $car['file_img'] = IMAGE_DOMAIN.$val['key']."?imageMogr2/auto-orient/thumbnail/1000x/strip";
+                        break;
+                    }
+                }
+            }else{
+                $car['file_img'] = "";
+            }
+        }
+
         $car['rental_info']=[
             'one' =>$car['one'],
             'two' =>$car['two'],

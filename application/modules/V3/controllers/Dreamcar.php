@@ -67,10 +67,21 @@ class DreamCarController extends ApiYafControllerAbstract
             $CarSellingM=new CarSellingModel;
             $car=$CarSellingM->pushSametoCarUser($data);
             if($car){
-                $toId=$userId ; 
-                $carId=$car['hash'];
-                $mh = new MessageHelper;
-                $mh->recommendNotify($toId,$carId);
+
+                $profileM = new ProfileModel();
+                $profile = $profileM->getProfile($userId);
+
+                if($profile['current_version'] >= 264){
+                    $toId=$userId ;
+                    $carId=$car['hash'];
+                    $mh = new MessageHelper;
+                    $mh->CarNotify($toId,$carId);
+                }else{
+                    $toId=$userId ;
+                    $carId=$car['hash'];
+                    $mh = new MessageHelper;
+                    $mh->recommendNotify($toId,$carId);
+                }
             }
 
         }
@@ -139,11 +150,30 @@ class DreamCarController extends ApiYafControllerAbstract
         //推荐车辆给用户
         $CarSellingM=new CarSellingModel;
         $car=$CarSellingM->pushSametoCarUser($data);
+
+//        if($car){
+//            $toId=$userId ;
+//            $carId=$car['hash'];
+//            $mh = new MessageHelper;
+//            $mh->recommendNotify($toId,$carId);
+//        }
+
         if($car){
-            $toId=$userId ; 
-            $carId=$car['hash'];
-            $mh = new MessageHelper;
-            $mh->recommendNotify($toId,$carId);
+
+            $profileM = new ProfileModel();
+            $profile = $profileM->getProfile($userId);
+
+            if($profile['current_version'] >= 264){
+                $toId=$userId ;
+                $carId=$car['hash'];
+                $mh = new MessageHelper;
+                $mh->CarNotify($toId,$carId);
+            }else{
+                $toId=$userId ;
+                $carId=$car['hash'];
+                $mh = new MessageHelper;
+                $mh->recommendNotify($toId,$carId);
+            }
         }
 
         $brandModel = new BrandModel();

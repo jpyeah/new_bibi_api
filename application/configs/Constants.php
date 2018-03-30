@@ -177,17 +177,17 @@ define("ORDER_BY_SALES_DESC", 3);
 
 
 //debug
-//define("RCLOUD_APP_KEY",'qf3d5gbj3uwth');
-//define("RCLOUD_APP_SECRET",'oqWp38xqaYifT');
+define("RCLOUD_APP_KEY",'qf3d5gbj3uwth');
+define("RCLOUD_APP_SECRET",'oqWp38xqaYifT');
 
 //release
 
-define("RCLOUD_APP_KEY",'sfci50a7c23ei');
-define("RCLOUD_APP_SECRET",'rTdKRNXsuO');
+//define("RCLOUD_APP_KEY",'sfci50a7c23ei');
+//define("RCLOUD_APP_SECRET",'rTdKRNXsuO');
 
 
 define("REPORT_MESSAGE",'【BIBICar】Hi,我发现一个高端车友社交APP，还能找到理想车型，在这里，一拍即合去撒野。http://a.app.qq.com/o/simple.jsp?pkgname=com.wiserz.pbibi');
-define("REPORT_MESSAGE_TITLE",'我正在BiBi Car，快来加入我们吧！');
+define("REPORT_MESSAGE_TITLE",'Hi,我发现一个高端车友社交APP，还能购买理想车型，在这里，一拍即合去撒野。');
 define("REPORT_MESSAGE_WEI",'【BIBICar】Hi,我发现一个高端车友社交APP，还能找到理想车型，在这里，一拍即合去撒野。');
 
 

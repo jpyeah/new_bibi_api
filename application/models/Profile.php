@@ -32,7 +32,7 @@ class ProfileModel extends PdoDb{
 
     public function getProfile($user_id){
         $table = self::$table;
-        $sql = "SELECT avatar, signature, age, constellation, nickname, gender, sort,bibi_no,type,company,balance FROM {$table} WHERE `user_id` = :user_id";
+        $sql = "SELECT avatar, signature, age, constellation, nickname, gender, sort,bibi_no,type,company,balance,current_version FROM {$table} WHERE `user_id` = :user_id";
         $profile = $this->query($sql, array(':user_id'=>$user_id));
         @$profile = $profile[0];
 
@@ -415,6 +415,22 @@ class ProfileModel extends PdoDb{
 
         $this->exec($sql);
 
+    }
+
+
+    public function getVersionUsers(){
+
+        $sql = "select user_id from bibi_user_profile where current_version >= 264";
+
+        $result =  $this->query($sql);
+
+        foreach($result as $k => $rs){
+
+            $values[] = $rs['user_id'];
+
+        }
+
+        return $values;
     }
 
 

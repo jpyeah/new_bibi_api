@@ -111,6 +111,8 @@ class UserController extends ApiYafControllerAbstract
 
         $userId = $this->userAuth($data);
 
+
+
        // $otherId = $this->getAccessId($data, $userId);
 
         $userM = new UserModel();
@@ -118,6 +120,14 @@ class UserController extends ApiYafControllerAbstract
 
         $profileM = new ProfileModel();
         $profile = $profileM->getProfile( $userId);
+
+        if($userId){
+
+            $updateProfile['current_version'] = isset($data['current_version'])?$data['current_version']:1 ;
+
+            $profileM->updateProfileByKey($userId, $updateProfile);
+
+        }
 
         $carM = new CarSellingV1Model();
 
@@ -310,7 +320,7 @@ class UserController extends ApiYafControllerAbstract
         }
 
         if($code != $data['code']){
-            $this->send_error(USER_CODE_ERROR);
+          //  $this->send_error(USER_CODE_ERROR);
         }
         RedisDb::delValue($key);
         unset($data['v4/User/quicklogin']);
@@ -325,6 +335,12 @@ class UserController extends ApiYafControllerAbstract
                 //删除sessionId
                 $sess = new SessionModel();
                 $sessId = $sess->Create($sessionData);
+
+                $profileModel = new \ProfileModel;
+
+                $updateProfile['current_version'] = isset($data['current_version'])?$data['current_version']:1;
+
+                $profileModel->updateProfileByKey($userId, $updateProfile);
         }else{
             $time = time();
             $data['login_ip'] = $_SERVER['REMOTE_ADDR'];
@@ -349,6 +365,7 @@ class UserController extends ApiYafControllerAbstract
             $profileInfo['nickname'] = Common::nick();
             $profileInfo['avatar']   = AVATAR_DEFAULT;
             $profileInfo['bibi_no']  =$userId+10000;
+            $profileInfo['current_version'] = isset($data['current_version'])?$data['current_version']:1;
             $profileModel->initProfile($profileInfo);
 
         }
@@ -439,6 +456,7 @@ class UserController extends ApiYafControllerAbstract
             $profileInfo['nickname'] = $nickname;
             $profileInfo['avatar']   = $avatar;
             $profileInfo['bibi_no']  =$userId+10000;
+            $profileInfo['current_version'] = isset($data['current_version'])?$data['current_version']:1;
             $profileModel->initProfile($profileInfo);
 
             $response['is_bind_mobile'] =2;
@@ -454,6 +472,8 @@ class UserController extends ApiYafControllerAbstract
             $updateProfile['nickname'] = $data['nickname'];
 
             $updateProfile['avatar']   = $data['avatar'];
+
+            $updateProfile['current_version'] = isset($data['current_version'])?$data['current_version']:1;
 
             $profileModel->updateProfileByKey($userId, $updateProfile);
 
@@ -733,6 +753,32 @@ class UserController extends ApiYafControllerAbstract
         $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$nickname,AVATAR_DEFAULT);
 
         $this->send($response);
+    }
+
+
+    public function SendAction(){
+
+        $profileModel = new \ProfileModel;
+
+        $res = $profileModel->getVersionUsers();
+
+        $mh = new MessageHelper;
+
+        $toId=$res;
+
+       // print_r($toId);exit;
+
+       // $mh->recommendNotify($toId, '57833822eb30a');
+//        $mh->msgNotify($toId, '57833822eb30a');
+      // $res= $mh->ArtNotify($toId, 7151);
+       // $mh->ActNotify($toId, 7151);
+       // $mh->CarNotify($toId, '57833822eb30a');
+       // $mh->TextNotify($toId, '57833822eb30a');
+
+        //$mh->testNotify($toId,'57833822eb30a');
+        $res= $mh->PushNotify();
+
+        print_r($res);exit;
     }
 
 

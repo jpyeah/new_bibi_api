@@ -626,7 +626,22 @@ class ThemeController extends ApiYafControllerAbstract {
         $Profile->pageSize=5;
         $page     = 1;
         $user=$Profile->getCompanylistV1($page);
-        $response['company_list']=$user;
+        $response['company_list']=new stdClass();
+
+        $carModel = new CarRentalModel();
+        $carModel->page = 1;
+        $lists = $carModel->getRentalCarList();
+        $carModel->currentUser = $userId;
+        if($lists['car_list']){
+            foreach($lists['car_list'] as $key => $list){
+                $file = isset($list['car_info']['files'][0]) ?  $list['car_info']['files'][0] : array();
+                $lists['car_list'][$key]['car_info']['files'] = array();
+                $lists['car_list'][$key]['car_info']['files'][] = $file;
+            }
+        }
+        $response['rentalcar_list'] = $lists;
+
+
         return $response;
 
     }

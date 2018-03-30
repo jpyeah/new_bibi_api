@@ -617,17 +617,17 @@ class CarController extends ApiYafControllerAbstract
 
             $lists = $carM->getCarNewList($userId);
 
-            if( $data['order_id']==0 && $data['page'] == 1 && !$data['brand_id'] && $data['car_source'] != 1 ){
-
-                    foreach($lists['car_list'] as $k => $val){
-                        // 默认排序第一辆添加平台车辆
-
-                        $lists['car_list'][0]['car_info']= $carM->getrecommendCar();
-
-                        $lists['car_list'][$k+1] = $val;
-                    }
-
-            }
+//            if( $data['order_id']==0 && $data['page'] == 1 && !$data['brand_id'] && $data['car_source'] != 1 ){
+//
+//                    foreach($lists['car_list'] as $k => $val){
+//                        // 默认排序第一辆添加平台车辆
+//
+//                        $lists['car_list'][0]['car_info']= $carM->getrecommendCar();
+//
+//                        $lists['car_list'][$k+1] = $val;
+//                    }
+//
+//            }
             if( ($data['order_id'] == 2 || $data['order_id'] == 3 ) &&  $lists['has_more'] == 2 &&  count($lists['car_list']) != 0 ){
 
                         $carM = new CarSellingV5Model();

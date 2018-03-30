@@ -907,13 +907,19 @@ class CarSellingModel extends PdoDb
                       `bibi_car_selling_list` 
                     WHERE
                     `car_type` <> 3 AND series_id = '.$series_id.'
-                    AND verify_status = 11 OR verify_status = 2
+                    AND (verify_status = 11 OR verify_status = 2 )
                     ORDER BY id DESC LIMIT 0, 1 
                     ';
 
             $data = $this->query($sql);
 
-            return $data[0];
+            if($data){
+                return $data[0];
+
+            }else{
+                return array();
+            }
+
 
     }
 
@@ -927,13 +933,19 @@ class CarSellingModel extends PdoDb
                   `bibi_car_selling_list` 
                 WHERE
                 `car_type` <> 3 AND brand_id = '.$brand_id.'
-                AND verify_status = 11 OR verify_status = 2
+                AND (verify_status = 11 OR verify_status = 2)
                 ORDER BY id DESC LIMIT 0, 1
                 ';
 
         $data = $this->query($sql);
 
-        return $data[0];
+         if($data){
+             return $data[0];
+
+         }else{
+             return array();
+         }
+
     }
 
 
@@ -948,7 +960,7 @@ class CarSellingModel extends PdoDb
     }
 
     public function pushSametoCarUser($data){
-       
+
           if($data['series_id']){
              $car =$this->getSameSeriestoUsers($data['series_id']) ;
          }else{
