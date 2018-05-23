@@ -20,14 +20,39 @@ class AppController extends ApiYafControllerAbstract {
      * @device_type
      * @device_identifier
      */
+    /**
+     * @api {POST} /app/register 注册App
+     * @apiName APP getversion
+     * @apiGroup APP
+     * @apiDescription 获取最新版本号
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} device_id 版本号
+     * @apiParam {string} device_resolution 版本号
+     * @apiParam {string} device_sys_version 版本号
+     * @apiParam {number} device_type   1:ios 2:android
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /app/register
+     *   {
+     *     "data": {
+     *       "device_id":"",
+     *       "device_resolution":"",
+     *      "device_sys_version":"",
+     *       "device_type":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
     public function registerAction(){
 
 
         $this->required_fields = array('device_id','device_resolution','device_sys_version','device_type');
 
         $data = $this->get_request_data();
-
-        unset($data['app/register']);
 
         $data['device_identifier'] = $this->generateIdentifier($data);
 
@@ -90,13 +115,37 @@ class AppController extends ApiYafControllerAbstract {
         $this->send($res);
     }
 
-    public function getimgAction(){
 
-        //$response['url']=['http://img.bibicar.cn/bling.png','http://img.bibicar.cn/qiuyue.png','http://img.bibicar.cn/yub.png'];http://img.bibicar.cn/chezhuzhaoweijia.jpeg
-       // $response['url']=['http://img.bibicar.cn/bibichepaidang.jpg','http://img.bibicar.cn/chezhuzhaoweijia.jpeg','http://img.bibicar.cn/chezhustory002.jpeg','http://img.bibicar.cn/chezhustory003.jpeg'];
-       // $response['url']=['http://img.bibicar.cn/bibichepaidang.jpg','http://img.bibicar.cn/bibichepaidang1.jpg','http://img.bibicar.cn/bibichepaidang2.jpg'];
+
+    /**
+     * @api {POST} /app/getversion 获取最新版本号
+     * @apiName APP getversion
+     * @apiGroup APP
+     * @apiDescription 获取最新版本号
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     *
+     * @apiParam {string} version_code 版本号
+     * @apiParam {number} type   1:ios 2:android
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/Video/list
+     *   {
+     *     "data": {
+     *       "version_code":"",
+     *       "type":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function getStartImgAction(){
+
         $App = new AppModel();
+
         $response['url'] = $App->getStartImg();
+
         $this->send($response);
 
     }
@@ -182,65 +231,7 @@ class AppController extends ApiYafControllerAbstract {
 
     }
 
-    /**
-     * @api {POST} /app/rgtoken 获取token(企业注册)
-     * @apiName APP rgtoken
-     * @apiGroup APP
-     * @apiDescription 获取token(企业注册)
-     * @apiPermission anyone
-     * @apiSampleRequest http://testapi.bibicar.cn
-     *
-     * @apiParam {string} sign 签名
-     *
-     *
-     */
 
-    //企业注册file token
-    public function RgTokenAction(){
-
-
-        $this->required_fields = array('sign');
-
-        $data = $this->get_request_data();
-
-        $str = date('Y-m-d',time());
-
-        if($data['sign']  != md5($str)){
-            $this->send_error(NOT_AUTHORIZED);
-        }
-        $userId = 0;
-
-        // $token = 'b2uNBag0oxn1Kh1-3ZaX2I8PUl_o2r19RWerT3yI:7ybP6eSg1UWghOKsdYLFpUfdBWE=:eyJzY29wZSI6ImJpYmkiLCJkZWFkbGluZSI6MTQ0Njc0NzM2OH0=';
-        $accessKey = QI_NIU_AK;
-        $secretKey = QI_NIU_SK;
-
-        // 构建鉴权对象
-        $auth = new Auth($accessKey, $secretKey);
-
-        // 要上传的空间
-        $bucket = 'bibi';
-
-        // 生成上传 Token
-        //$token = $auth->uploadToken($bucket);
-
-        $expire = 3600;
-
-        $key = 'uploadToken_' . $userId;
-
-        $policy = array(
-            'callbackUrl' => 'http://120.25.62.110/index/callback',
-            'callbackBody' => '{"fname":"$(fname)", "hash":"$(key)",  "user_id":' . $userId . '}',
-            // 'mimeLimit'    => 'image/*'
-        );
-
-        $uploadToken = $auth->uploadToken($bucket, null, $expire, $policy);
-
-        $response = array();
-        $response['upload_token'] = $uploadToken;
-
-        $this->send($response);
-
-    }
 
     public function uploadAction(){
 
@@ -363,6 +354,58 @@ class AppController extends ApiYafControllerAbstract {
         $id = $Suggest->insert('bibi_suggest',$insert);
 
         $response['id'] = $id;
+
+        $this->send($response);
+
+    }
+
+
+    /**
+     * @api {POST} /v1/User/sendCode 发送验证码
+     * @apiName App send_mobile
+     * @apiGroup App
+     * @apiDescription 发送验证码
+     * @apiPermission anyone
+     * @apiSampleRequest http://new.bibicar.cn
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [mobile] 手机号码
+     *
+     * @apiParam {json} data object
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v1/User/sendCode
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "mobile":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function sendCodeAction()
+    {
+
+        $this->required_fields = array_merge($this->required_fields, array('mobile'));
+
+        $code = rand(1000,9999);
+
+        $data = $this->get_request_data();
+
+        $key = 'code_' . $data['mobile'] . '';
+
+        RedisDb::setValue($key, $code);
+
+        RedisDb::getInstance()->expire($key, 60);
+
+        $response = array(
+            'code' => $code
+        );
+
+        Common::sendSMS($data['mobile'],array($code),"180149");
 
         $this->send($response);
 

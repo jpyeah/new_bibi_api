@@ -106,7 +106,6 @@ class AppModel extends PdoDb{
               foreach($result as $k){
                      $list[]=$k['img_href'];
               }
-
               return $list;
 
         }else{

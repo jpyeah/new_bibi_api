@@ -8,9 +8,9 @@
 
 class BrandModel extends PdoDb{
 
-    static public  $tableBrand  = 'bibi_car_brand_list';
-    static public  $tableSeries = 'bibi_car_brand_series';
-    static public  $tableModel  = 'bibi_car_series_model';
+    static public  $tableBrand  = 'new_bibi_car_brand_list';
+    static public  $tableSeries = 'new_bibi_car_brand_series';
+    static public  $tableModel  = 'new_bibi_car_series_model';
 
     public $brand_id;
     public $series_id;
@@ -20,10 +20,6 @@ class BrandModel extends PdoDb{
 
         parent::__construct();
 
-//        foreach($items as $key => $item){
-//
-//            $this->$key = $item;
-//        }
     }
 
     public function getBrandInfo(){
@@ -55,7 +51,7 @@ class BrandModel extends PdoDb{
     public function getBrandModel($brandId){
 
 
-            $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_car_brand_list` WHERE `brand_id` = "'.$brandId.'" ';
+            $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `new_bibi_car_brand_list` WHERE `brand_id` = "'.$brandId.'" ';
 
             $brandM = $this->query($sql);
 
@@ -74,7 +70,7 @@ class BrandModel extends PdoDb{
     public function getSeriesModel($brandId, $seriesId){
 
 
-            $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name`  FROM `bibi_car_brand_series` WHERE `brand_id` = ' . $brandId . ' AND `brand_series_id` = '.$seriesId.' ';
+            $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name`  FROM `new_bibi_car_brand_series` WHERE `brand_id` = ' . $brandId . ' AND `brand_series_id` = '.$seriesId.' ';
 
             $series = $this->query($sql);
 
@@ -98,7 +94,7 @@ class BrandModel extends PdoDb{
     {
 
 
-            $sql = 'SELECT `model_id` ,`model_year` , `model_name` FROM `bibi_car_series_model` WHERE  `series_id` = '.$seriesId.' AND `model_id`='.$modelId.' ';
+            $sql = 'SELECT `model_id` ,`model_year` , `model_name` FROM `new_bibi_car_series_model` WHERE  `series_id` = '.$seriesId.' AND `model_id`='.$modelId.' ';
 
             $model = $this->query($sql);
 
@@ -126,17 +122,13 @@ class BrandModel extends PdoDb{
     {
 
 
-            $sql = 'SELECT * FROM `bibi_car_model_detail` WHERE  `model_id`='.$modelId.' ';
+            $sql = 'SELECT * FROM `new_bibi_car_model_detail` WHERE  `model_id`='.$modelId.' ';
 
             $model = $this->query($sql);
 
             if(isset($model[0])){
 
                 $info = $model[0];
-
-               // $name = explode(' ', $info['model_name']);
-
-               // $info['model_name'] = $name[0] . ' ' . $name[1] . ' ' . $name[2];
 
                 return $info;
             }
@@ -149,24 +141,6 @@ class BrandModel extends PdoDb{
 
     }
 
-
-    public function getRecommenBrand(){
-
-        $ids = "2,3,82,93,91,94,9,85,96,80";
-
-        $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_car_brand_list` WHERE `brand_id` in ( '.$ids.') ';
-
-        $brandM = $this->query($sql);
-
-        if($brandM){
-
-            return $brandM;
-        }
-        else{
-            return new stdClass;
-        }
-
-    }
 
 
 

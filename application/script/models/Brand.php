@@ -8,9 +8,9 @@
 
 class BrandModel extends PdoDb{
 
-    static public  $tableBrand  = 'bibi_car_brand_list';
-    static public  $tableSeries = 'bibi_car_brand_series';
-    static public  $tableModel  = 'bibi_car_series_model';
+    static public  $tableBrand  = 'new_bibi_car_brand_list';
+    static public  $tableSeries = 'new_bibi_car_brand_series';
+    static public  $tableModel  = 'new_bibi_car_series_model';
 
     public $brand_id;
     public $series_id;
@@ -60,7 +60,7 @@ class BrandModel extends PdoDb{
 
         if(!$brandM){
 
-            $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_car_brand_list` WHERE `brand_id` = "'.$brandId.'" ';
+            $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `new_bibi_car_brand_list` WHERE `brand_id` = "'.$brandId.'" ';
 
             $brandM = $this->query($sql);
 
@@ -94,7 +94,7 @@ class BrandModel extends PdoDb{
 
         if(!$series){
 
-            $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name`  FROM `bibi_car_brand_series` WHERE `brand_id` = ' . $brandId . ' AND `brand_series_id` = '.$seriesId.' ';
+            $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name`  FROM `new_bibi_car_brand_series` WHERE `brand_id` = ' . $brandId . ' AND `brand_series_id` = '.$seriesId.' ';
 
             $series = $this->query($sql);
 
@@ -132,7 +132,7 @@ class BrandModel extends PdoDb{
 
         if(!$model){
 
-            $sql = 'SELECT `model_id` , `model_name` FROM `bibi_car_series_model` WHERE  `series_id` = '.$seriesId.' AND `model_id`='.$modelId.' ';
+            $sql = 'SELECT `model_id` , `model_name` FROM `new_bibi_car_series_model` WHERE  `series_id` = '.$seriesId.' AND `model_id`='.$modelId.' ';
 
             $model = $this->query($sql);
 

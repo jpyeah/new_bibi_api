@@ -1,6 +1,6 @@
 <?php
 require_once "wxpay/WxPay.Api.php";
-//require_once 'wxpay/WxPay.Notify.php';
+//require_once 'wxpay/WxPay.PayNotify.php';
 
 class Wxpay extends WxPayNotify
 {

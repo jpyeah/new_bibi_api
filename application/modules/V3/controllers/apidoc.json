@@ -1,9 +1,0 @@
-{
-  "name":"bibi接口文档",
-  "version":"1.0.0",
-  "description":"API文档",
-  "title"     :"API文档",
-  "url"       :"http://www.bibicar.cn:8090",
-  "sampleUrl" :"http://www.bibicar.com"
-
-}

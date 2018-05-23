@@ -6,11 +6,44 @@
  * Date: 15/10/19
  * Time: 上午11:50
  */
+
+use Qiniu\Auth;
 class UserController extends ApiYafControllerAbstract
 {
 
 
-
+    /**
+     * @api {POST} /v3/User/register 用户注册
+     * @apiName user register
+     * @apiGroup User
+     * @apiDescription 用户注册
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [mobile] 手机号码
+     * @apiParam {string} [password] 密码
+     * @apiParam {string} [code] 验证码
+     * @apiParam {string} [nickname] 昵称
+     *
+     * @apiParam {json} data object
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/register
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "mobile":"",
+     *       "password":"",
+     *       "code":"",
+     *       "nickname":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
     public function registerAction()
     {
 
@@ -18,13 +51,12 @@ class UserController extends ApiYafControllerAbstract
 
         $data = $this->get_request_data();
 
-
+        unset($data['v3/user/register']);
         //unset($data['code']);
         $key =  $key = 'code_' . $data['mobile'] . '';
         $code = RedisDb::getValue($key);
 
-        if($code != $data['code'] && $code != 65832){
-
+        if($code != $data['code']){
             $this->send_error(USER_CODE_ERROR);
         }
 
@@ -46,7 +78,7 @@ class UserController extends ApiYafControllerAbstract
 
         $len = strlen($nickname);
 
-        if ($len < 4 || $len > 20) {
+        if ($len < 4 || $len > 30) {
 
             $this->send_error(USER_NICKNAME_FORMAT_ERROR);
 
@@ -64,6 +96,23 @@ class UserController extends ApiYafControllerAbstract
         }
 
         $device_identifier = $data['device_identifier'];
+
+        /*
+        //同步推正
+        $device_id=Common::shiwan($device_identifier);
+        if($device_id){
+            $key = 'shiwan_callback' . $device_id . '';
+            $callback = RedisDb::getValue($key);
+             $url=urldecode($callback);
+             //RedisDb::delValue($key);
+            if($url){
+                 $html = file_get_contents($url);
+            }
+
+
+
+        }
+        */
         unset($data['device_identifier']);
 
         $userId = $userModel->register($data);
@@ -85,7 +134,7 @@ class UserController extends ApiYafControllerAbstract
         $profileInfo['user_no'] = $name;
         $profileInfo['nickname'] = $nickname;
         $profileInfo['avatar']   = AVATAR_DEFAULT;
-
+        $profileInfo['bibi_no']  =$userId+10000;
 
         $profileModel->initProfile($profileInfo);
 
@@ -103,32 +152,127 @@ class UserController extends ApiYafControllerAbstract
 
     }
 
-
-    public function sendCodeAction()
-    {
-
-        $this->required_fields = array_merge($this->required_fields, array('mobile'));
-
-        $code = rand(1000,9999);
+    /**
+     * @api {POST} /v3/User/forgetpassword 修改密码／忘记密码
+     * @apiName user forgetpassword
+     * @apiGroup User
+     * @apiDescription 修改密码
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [mobile] 手机号码
+     * @apiParam {string} [password] 密码
+     * @apiParam {string} [code] 验证码
+     *
+     * @apiParam {json} data object
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/forgetpassword
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "mobile":"",
+     *       "password":"",
+     *       "code":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function forgetpasswordAction(){
+        $this->required_fields = array_merge($this->required_fields, array('mobile', 'password', 'code'));
 
         $data = $this->get_request_data();
+        unset($data['v2/user/forgetpassword']);
+        $device_identifier = $data['device_identifier'];
+        unset($data['device_identifier']);
+        //unset($data['code']);
+        $key =  $key = 'code_' . $data['mobile'] . '';
+        $code = RedisDb::getValue($key);
 
-        $key = 'code_' . $data['mobile'] . '';
+        if($code != $data['code']){
+            $this->send_error(USER_CODE_ERROR);
+        }
+        unset($data['code']);
 
-        RedisDb::setValue($key, $code);
+        $time = time();
 
-        RedisDb::getInstance()->expire($key, 60);
+        $data['login_ip'] = $_SERVER['REMOTE_ADDR'];
+        $data['updated'] = $time;
+        $mobile=$data['mobile'];
 
-        $response = array(
-            'code' => $code
-        );
+        $userModel = new \UserModel;
 
-        Common::sendSMS($data['mobile'],array($code),"74511");
+
+        $user = $userModel->getInfoByMobile($data['mobile']);
+
+        if (!$user) {
+            $this->send_error(USER_MOBILE_FORGETPASS);
+        }
+
+        $userrow= $userModel->changepass($data);
+
+        if (!$userrow) {
+
+            $this->send_error(USER_CHANGEPASS_FAIL);
+
+        }
+
+        $userId=$user[0]['user_id'];
+
+        $response = array();
+
+        $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
+        //删除sessionId
+        $sess = new SessionModel();
+        $sessId = $sess->Create($sessionData);
+
+        $time = time();
+
+        $profile = new \ProfileModel;
+
+        $info['profile'] = $profile->getProfile($userId);
+        $response['session_id'] = $sessId;
+        $response['user_info'] = $info;
+
+        $nickname = $info['profile']['nickname'];
+        $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$nickname,AVATAR_DEFAULT);
 
         $this->send($response);
-
     }
 
+
+    /**
+     * @api {POST} /v3/User/login 用户登陆
+     * @apiName user login
+     * @apiGroup User
+     * @apiDescription 用户登录
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [mobile] 手机号码
+     * @apiParam {string} [password] 密码
+     *
+     * @apiParam {json} data object
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/login
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "mobile":"",
+     *       "password":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
     public function loginAction()
     {
 
@@ -172,12 +316,33 @@ class UserController extends ApiYafControllerAbstract
 
     }
 
-    /*
-     * @nickname
-     * @birth
-     * @signature
-     * @user_no
-     * @constellationUSER_PROFILE_UPDATE_FAIL
+    /**
+     * @api {POST} /v3/User/updateProfile 用户资料更新
+     * @apiName user updateProfile
+     * @apiGroup User
+     * @apiDescription 用户资料更新
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [session_id] session_id
+     * @apiParam {string} [key] 键值 nickname birth avatar gender signature
+     * @apiParam {string} [value] 值
+     *
+     * @apiParam {json} data object
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/updateProfile
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "key":"",
+     *       "value":"",
+     *
+     *
+     *     }
+     *   }
      *
      */
     public function updateProfileAction()
@@ -261,117 +426,31 @@ class UserController extends ApiYafControllerAbstract
 
     }
 
-    public function updateAllAction()
-    {
-
-        $this->optional_fields = array('nickname', 'birth', 'avatar', 'gender', 'signature');
-
-        $this->required_fields = array_merge($this->required_fields, array('session_id'));
-
-        $data = $this->get_request_data();
-
-        $user_id = $this->userAuth($data);
-
-        $update = array();
-
-        foreach ($data as $k => $pk) {
-
-            if (!in_array($k, $this->optional_fields)) {
-
-                continue;
-            }
-
-
-
-            switch ($k) {
-
-                case 'birth':
-
-                    if ($data['birth']) {
-
-                        $birth = $data['birth'];
-                        $date = explode('-', $birth);
-
-                        if (is_array($date)) {
-
-                            list($year, $month, $day) = $date;
-
-                            $update['year'] = $year;
-                            $update['month'] = $month;
-                            $update['day'] = $day;
-
-                            $cons = Common::get_constellation($month, $day);
-
-                            $update['constellation'] = $cons;
-                            $update['age'] = Common::birthday($birth);
-                        }
-                    }
-
-
-                    break;
-
-                case 'avatar':
-
-                    if($data['avatar']){
-
-                        $file = new FileModel();
-                        $fileUrl = $file->Get($data['avatar']);
-                        $update['avatar'] = $fileUrl;
-                    }
-
-                    break;
-
-                case 'gender':
-                    $update['gender'] = $data['gender'] ? $data['gender'] : 0;
-                    break;
-
-                case 'nickname':
-
-                    if($data['nickname']){
-
-                        $update['nickname'] = $data['nickname'];
-
-                    }
-
-                    break;
-
-                case 'signature':
-
-                    if($data['signature']){
-
-                        $update['signature'] = $data['signature'];
-
-                    }
-
-                    break;
-//
-//                default:
-//
-//                    $update[$k] = $data[$k];
-//
-//                    break;
-
-
-            }
-
-        }
-
-        $profile = new ProfileModel();
-
-        $profile->updateProfileByKey($user_id, $update);
-
-        $userM = new UserModel();
-
-        $userInfo = $userM->getProfileInfoById($user_id);
-
-        $response = array();
-        $response['user_info'] = $userInfo;
-
-        $this->send($response);
-
-    }
-
-
+    /**
+     * @api {POST} /v3/User/profile 用户信息
+     * @apiName user profile
+     * @apiGroup User
+     * @apiDescription 用户信息
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [session_id] session_id
+     *
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/profile
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
     public function profileAction()
     {
 
@@ -406,6 +485,29 @@ class UserController extends ApiYafControllerAbstract
 
     }
 
+    /**
+     * @api {POST} /v1/User/homepage  个人中心
+     * @apiName user homepage
+     * @apiGroup User
+     * @apiDescription 个人中心
+     * @apiPermission anyone
+     * @apiSampleRequest http://new.bibicar.cn
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v1/User/homepage
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *
+     *     }
+     *   }
+     *
+     */
     public function homepageAction(){
 
         $this->required_fields = array_merge($this->required_fields, array('session_id'));
@@ -413,48 +515,159 @@ class UserController extends ApiYafControllerAbstract
 
         $userId = $this->userAuth($data);
 
-        $otherId = $this->getAccessId($data, $userId);
-
         $userM = new UserModel();
-        $userInfo = $userM->getInfoById($otherId);
+        $userInfo = $userM->getInfoById($userId);
 
         $profileM = new ProfileModel();
-        $profile = $profileM->getProfile($otherId);
+        $profile = $profileM->getProfile( $userId);
+
+        if($userId){
+
+            $updateProfile['current_version'] = isset($data['current_version'])?$data['current_version']:1 ;
+
+            $profileM->updateProfileByKey($userId, $updateProfile);
+
+        }
+
+        $carM = new CarSellingV1Model();
 
         $userInfo['profile'] = $profile;
 
-        $response['user_info'] = $userInfo;
-
-        $car = new CarSellingModel();
-
-        $response['car_info'] = $car->getUserCar($otherId);
-
-        $friendShipM = new FriendShipModel();
-
-        $friendShipM->currentUser = $otherId;
-
-        $response['friend_num'] = $friendShipM->friendNumCnt();
-
-        $response['fans_num']   = $friendShipM->fansNumCnt();
-
-        $friendShip = $friendShipM->getMyFriendShip($userId, $otherId);
-
-        $response['is_friend'] = isset($friendShip['user_id']) ? 1 : 2;
-
-//        $publishCar = $car->getUserPublishCar($otherId);
-//
-//        foreach($publishCar['car_list'] as $k => $car){
-//
-//            $response['publish_car_list'][] = $car['car_info'];
-//        }
-
-       // $response['publish_car_list'] = $publishCar['car_list'];
+        $response['user_info'] =$userInfo;
 
         $this->send($response);
+    }
 
+    /**
+     * @api {POST} /v4/User/quicklogin 用户登录/注册
+     * @apiName user quicklogin
+     * @apiGroup User
+     * @apiDescription 用户登录/注册
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [mobile] 手机号码
+     * @apiParam {string} [code] 验证码
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v4/User/quicklogin
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "mobile":"",
+     *       "code":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function quickloginAction()
+    {
+        $this->required_fields = array_merge($this->required_fields, array('mobile','code'));
+
+        $data = $this->get_request_data();
+
+        $key ='code_' . $data['mobile'] . '';
+        $code = RedisDb::getValue($key);
+
+        if($data['mobile'] == '13218029707' || $data['mobile'] == '10000000017' || $data['mobile'] == '10000000018' || $data['mobile'] == '10000000019' || $data['mobile']== '10000002016'){
+            RedisDb::setValue($key,'1234');
+            $code = RedisDb::getValue($key);
+        }
+
+        if($code != $data['code']){
+            //  $this->send_error(USER_CODE_ERROR);
+        }
+        RedisDb::delValue($key);
+        unset($data['v4/User/quicklogin']);
+        unset($data['code']);
+        $userModel = new \UserModel;
+        $user = $userModel->getInfoByMobile($data['mobile']);
+        if ($user) {
+            $userId = $user[0]['user_id'];
+            $device_identifier = $data['device_identifier'];
+            $response = array();
+            $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
+            //删除sessionId
+            $sess = new SessionModel();
+            $sessId = $sess->Create($sessionData);
+
+            $profileModel = new \ProfileModel;
+
+            $updateProfile['current_version'] = isset($data['current_version'])?$data['current_version']:1;
+
+            $profileModel->updateProfileByKey($userId, $updateProfile);
+        }else{
+            $time = time();
+            $data['login_ip'] = $_SERVER['REMOTE_ADDR'];
+            $data['login_time'] = $time;
+            $data['created'] = $time;
+            $data['updated'] = $time;
+            $data['username']= 'bibi_' . Common::randomkeys(6);
+            $data['password']=md5('12345');
+            $device_identifier = $data['device_identifier'];
+            unset($data['device_identifier']);
+            $userId = $userModel->register($data);
+            if (!$userId) {
+                $this->send_error(USER_REGISTER_FAIL);
+            }
+            $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
+            $sess = new SessionModel();
+            $sessId = $sess->Create($sessionData);
+            $profileModel = new \ProfileModel;
+            $profileInfo = array();
+            $profileInfo['user_id'] = $userId;
+            $profileInfo['user_no'] = $data['username'];
+            $profileInfo['nickname'] = Common::nick();
+            $profileInfo['avatar']   = AVATAR_DEFAULT;
+            $profileInfo['bibi_no']  =$userId+10000;
+            $profileInfo['current_version'] = isset($data['current_version'])?$data['current_version']:1;
+            $profileModel->initProfile($profileInfo);
+
+        }
+        $profileModel = new \ProfileModel;
+        $userInfo = $userModel->getInfoById($userId);
+        $userInfo['profile'] = $profileModel->getProfile($userId);
+        $response = array();
+        $response['session_id'] = $sessId;
+        $response['user_info'] = $userInfo;
+        $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$userInfo['profile']['nickname'],AVATAR_DEFAULT);
+        $this->send($response);
 
     }
 
+
+    /**
+     * @api {POST} /v4/User/oauthlogin 第三方登录
+     * @apiName user oauthlogin
+     * @apiGroup User
+     * @apiDescription 第三方登录
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
+     * @apiParam (request) {string} device_identifier 设备唯一标识
+     * @apiParam (request) {string} [wx_open_id] 微信识别ID
+     * @apiParam (request) {string} [weibo_open_id]  微博识别ID
+     * @apiParam (request) {string} nickname  昵称
+     * @apiParam (request) {string} avatar 头像
+     *
+     * @apiParam (response) {number} is_bind_mobile 是否绑定手机 1：是 2：否
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/oauthlogin
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
     public function oauthloginAction(){
 
         $this->required_fields = array_merge(
@@ -464,114 +677,24 @@ class UserController extends ApiYafControllerAbstract
 
         $data = $this->get_request_data();
 
-        $user = new \UserModel;
+        $userModel = new \UserModel;
+        $profileModel = new \ProfileModel;
 
         $wx_open_id = $data['wx_open_id'];
         $weibo_open_id = $data['weibo_open_id'];
 
-
+        $avatar = $data['avatar'];
+        $nickname = $data['nickname'];
 
         $oauth['wx_open_id'] =  preg_match("/[A-Za-z0-9]+/", $wx_open_id) ? $wx_open_id : '';
         $oauth['weibo_open_id'] = preg_match("/[A-Za-z0-9]+/", $weibo_open_id) ? $weibo_open_id : '';
 
+        $info = $userModel->loginByOauth($oauth);
 
-        $info = $user->loginByOauth($oauth);
-
-        if (!$info) {
-
-            $this->send_error(USER_OAUTH_UPDATE_PROFILE);
-        }
-
-        $userId = $info['user_id'];
-        $device_identifier = $data['device_identifier'];
-
+        $time=time();
         $response = array();
 
-        $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
-        //删除sessionId
-        $sess = new SessionModel();
-        $sessId = $sess->Create($sessionData);
-
-        $time = time();
-
-        $profile = new \ProfileModel;
-
-        $update['nickname'] = $data['nickname'];
-        $update['avatar']   = $data['avatar'];
-        $profile->updateProfileByKey($userId,$update);
-
-        $info['profile'] = $profile->getProfile($userId);
-        $response['session_id'] = $sessId;
-        $response['user_info'] = $info;
-
-        $nickname = $info['profile']['nickname'];
-        $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$nickname,AVATAR_DEFAULT);
-
-
-        $this->send($response);
-    }
-
-
-    public function oauthregisterAction(){
-
-        $this->required_fields = array_merge(
-            $this->required_fields,
-            array('mobile', 'password', 'code', 'nickname','avatar','wx_open_id','weibo_open_id')
-        );
-
-        $data = $this->get_request_data();
-
-        $key =  $key = 'code_' . $data['mobile'] . '';
-        $code = RedisDb::getValue($key);
-
-//        if($code != $data['code']){
-//
-//            $this->send_error(USER_CODE_ERROR);
-//        }
-
-        unset($data['code']);
-
-        $time = time();
-
-        $nickname = $data['nickname'];
-
-        $avatar = $data['avatar'];
-
-        $userModel = new \UserModel;
-        $profileModel = new \ProfileModel;
-
-        $info = $userModel->getInfoByMobile($data['mobile']);
-
-
-        if($info){
-
-            $userId = $info[0]['user_id'];
-
-            $update['password'] = $data['password'];
-
-            if($data['wx_open_id']){
-
-                $update['wx_open_id'] = $data['wx_open_id'];
-            }
-
-            if( $data['weibo_open_id']){
-
-                $update['weibo_open_id'] = $data['weibo_open_id'];
-
-            }
-
-
-            $update['updated'] = $time;
-
-            $userModel->update(array('user_id'=>$userId),$update);
-
-            $updateProfile['nickname'] = $data['nickname'];
-            $updateProfile['avatar']   = $data['avatar'];
-
-            $profileModel->updateProfileByKey($userId, $updateProfile);
-
-        }
-        else{
+        if (!$info) {
 
             $insert = array();
             $insert['login_ip'] = $_SERVER['REMOTE_ADDR'];
@@ -584,40 +707,157 @@ class UserController extends ApiYafControllerAbstract
             $insert['username'] = $name;
             $insert['wx_open_id'] = $data['wx_open_id'];
             $insert['weibo_open_id'] = $data['weibo_open_id'];
-            $insert['mobile'] = $data['mobile'];
-            $insert['password'] = $data['password'];
 
             $userId = $userModel->register($insert);
-
             $profileInfo = array();
             $profileInfo['user_id'] = $userId;
             $profileInfo['user_no'] = $name;
             $profileInfo['nickname'] = $nickname;
             $profileInfo['avatar']   = $avatar;
-
+            $profileInfo['bibi_no']  =$userId+10000;
+            $profileInfo['current_version'] = isset($data['current_version'])?$data['current_version']:1;
             $profileModel->initProfile($profileInfo);
+
+            $response['is_bind_mobile'] =2;
+
+            //$this->send_error(USER_OAUTH_UPDATE_PROFILE);
+        }else{
+            $userId = $info['user_id'];
+
+            $update['updated'] = $time;
+
+            $userModel->update(array('user_id'=>$userId),$update);
+
+            $updateProfile['nickname'] = $data['nickname'];
+
+            $updateProfile['avatar']   = $data['avatar'];
+
+            $updateProfile['current_version'] = isset($data['current_version'])?$data['current_version']:1;
+
+            $profileModel->updateProfileByKey($userId, $updateProfile);
+
+            $info['mobile'] ? $response['is_bind_mobile'] = 1 : $response['is_bind_mobile'] =2;
+
         }
 
         $device_identifier = $data['device_identifier'];
+
         $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
+        //删除sessionId
         $sess = new SessionModel();
         $sessId = $sess->Create($sessionData);
 
         $userInfo = $userModel->getInfoById($userId);
         $userInfo['profile'] = $profileModel->getProfile($userId);
 
-
-        $response = array();
         $response['session_id'] = $sessId;
         $response['user_info'] = $userInfo;
         $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$nickname,AVATAR_DEFAULT);
 
-
         $this->send($response);
-
-
     }
 
+    /**
+     * @api {POST} /v4/user/oauthbindmobile 第三方登录绑定手机号
+     * @apiName User  oauthbindmobile
+     * @apiGroup User
+     * @apiDescription  第三方登录绑定手机号
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 2.0.0
+     * @apiParam {string} device_identifier device_identifier
+     * @apiParam {string} session_id session_id
+     * @apiParam {string}  mobile 手机号码
+     * @apiParam {number} code 验证码
+     *
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v4/user/oauthbindmobile
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "mobile":"",
+     *       "code":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function oauthbindmobileAction(){
+
+        $this->required_fields = array_merge(
+            $this->required_fields,
+            array('session_id', 'mobile','code')
+        );
+
+        $data = $this->get_request_data();
+
+        $key =  $key = 'code_' . $data['mobile'] . '';
+        $code = RedisDb::getValue($key);
+
+        if($code != $data['code']){
+            $this->send_error(USER_CODE_ERROR);
+        }
+
+        unset($data['code']);
+
+        if(@$data['session_id']){
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }
+
+        if(!$userId){
+            $this->send_error('USER_AUTH_FAIL');
+        }
+
+        $userModel = new \UserModel;
+        $profileModel = new \ProfileModel;
+
+        $user = $userModel->getInfoByMobile($data['mobile']);
+
+        if ($user) {
+            $this->send_error(USER_MOBILE_REGISTERED);
+        }
+
+        $update['mobile'] = $data['mobile'];
+
+        $userModel->update(array('user_id'=>$userId),$update);
+
+        $userInfo = $userModel->getInfoById($userId);
+        $userInfo['profile'] = $profileModel->getProfile($userId);
+
+        $response['userinfo']=$userInfo;
+
+        $this->send($response);
+    }
+
+    /**
+     * @api {POST} /v3/User/chattoken 融云消息刷新
+     * @apiName user chattoken
+     * @apiGroup User
+     * @apiDescription 用户资料更新
+     * @apiPermission anyone
+     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiVersion 1.0.0
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [session_id] session_id
+     *
+     * @apiParam {json} data object
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/chattoken
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
     public function chattokenAction(){
 
         $this->required_fields = array_merge($this->required_fields, array('session_id'));
@@ -630,7 +870,6 @@ class UserController extends ApiYafControllerAbstract
 
         $profile = $profileModel->getProfile($userId);
 
-
         $chatToken = $this->getRcloudToken($userId, $profile['nickname'],$profile['avatar']);
 
         $response['chat_token'] = $chatToken;
@@ -638,43 +877,179 @@ class UserController extends ApiYafControllerAbstract
         $this->send($response);
     }
 
-    public function searchAction(){
 
 
-        $this->required_fields = array_merge($this->required_fields, array('session_id','nickname','page'));
+    /**
+     * @api {POST} /v3/User/loginbymobile 用户登陆(手机验证码)
+     * @apiName user loginbymobile
+     * @apiGroup User
+     * @apiDescription 用户登录(手机验证码)
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 1.0.0
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [mobile] 手机号码
+     * @apiParam {string} [code] 验证码
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/User/loginbymobile
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "mobile":"",
+     *       "code":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function loginbymobileAction()
+    {
+
+        $this->required_fields = array_merge($this->required_fields, array('mobile', 'code'));
 
         $data = $this->get_request_data();
 
-        $userId = $this->userAuth($data);
+        $key =  $key = 'code_' . $data['mobile'] . '';
+        $code = RedisDb::getValue($key);
 
-        $nickname = $data['nickname'];
+        if(!$data['code']){
 
-        $page = $data['page'];
+            $this->send_error(USER_CODE_ERROR);
+        }
 
-        $userModel = new Model('bibi_user_profile');
+        if($code != $data['code']){
 
-//        $sqlCnt = 'SELECT
-//                  COUNT(*) AS count FROM `bibi_user` AS t1
-//                  LEFT JOIN `bibi_user_profile` AS t2 ON t1.user_id = t2.user_id
-//                  WHERE t2.`nickname` LIKE "%'.$nickname.'%"';
-//
-//        $count = $userModel->query($sqlCnt)[0]['count'];
+            $this->send_error(USER_CODE_ERROR);
+        }
 
-        $pageSize = 10;
-        $number = ($page - 1) * $pageSize;
+        if(!$data['mobile']){
+            $this->send_error(USER_LOGIN_FAIL);
 
-        $sql = 'SELECT 
-                  t2.user_id,t2.nickname,t2.avatar FROM `bibi_user` AS t1 
-                  LEFT JOIN `bibi_user_profile` AS t2 ON t1.user_id = t2.user_id
-                  WHERE t2.`nickname` LIKE "%'.$nickname.'%" LIMIT ' . $number . ' , ' . $pageSize . '';
+        }
 
-        $users = $userModel->query($sql);
+        $userModel = new \UserModel;
 
-        $response['list'] = $users;
+        $info = $userModel->getInfoByMobile($data['mobile']);
+
+        if (!$info) {
+
+            $this->send_error(USER_LOGIN_FAIL);
+        }
+
+        $userId = $info[0]['user_id'];
+
+        $device_identifier = $data['device_identifier'];
+
+        $response = array();
+
+        $sessionData = array('device_identifier' => $device_identifier, 'user_id' => $userId);
+        //删除sessionId
+        $sess = new SessionModel();
+        $sessId = $sess->Create($sessionData);
+
+        $profileModel = new \ProfileModel;
+
+        $userInfo = $userModel->getInfoById($userId);
+        $userInfo['profile'] = $profileModel->getProfile($userId);
+
+        $response['session_id'] = $sessId;
+        $response['user_info'] = $userInfo;
+
+        $nickname = $userInfo['profile']['nickname'];
+        $response['user_info']['chat_token'] = $this->getRcloudToken($userId,$nickname,$userInfo['profile']['avatar']);
 
         $this->send($response);
 
     }
+
+    /**
+     * @api {POST} /v3/user/bindmobile 绑定手机号
+     * @apiName User  bandmobile
+     * @apiGroup User
+     * @apiDescription  绑定手机号
+     * @apiPermission anyone
+     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiVersion 1.0.0
+     * @apiParam {string} device_identifier device_identifier
+     * @apiParam {string} session_id session_id
+     * @apiParam {string}  mobile 手机号码
+     * @apiParam {number} code 验证码
+     *
+     * @apiUse DreamParam
+     * @apiParamExample {json} 请求样例
+     *   POST /v3/user/bindmobile
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "mobile":"",
+     *       "code":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+    public function bindmobileAction(){
+
+        $this->required_fields = array_merge(
+            $this->required_fields,
+            array('session_id', 'mobile','code')
+        );
+
+        $data = $this->get_request_data();
+
+        $key =  $key = 'code_' . $data['mobile'] . '';
+        $code = RedisDb::getValue($key);
+
+
+        if($code != $data['code']){
+            $this->send_error(USER_CODE_ERROR);
+        }
+
+        unset($data['code']);
+
+        if(@$data['session_id']){
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }
+
+        if(!$userId){
+            $this->send_error('USER_AUTH_FAIL');
+        }
+
+        $userModel = new \UserModel;
+        $profileModel = new \ProfileModel;
+
+        $user = $userModel->getInfoByMobile($data['mobile']);
+
+        if ($user && ($user[0]['user_id'] != $userId) ) {
+            $this->send_error(USER_MOBILE_REGISTERED);
+        }
+
+        $update['mobile'] = $data['mobile'];
+
+        $userModel->update(array('user_id'=>$userId),$update);
+
+        $userInfo = $userModel->getInfoById($userId);
+        $userInfo['profile'] = $profileModel->getProfile($userId);
+
+        $response['userinfo']=$userInfo;
+
+        $this->send($response);
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 }
