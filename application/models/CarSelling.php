@@ -21,7 +21,7 @@ class CarSellingModel extends PdoDb
         self::$table = 'new_bibi_car_selling_list';
     }
 
-    public function GetCarInfoById($model_id)
+    public function GetCarInfoById($model_id,$userId=0)
     {
 
 
@@ -31,6 +31,31 @@ class CarSellingModel extends PdoDb
             FROM `' . self::$table . '`
             AS t1
             WHERE t1.model_id = "' . $model_id . '"  
+        Limit 1';
+
+        $car = @$this->query($sql)[0];
+
+        if (!$car) {
+            return array();
+        }
+
+        $car = $this->handlerCar($car,$userId);
+
+        return $car;
+
+    }
+
+
+    public function GetCarInfoByHash($car_id)
+    {
+
+
+        $sql = '
+            SELECT
+            t1.*
+            FROM `' . self::$table . '`
+            AS t1
+            WHERE t1.hash = "' . $car_id . '"  
         Limit 1';
 
         $car = @$this->query($sql)[0];
@@ -101,8 +126,7 @@ class CarSellingModel extends PdoDb
         Common::globalLogRecord('favorite key', $favkey);
         $favId = RedisDb::getValue($favkey);
 
-
-        $car['is_fav'] = $favId ? 1 : 2;
+        $car['is_collect'] = $favId ? 1 : 2;
 
         return $car;
 

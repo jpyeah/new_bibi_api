@@ -6,188 +6,211 @@
  * Date: 15/11/13
  * Time: 下午6:09
  */
-class CarController extends ApiYafControllerAbstract
+class OrderController extends ApiYafControllerAbstract
 {
 
+
+    /**
+     * @api {POST} /v1/order/index 订单详情
+     * @apiName order index
+     * @apiGroup Order
+     * @apiDescription 订单详情
+     * @apiPermission anyone
+     * @apiSampleRequest http://new.bibicar.cn
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {string} order_id 订单ID
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v1/order/index
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "order_id":"",
+     *
+     *     }
+     *   }
+     *
+     */
     public function indexAction()
     {
 
-        $this->required_fields = array_merge($this->required_fields, array('session_id', 'car_id'));
+        $this->required_fields = array_merge($this->required_fields, array('session_id', 'order_id'));
 
         $data = $this->get_request_data();
 
         //$userId = $this->userAuth($data);
-        if(@$data['session_id']){
+        if($data['session_id']){
 
             $sess = new SessionModel();
             $userId = $sess->Get($data);
+        }else{
+            $userId = 0;
         }
-        else{
+
+        $OrderModel = new OrderModel();
+
+        $order = $OrderModel->getOrderInfo($data['order_id']);
+
+        if(!$order){
+            return $this->send_error(HAS_EXSIT);
+        }
+
+        $this->send($order);
+    }
+
+    /**
+     * @api {POST} /v1/order/create 创建订单
+     * @apiName order create
+     * @apiGroup Order
+     * @apiDescription 创建订单
+     * @apiPermission anyone
+     * @apiSampleRequest http://new.bibicar.cn
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {string} car_id 车辆ID
+     * @apiParam {string} contact_name 联系人姓名
+     * @apiParam {string} contact_phone 联系人电话
+     * @apiParam {string} order_amount 订单总额
+     * @apiParam {string} sub_fee 订金
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v1/order/create
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "car_id":"",
+     *       "contact_name":"",
+     *       "contact_phone":"",
+     *       "order_amount":"",
+     *       "sub_fee":"",
+     *
+     *     }
+     *   }
+     *
+     */
+    public function createAction(){
+
+        $this->required_fields = array_merge($this->required_fields, array('session_id', 'car_id','contact_name','contact_phone','order_amount','sub_fee'));
+
+        $data = $this->get_request_data();
+
+        //$userId = $this->userAuth($data);
+        if($data['session_id']){
+
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }else{
 
             $userId = 0;
         }
 
-        $carModel = new CarSellingModel();
+        if(!$userId){
 
-        $carT = $carModel::$table;
-
-        $carId = $data['car_id'];
-
-        $carModel->currentUser = $userId;
-
-        $carInfo = $carModel->GetCarInfoById($carId);
-
-
-        $response['car_info'] = $carInfo;
-
-        $brandId = isset($carInfo['brand_info']['brand_id']) ? $carInfo['brand_info']['brand_id'] : 0;
-
-
-        $response['car_users'] = $carModel->getSameBrandUsers($brandId);
-
-        //同款车
-        $response['related_price_car_list'] = $carModel->relatedPriceCars($carId,$carInfo['price']);
-
-        //同价车
-        $response['related_style_car_list'] = $carModel->relatedStyleCars(
-            $carId,
-            $carInfo['brand_info']['brand_id'] ,
-            $carInfo['series_info']['series_id']
-        );
-
-
-        $visitCarM = new VisitCarModel();
-        $visitCarM->car_id  = $carId;
-        $visitCarM->user_id = $userId;
-
-        $id = $visitCarM->get();
-
-        if(!$id){
-
-            $properties = array();
-            $properties['created'] = time();
-            $properties['user_id'] = $userId;
-            $properties['car_id']  = $carId;
-
-            $carModel->updateByPrimaryKey(
-                $carT,
-                array('hash'=>$carId),
-                array('visit_num'=>($carInfo['visit_num']+1))
-            );
-
-            $visitCarM->insert($visitCarM->tableName, $properties);
+            return $this->send_error(USER_AUTH_FAIL);
         }
 
-        $title = is_array($carInfo['user_info']) ?
-            $carInfo['user_info']['profile']['nickname'] . '的' . $carInfo['car_name']
-            : $carInfo['car_name'];
+        $OrderModel = new OrderModel();
 
-        $response['share_title'] = $title;
-        //http://m.bibicar.cn/post/index?device_identifier='.$data['device_identifier'].'&fcar_id='.$carId.'
-        $response['share_url'] = 'http://wx.bibicar.cn/car/index/car_id/'.$carId.'';
-        $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
-        $response['share_img'] = isset($carInfo['files'][0]) ? $carInfo['files'][0]['file_url'] : '';
+        $order = $OrderModel->getOrder($userId,$data['car_id']);
 
-        $this->send($response);
+        if($order){
+            return $this->send_error(HAS_EXSIT);
+        }
+
+        $properties = array();
+        $properties['user_id'] = $userId;
+        $properties['car_id']  = $data['car_id'];
+        $properties['contact_name']  = $data['contact_name'];
+        $properties['contact_phone']  = $data['contact_phone'];
+        $properties['sub_fee']  = $data['sub_fee'];
+        $properties['order_amount']  = $data['order_amount'];
+        $created = time();
+        $properties['created_at'] = $created;
+
+        $OrderModel = new OrderModel();
+        $OrderModel->properties = $properties;
+        $id = $OrderModel->CreateM();
+
+        if($id){
+
+            $OrderModel = new OrderModel();
+
+            $order = $OrderModel->getOrderInfo($id);
+
+            $this->send($order);
+
+        }
 
 
     }
 
 
-
-
+    /**
+     * @api {POST} /v1/order/list 订单列表
+     * @apiName order list
+     * @apiGroup Order
+     * @apiDescription 订单列表
+     * @apiPermission anyone
+     * @apiSampleRequest http://new.bibicar.cn
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {string} page 页码
+     * @apiParam {string} order_status 订单状态  1: 待签约2:运输中3:已到店 4:已关闭
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /v1/order/list
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "session_id":"",
+     *       "page":"",
+     *
+     *     }
+     *   }
+     *
+     */
     public function listAction(){
 
-
-        $jsonData = require APPPATH .'/configs/JsonData.php';
-
-        $this->optional_fields = array('keyword','order_id','brand_id','series_id');
-        //$this->required_fields = array_merge($this->required_fields, array('session_id'));
-
+        $this->required_fields = array_merge($this->required_fields, array('session_id','page'));
 
         $data = $this->get_request_data();
 
-        $data['order_id'] = $data['order_id'] ? $data['order_id'] : 0 ;
+        if($data['session_id']){
+
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }else{
+
+            $userId = 0;
+        }
+
+        if(!$userId){
+
+            return $this->send_error(USER_AUTH_FAIL);
+        }
+
         $data['page']     = $data['page'] ? ($data['page']+1) : 1;
-        $data['brand_id'] = $data['brand_id'] ? $data['brand_id'] : 0 ;
-        $data['series_id'] = $data['series_id'] ? $data['series_id'] : 0 ;
 
+        $data['order_status']     = isset($data['order_status']) ? $data['order_status'] : 0;
 
-        $carM = new CarSellingModel();
-        $where = 'WHERE t1.files <> "" AND t1.brand_id <> 0 AND t1.series_id <> 0 AND t1.car_type <> 3 ';
+        $OrderModel = new OrderModel();
 
-        if($data['keyword']){
-            $carM->keyword = $data['keyword'];
-            $where .= ' AND t1.car_name LIKE "%'.$carM->keyword.'%" ';
-        }
+        $orders = $OrderModel->getOrders($userId,$data['page'],$data['order_status']);
 
-        if($data['brand_id']){
-
-            $where .= ' AND t1.brand_id = '.$data['brand_id'].' ';
-        }
-
-        if($data['series_id']){
-
-            $where .= ' AND t1.series_id = '.$data['series_id'].' ';
-        }
-
-        if($data['source'] == 1){
-
-            $where .= ' AND t1.car_type = 1';
-        }
-
-
-        $carM->where = $where;
-
-        if(isset($jsonData['order_info'][$data['order_id']])) {
-
-            // $carM->order  = ' ORDER BY t1.car_type ASC , ';
-            $carM->order = $jsonData['order_info'][$data['order_id']];
-
-        }
-
-        $carM->page = $data['page'];
-
-        $sess = new SessionModel();
-        $userId = $sess->Get($data);
-
-        $carM->currentUser = $userId;
-
-        $lists = $carM->getCarList();
-
-        if($lists['car_list']){
-
-            foreach($lists['car_list'] as $key => $list){
-
-                $file = isset($list['car_info']['files'][0]) ?  $list['car_info']['files'][0] : array();
-
-                $lists['car_list'][$key]['car_info']['files'] = array();
-                $lists['car_list'][$key]['car_info']['files'][] = $file;
-            }
-        }
-
-
-        //$response = array();
-        $response = $lists;
-        $response['order_id'] = $data['order_id'];
-
-        if($data['city_id']){
-
-            $jsonData['city_info']['city_id'] = $data['city_id'];
-            $jsonData['city_info']['city_lat'] = $data['city_lat'];
-            $jsonData['city_info']['city_lng'] = $data['city_lng'];
-
-        }
-
-        $response['city_info'] = $jsonData['city_info'];
-        $response['keyword']   = $data['keyword'];
-        $bm = new BrandModel();
-        $response['brand_info'] = $bm->getBrandModel($data['brand_id']);
-        $response['series_info'] = $bm->getSeriesModel($data['brand_id'],$data['series_id']);
-
-        $this->send($response);
+        $this->send($orders);
 
     }
+
+
+
+
+
 
 
 

@@ -11,39 +11,6 @@ use Qiniu\Auth;
 class UserController extends ApiYafControllerAbstract
 {
 
-
-    /**
-     * @api {POST} /v3/User/register 用户注册
-     * @apiName user register
-     * @apiGroup User
-     * @apiDescription 用户注册
-     * @apiPermission anyone
-     * @apiSampleRequest http://www.bibicar.cn:8090
-     * @apiVersion 1.0.0
-     *
-     * @apiParam {string} [device_identifier] 设备唯一标识
-     * @apiParam {string} [mobile] 手机号码
-     * @apiParam {string} [password] 密码
-     * @apiParam {string} [code] 验证码
-     * @apiParam {string} [nickname] 昵称
-     *
-     * @apiParam {json} data object
-     * @apiUse DreamParam
-     * @apiParamExample {json} 请求样例
-     *   POST /v3/User/register
-     *   {
-     *     "data": {
-     *       "device_identifier":"",
-     *       "mobile":"",
-     *       "password":"",
-     *       "code":"",
-     *       "nickname":"",
-     *
-     *
-     *     }
-     *   }
-     *
-     */
     public function registerAction()
     {
 
@@ -152,36 +119,6 @@ class UserController extends ApiYafControllerAbstract
 
     }
 
-    /**
-     * @api {POST} /v3/User/forgetpassword 修改密码／忘记密码
-     * @apiName user forgetpassword
-     * @apiGroup User
-     * @apiDescription 修改密码
-     * @apiPermission anyone
-     * @apiSampleRequest http://www.bibicar.cn:8090
-     * @apiVersion 1.0.0
-     *
-     * @apiParam {string} [device_identifier] 设备唯一标识
-     * @apiParam {string} [mobile] 手机号码
-     * @apiParam {string} [password] 密码
-     * @apiParam {string} [code] 验证码
-     *
-     * @apiParam {json} data object
-     * @apiUse DreamParam
-     * @apiParamExample {json} 请求样例
-     *   POST /v3/User/forgetpassword
-     *   {
-     *     "data": {
-     *       "device_identifier":"",
-     *       "mobile":"",
-     *       "password":"",
-     *       "code":"",
-     *
-     *
-     *     }
-     *   }
-     *
-     */
     public function forgetpasswordAction(){
         $this->required_fields = array_merge($this->required_fields, array('mobile', 'password', 'code'));
 
@@ -245,34 +182,6 @@ class UserController extends ApiYafControllerAbstract
     }
 
 
-    /**
-     * @api {POST} /v3/User/login 用户登陆
-     * @apiName user login
-     * @apiGroup User
-     * @apiDescription 用户登录
-     * @apiPermission anyone
-     * @apiSampleRequest http://www.bibicar.cn:8090
-     * @apiVersion 1.0.0
-     *
-     * @apiParam {string} [device_identifier] 设备唯一标识
-     * @apiParam {string} [mobile] 手机号码
-     * @apiParam {string} [password] 密码
-     *
-     * @apiParam {json} data object
-     * @apiUse DreamParam
-     * @apiParamExample {json} 请求样例
-     *   POST /v3/User/login
-     *   {
-     *     "data": {
-     *       "device_identifier":"",
-     *       "mobile":"",
-     *       "password":"",
-     *
-     *
-     *     }
-     *   }
-     *
-     */
     public function loginAction()
     {
 
@@ -317,12 +226,12 @@ class UserController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v3/User/updateProfile 用户资料更新
+     * @api {POST} /v1/User/updateProfile 用户资料更新
      * @apiName user updateProfile
      * @apiGroup User
      * @apiDescription 用户资料更新
      * @apiPermission anyone
-     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiSampleRequest http://new.bibicar.cn
      * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
@@ -330,10 +239,8 @@ class UserController extends ApiYafControllerAbstract
      * @apiParam {string} [key] 键值 nickname birth avatar gender signature
      * @apiParam {string} [value] 值
      *
-     * @apiParam {json} data object
-     * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
-     *   POST /v3/User/updateProfile
+     *   POST /v1/User/updateProfile
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -393,9 +300,6 @@ class UserController extends ApiYafControllerAbstract
                 $update['age'] = Common::birthday($value);
 
                 break;
-//            case 'signature':
-//
-//                break;
 
             case 'avatar':
 
@@ -404,9 +308,6 @@ class UserController extends ApiYafControllerAbstract
                 $update['avatar'] = $fileUrl;
 
                 break;
-//
-//            case 'gender':
-//                break;
 
         }
 
@@ -427,20 +328,19 @@ class UserController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v3/User/profile 用户信息
+     * @api {POST} /v1/User/profile 用户信息
      * @apiName user profile
      * @apiGroup User
      * @apiDescription 用户信息
      * @apiPermission anyone
-     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiSampleRequest http://new.bibicar.cn
      * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
      *
-     * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
-     *   POST /v3/User/profile
+     *   POST /v1/User/profile
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -539,12 +439,12 @@ class UserController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v4/User/quicklogin 用户登录/注册
+     * @api {POST} /v1/User/quicklogin 用户登录/注册
      * @apiName user quicklogin
      * @apiGroup User
      * @apiDescription 用户登录/注册
      * @apiPermission anyone
-     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiSampleRequest http://new.bibicar.cn
      * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
@@ -552,7 +452,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiParam {string} [code] 验证码
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v4/User/quicklogin
+     *   POST /v1/User/quicklogin
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -573,16 +473,10 @@ class UserController extends ApiYafControllerAbstract
         $key ='code_' . $data['mobile'] . '';
         $code = RedisDb::getValue($key);
 
-        if($data['mobile'] == '13218029707' || $data['mobile'] == '10000000017' || $data['mobile'] == '10000000018' || $data['mobile'] == '10000000019' || $data['mobile']== '10000002016'){
-            RedisDb::setValue($key,'1234');
-            $code = RedisDb::getValue($key);
-        }
-
         if($code != $data['code']){
             //  $this->send_error(USER_CODE_ERROR);
         }
         RedisDb::delValue($key);
-        unset($data['v4/User/quicklogin']);
         unset($data['code']);
         $userModel = new \UserModel;
         $user = $userModel->getInfoByMobile($data['mobile']);
@@ -621,7 +515,7 @@ class UserController extends ApiYafControllerAbstract
             $profileInfo = array();
             $profileInfo['user_id'] = $userId;
             $profileInfo['user_no'] = $data['username'];
-            $profileInfo['nickname'] = Common::nick();
+            $profileInfo['nickname'] = $data['mobile']."手机用户";
             $profileInfo['avatar']   = AVATAR_DEFAULT;
             $profileInfo['bibi_no']  =$userId+10000;
             $profileInfo['current_version'] = isset($data['current_version'])?$data['current_version']:1;
@@ -641,7 +535,7 @@ class UserController extends ApiYafControllerAbstract
 
 
     /**
-     * @api {POST} /v4/User/oauthlogin 第三方登录
+     * @api {POST} /v1/User/oauthlogin 第三方登录
      * @apiName user oauthlogin
      * @apiGroup User
      * @apiDescription 第三方登录
@@ -657,7 +551,7 @@ class UserController extends ApiYafControllerAbstract
      * @apiParam (response) {number} is_bind_mobile 是否绑定手机 1：是 2：否
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/User/oauthlogin
+     *   POST /v1/User/oauthlogin
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -758,7 +652,7 @@ class UserController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v4/user/oauthbindmobile 第三方登录绑定手机号
+     * @api {POST} /v1/user/oauthbindmobile 第三方登录绑定手机号
      * @apiName User  oauthbindmobile
      * @apiGroup User
      * @apiDescription  第三方登录绑定手机号
@@ -770,9 +664,8 @@ class UserController extends ApiYafControllerAbstract
      * @apiParam {string}  mobile 手机号码
      * @apiParam {number} code 验证码
      *
-     * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
-     *   POST /v4/user/oauthbindmobile
+     *   POST /v1/user/oauthbindmobile
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -834,20 +727,18 @@ class UserController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v3/User/chattoken 融云消息刷新
+     * @api {POST} /v1/User/chattoken 融云token刷新
      * @apiName user chattoken
      * @apiGroup User
-     * @apiDescription 用户资料更新
+     * @apiDescription 融云消息刷新
      * @apiPermission anyone
-     * @apiSampleRequest http://www.bibicar.cn:8090
+     * @apiSampleRequest http://new.bibicar.cn
      * @apiVersion 1.0.0
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [session_id] session_id
      *
-     * @apiParam {json} data object
-     * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
-     *   POST /v3/User/chattoken
+     *   POST /v1/User/chattoken
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -878,32 +769,6 @@ class UserController extends ApiYafControllerAbstract
     }
 
 
-
-    /**
-     * @api {POST} /v3/User/loginbymobile 用户登陆(手机验证码)
-     * @apiName user loginbymobile
-     * @apiGroup User
-     * @apiDescription 用户登录(手机验证码)
-     * @apiPermission anyone
-     * @apiSampleRequest http://testapi.bibicar.cn
-     * @apiVersion 1.0.0
-     * @apiParam {string} [device_identifier] 设备唯一标识
-     * @apiParam {string} [mobile] 手机号码
-     * @apiParam {string} [code] 验证码
-     *
-     * @apiParamExample {json} 请求样例
-     *   POST /v3/User/loginbymobile
-     *   {
-     *     "data": {
-     *       "device_identifier":"",
-     *       "mobile":"",
-     *       "code":"",
-     *
-     *
-     *     }
-     *   }
-     *
-     */
     public function loginbymobileAction()
     {
 
@@ -965,21 +830,20 @@ class UserController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v3/user/bindmobile 绑定手机号
+     * @api {POST} /v1/user/bindmobile 绑定手机号
      * @apiName User  bandmobile
      * @apiGroup User
      * @apiDescription  绑定手机号
      * @apiPermission anyone
-     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiSampleRequest http://new.bibicar.cn
      * @apiVersion 1.0.0
      * @apiParam {string} device_identifier device_identifier
      * @apiParam {string} session_id session_id
      * @apiParam {string}  mobile 手机号码
      * @apiParam {number} code 验证码
      *
-     * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
-     *   POST /v3/user/bindmobile
+     *   POST /v1/user/bindmobile
      *   {
      *     "data": {
      *       "device_identifier":"",

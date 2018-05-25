@@ -93,7 +93,6 @@ class BrandModel extends PdoDb{
     public function getModelModel($seriesId, $modelId)
     {
 
-
             $sql = 'SELECT `model_id` ,`model_year` , `model_name` FROM `new_bibi_car_series_model` WHERE  `series_id` = '.$seriesId.' AND `model_id`='.$modelId.' ';
 
             $model = $this->query($sql);
@@ -113,8 +112,6 @@ class BrandModel extends PdoDb{
 
                 return new stdClass();
             }
-
-
 
     }
 
@@ -136,11 +133,43 @@ class BrandModel extends PdoDb{
 
                 return new stdClass();
             }
-
-
-
     }
 
+
+    public function getSeries($page=1){
+
+        $sql = 'SELECT 
+               `brand_series_id` AS `series_id`,
+               `brand_series_name` AS `series_name`, 
+               `brand_series_video` AS `series_video`
+                FROM `new_bibi_car_brand_series` 
+          ';
+
+        $sqlCnt = 'SELECT 
+                   count(*) as total 
+                   FROM `new_bibi_car_brand_series` 
+        ';
+
+        $pageSize = 10;
+
+        $number = ($page - 1) * $pageSize;
+
+        $sql .= '  LIMIT ' . $number . ' , ' . $pageSize . ' ';
+
+        $total = $this->query($sqlCnt)[0]['total'];
+
+        $series = $this->query($sql);
+
+
+        $count = count($series);
+
+        $list['list'] = $series;
+        $list['has_more'] = (($number + $count) < $total) ? 1 : 2;
+        $list['total'] = $total;
+
+        return $list;
+
+    }
 
 
 

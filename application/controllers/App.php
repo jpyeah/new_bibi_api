@@ -21,10 +21,10 @@ class AppController extends ApiYafControllerAbstract {
      * @device_identifier
      */
     /**
-     * @api {POST} /app/register 注册App
+     * @api {POST} /app/register 注册App(获取device_identifier)
      * @apiName APP getversion
      * @apiGroup APP
-     * @apiDescription 获取最新版本号
+     * @apiDescription 注册App
      * @apiPermission anyone
      * @apiSampleRequest http://testapi.bibicar.cn
      *
@@ -85,13 +85,13 @@ class AppController extends ApiYafControllerAbstract {
      * @apiGroup APP
      * @apiDescription 获取最新版本号
      * @apiPermission anyone
-     * @apiSampleRequest http://testapi.bibicar.cn
+     * @apiSampleRequest http://new.bibicar.cn
      *
      * @apiParam {string} version_code 版本号
      * @apiParam {number} type   1:ios 2:android
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v3/Video/list
+     *   POST /app/getversion
      *   {
      *     "data": {
      *       "version_code":"",
@@ -118,26 +118,15 @@ class AppController extends ApiYafControllerAbstract {
 
 
     /**
-     * @api {POST} /app/getversion 获取最新版本号
-     * @apiName APP getversion
+     * @api {POST} /app/getstartimg 获取启动页图片
+     * @apiName APP getstartimg
      * @apiGroup APP
-     * @apiDescription 获取最新版本号
+     * @apiDescription 获取启动页图片
      * @apiPermission anyone
-     * @apiSampleRequest http://testapi.bibicar.cn
-     *
-     * @apiParam {string} version_code 版本号
-     * @apiParam {number} type   1:ios 2:android
-     *
+     * @apiSampleRequest http://new.bibicar.cn
+     **
      * @apiParamExample {json} 请求样例
-     *   POST /v3/Video/list
-     *   {
-     *     "data": {
-     *       "version_code":"",
-     *       "type":"",
-     *
-     *
-     *     }
-     *   }
+     *   POST /app/getstartimg
      *
      */
     public function getStartImgAction(){
@@ -161,7 +150,7 @@ class AppController extends ApiYafControllerAbstract {
 
     }
     /**
-     * @api {POST} /app/uploadtoken 获取token
+     * @api {POST} /app/uploadtoken 获取七牛token
      * @apiName APP uploadtoken
      * @apiGroup APP
      * @apiDescription 获取token
@@ -206,21 +195,6 @@ class AppController extends ApiYafControllerAbstract {
         );
 
         $uploadToken = $auth->uploadToken($bucket, null, $expire, $policy);
-
-//        $uploadToken = RedisDb::getValue($key);
-//
-//        if(!$uploadToken){
-//
-//            $policy = array(
-//                'callbackUrl' => 'http://120.25.62.110/index/callback',
-//                'callbackBody' => '{"fname":"$(fname)", "hash":"$(key)",  "user_id":' . $userId . '}'
-//            );
-//
-//            $uploadToken = $auth->uploadToken($bucket, null, $expire, $policy);
-//            RedisDb::setValue($key , $uploadToken);
-//            RedisDb::getInstance()->expire($key,$expire);
-//
-//        }
 
 
         $response = array();
@@ -361,7 +335,7 @@ class AppController extends ApiYafControllerAbstract {
 
 
     /**
-     * @api {POST} /v1/User/sendCode 发送验证码
+     * @api {POST} /app/sendCode 发送验证码
      * @apiName App send_mobile
      * @apiGroup App
      * @apiDescription 发送验证码
@@ -372,8 +346,6 @@ class AppController extends ApiYafControllerAbstract {
      * @apiParam {string} [device_identifier] 设备唯一标识
      * @apiParam {string} [mobile] 手机号码
      *
-     * @apiParam {json} data object
-     * @apiUse DreamParam
      * @apiParamExample {json} 请求样例
      *   POST /v1/User/sendCode
      *   {
