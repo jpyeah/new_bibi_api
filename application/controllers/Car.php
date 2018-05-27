@@ -89,7 +89,7 @@ class CarController extends ApiYafControllerAbstract
 
         $brandInfo['series'] = array();
 
-        $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name` , `makename`  FROM `new_bibi_car_brand_series` WHERE `brand_id` = ' . $brand_id;
+        $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name` ,`brand_series_url` AS `series_url` , `makename`  FROM `new_bibi_car_brand_series` WHERE `brand_id` = ' . $brand_id;
 
         $series = $pdo->query($sql);
 
@@ -118,6 +118,9 @@ class CarController extends ApiYafControllerAbstract
      * @apiSampleRequest http://new.bibicar.cn
      *
      * @apiParam {number} series_id 系列id
+     * @apiSuccess {string} interior 内饰
+     * @apiSuccess {string} exterior 外饰
+     * @apiSuccess {string} model_url 图片链接
      *
      * @apiParamExample {json} 请求样例
      *   GET /Car/model
@@ -138,7 +141,7 @@ class CarController extends ApiYafControllerAbstract
 
         $series_id = $data['series_id'];
 
-        $sql = 'SELECT `model_id` , `model_name` FROM `new_bibi_car_series_model` WHERE  `series_id` = '.$series_id.' ORDER BY `model_name` DESC';
+        $sql = 'SELECT `model_id` , `model_name`, `model_url`,`interior`,`exterior`FROM `new_bibi_car_series_model` WHERE  `series_id` = '.$series_id.' ORDER BY `model_name` DESC';
 
         $pdo = new PdoDb;
 
