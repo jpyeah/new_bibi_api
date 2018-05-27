@@ -121,6 +121,7 @@ class CarController extends ApiYafControllerAbstract
      * @apiSuccess {string} interior 内饰
      * @apiSuccess {string} exterior 外饰
      * @apiSuccess {string} model_url 图片链接
+     * @apiSuccess {string} version 版本
      *
      * @apiParamExample {json} 请求样例
      *   GET /Car/model
@@ -141,7 +142,7 @@ class CarController extends ApiYafControllerAbstract
 
         $series_id = $data['series_id'];
 
-        $sql = 'SELECT `model_id` , `model_name`, `model_url`,`interior`,`exterior`FROM `new_bibi_car_series_model` WHERE  `series_id` = '.$series_id.' ORDER BY `model_name` DESC';
+        $sql = 'SELECT `model_id` , `model_name`, `model_url`,`interior`,`exterior`,`version`FROM `new_bibi_car_series_model` WHERE  `series_id` = '.$series_id.' ORDER BY `model_name` DESC';
 
         $pdo = new PdoDb;
 
