@@ -152,6 +152,92 @@ class CarSellingModel extends PdoDb
 
     }
 
+    public function getCarList($userId = 0)
+    {
+
+        $pageSize = 10;
+
+        $sql = '
+                SELECT
+                *
+                FROM `new_bibi_car_series_model` 
+                ';
+
+        $sqlCnt = '
+                SELECT
+                count(*) AS total
+                FROM `new_bibi_car_series_model` 
+                ';
+
+        $sql .= $this->where;
+
+        $number = ($this->page-1)*$pageSize;
+
+        $sql .= ' LIMIT '.$number.' , '.$pageSize.' ';
+
+        $models = $this->query($sql);
+
+        $items = array();
+
+        foreach($models as $k => $model){
+            $items[]  = $model;
+        }
+
+        $sqlCnt .= $this->where;
+
+        $total = @$this->query($sqlCnt)[0]['total'];
+
+        $count = count($items);
+
+        $list['car_list'] = $items;
+        $list['has_more'] = (($number+$count) < $total) ? 1 : 2;
+        $list['total'] = $total;
+
+        return $list;
+    }
+
+
+    public function changemodel(){
+
+
+        $sql = '
+                SELECT
+                *
+                FROM `new_bibi_car_series_model` 
+                ';
+
+        $lists = @$this->query($sql);
+
+
+        foreach($lists as $k){
+
+            $se = '
+                SELECT
+                *
+                FROM `new_bibi_car_brand_series` 
+                WHERE brand_series_id ='.$k['series_id'];
+            $ses =$this->query($se)[0];
+
+            $brand = '
+                SELECT
+                *
+                FROM `new_bibi_car_brand_list` 
+                WHERE brand_id ='.$ses['brand_id'];
+            $br =$this->query($brand)[0];
+
+            $car_name = $br['brand_name']." ".$ses['brand_series_name']." ".$k['model_name'];
+
+            $up = 'UPDATE new_bibi_car_series_model SET car_name ='."'".$car_name."'".' WHERE model_id = '.$k['model_id'];
+
+            $re = $this->execute($up);
+
+        }
+
+
+
+
+    }
+
 
 
 

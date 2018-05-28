@@ -46,51 +46,58 @@ class CarController extends ApiYafControllerAbstract
     }
 
 
+    /**
+     * @api {POST} /v1/car/search 车辆搜索
+     * @apiName car search
+     * @apiGroup Car
+     * @apiDescription 车辆搜索(首页)
+     * @apiPermission anyone
+     * @apiSampleRequest http://new.bibicar.cn
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} page 页码 从0开始
+     * @apiParam {string} keyword 关键词
+     *
+     * @apiParamExample {json} 请求样例
+     *    POST /v1/car/search
+     *   {
+     *     "data": {
+     *       "page":"",
+     *       "keyword":"",
+     *
+     *     }
+     *   }
+     *
+     */
     public function SearchAction(){
 
         $this->required_fields = array_merge($this->required_fields, array('keyword','page'));
 
         $data = $this->get_request_data();
 
+
+        if(@$data['session_id']){
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }else{
+            $userId = 0;
+        }
+
         $data['page']     = $data['page'] ? ($data['page']+1) : 1;
 
         $number = ($data['page']-1)*10;
 
-        $carM = new CarSellingV1Model();
+        $carM = new CarSellingModel();
 
-        $results = $this->searchcar($data['keyword'], $number);
+        $where = ' WHERE car_name LIKE "%'.$data['keyword'].'%" ';
 
-        if($results['hits']['hits']){
+        $carM->where = $where;
 
-            $inStr = $this->implodeArrayByKey('_id',$results['hits']['hits']);
+        $carM->page = $data['page'];
 
-            $where = '';
+        $results = $carM->getCarlist($userId);
 
-            $where .= ' where t1.id in (' . $inStr . ') ORDER By field(t1.id,'.$inStr.')'; //ORDER BY t3.comment_id DESC
-
-            $carM = new CarSellingV1Model();
-
-            $carM->where = $where;
-
-            $list = $carM->getCarlistByIds();
-
-        }else{
-
-            $list=array();
-        }
-        $total=$results['hits']['total'];
-
-        $count = count($results['hits']['hits']);
-
-        $lists['car_list']=$list;
-        $lists['has_more'] = (($number+$count) < $total) ? 1 : 2;
-        $lists['total'] = $total;
-        $lists['number'] = $number;
-
-        $lists['custom_url'] = "http://custom.bibicar.cn/customize";
-
-
-        return $this->send($lists);
+        return $this->send($results);
     }
 
     /**
@@ -156,6 +163,14 @@ class CarController extends ApiYafControllerAbstract
         $this->send($response);
 
 
+    }
+
+
+    public function testAction(){
+
+        $carModel = new CarSellingModel();
+
+        $carModel->changemodel();
     }
 
 
