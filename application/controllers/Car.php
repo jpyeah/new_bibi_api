@@ -19,6 +19,8 @@ class CarController extends ApiYafControllerAbstract
  * @apiSampleRequest http://new.bibicar.cn
  *
  *
+ * @apiParam {string} [session_id] session_id
+ * @apiSuccess {number} is_focus 是否关注 1:是 2:否
  * @apiParamExample {json} 请求样例
  *   POST /Car/brand
  *   {
@@ -59,19 +61,13 @@ class CarController extends ApiYafControllerAbstract
             $res = $pdo->query($focus);
 
                 if($res){
-
                     $list[$k]['is_focus']=1;
-
                 }else{
-
                     $list[$k]['is_focus']=2;
-
                 }
 
             }else{
-
                 $list[$k]['is_focus']=2;
-
             }
         }
 
