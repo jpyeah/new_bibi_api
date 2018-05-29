@@ -45,7 +45,7 @@ class FocusController extends ApiYafControllerAbstract
 
         if($focus){
 
-            $this->send_error(FAVORITE_CAR_ALREADY);
+            $this->send_error(HAS_EXSIT);
         }
 
         $properties = array();
