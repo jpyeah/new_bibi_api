@@ -51,7 +51,6 @@ class FocusController extends ApiYafControllerAbstract
         $properties = array();
         $properties['user_id'] = $userId;
         $properties['brand_id']  = $data['brand_id'];
-        $properties['series_id']  = $data['series_id'];
         $created = time();
         $properties['created_at'] = $created;
 
@@ -63,8 +62,8 @@ class FocusController extends ApiYafControllerAbstract
 
         $response = array();
 
-        $response['focus_id'] = $id;
-        $response['brand_info']  = $brandModel->getBrandModel($data['brand_id']);
+       // $response['focus_id'] = $id;
+        //$response['brand_info']  = $brandModel->getBrandModel($data['brand_id']);
         $this->send($response);
 
     }
