@@ -32,12 +32,48 @@ class CarController extends ApiYafControllerAbstract
  */
     public function BrandAction()
     {
+        $data = $this->get_request_data();
+
+        if(@$data['session_id']){
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }else{
+            $userId = 0;
+        }
 
         $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `new_bibi_car_brand_list`';
 
         $pdo = new PdoDb;
 
         $list = $pdo->query($sql);
+
+
+        foreach($list as $k =>$val){
+
+            if($userId){
+
+            $focus = 'SELECT `brand_id` FROM `new_bibi_car_focus` WHERE user_id='.$userId.' AND brand_id='.$val['brand_id'];
+
+            $pdo = new PdoDb;
+
+            $res = $pdo->query($focus);
+
+                if($res){
+
+                    $list[$k]['is_focus']=1;
+
+                }else{
+
+                    $list[$k]['is_focus']=2;
+
+                }
+
+            }else{
+
+                $list[$k]['is_focus']=2;
+
+            }
+        }
 
         $response['brand_list'] = $list;
 

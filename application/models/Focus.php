@@ -39,4 +39,16 @@ class FocusModel extends PdoDb
 
     }
 
+    public function deleteFocus($brand_id){
+
+        $sql = '
+                DELETE FROM new_bibi_car_focus where
+                brand_id ='.$brand_id;
+
+        $focus = $this->execute($sql);
+
+        return $focus;
+
+    }
+
 }

@@ -70,7 +70,7 @@ class FocusController extends ApiYafControllerAbstract
      *
      * @apiParam {string} device_identifier 设备唯一标识
      * @apiParam {string} session_id session_id
-     * @apiParam {string} focus_id focus_id
+     * @apiParam {string} brand_id brand_id
      *
      * @apiParamExample {json} 请求样例
      *   POST /v1/focus/delete
@@ -78,7 +78,7 @@ class FocusController extends ApiYafControllerAbstract
      *     "data": {
      *       "device_identifier":"",
      *       "session_id":"",
-     *       "focus_id":"",
+     *       "brand_id":"",
      *
      *
      *     }
@@ -90,7 +90,7 @@ class FocusController extends ApiYafControllerAbstract
 
         $this->required_fields = array_merge(
             $this->required_fields,
-            array('session_id','focus_id')
+            array('session_id','brand_id')
         );
 
         $data = $this->get_request_data();
@@ -99,7 +99,7 @@ class FocusController extends ApiYafControllerAbstract
 
         $FocusModel = new FocusModel();
 
-        $FocusModel->deleteByPrimaryKey(FocusModel::$table, array('id'=>$data['focus_id']));
+        $FocusModel->deleteFocus($data['brand_id']);
 
         $response = array();
 
