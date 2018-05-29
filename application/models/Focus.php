@@ -39,6 +39,25 @@ class FocusModel extends PdoDb
 
     }
 
+
+    public function getFocu($brand_id,$UserId){
+
+        $sql = '
+                SELECT
+                id 
+                FROM
+                `new_bibi_car_focus` 
+                WHERE brand_id = '.$brand_id.' AND
+                user_id='.$UserId;
+
+
+        $focus = $this->query($sql);
+
+        return $focus;
+
+
+    }
+
     public function deleteFocus($brand_id){
 
         $sql = '

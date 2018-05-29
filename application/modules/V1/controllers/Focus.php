@@ -39,6 +39,15 @@ class FocusController extends ApiYafControllerAbstract
 
         $userId = $this->userAuth($data);
 
+        $FocusModel = new FocusModel();
+
+       $focus = $FocusModel->getFocu($data['brand_id'],$userId);
+
+        if($focus){
+
+            $this->send_error(FAVORITE_CAR_ALREADY);
+        }
+
         $properties = array();
         $properties['user_id'] = $userId;
         $properties['brand_id']  = $data['brand_id'];
