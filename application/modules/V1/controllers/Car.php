@@ -170,7 +170,25 @@ class CarController extends ApiYafControllerAbstract
 
         $carModel = new CarSellingModel();
 
-        $carModel->changemodel();
+        $pdo = new PdoDb;
+
+        $sql="select hash from new_bibi_car_selling_list";
+
+        $hashs =$pdo->query($sql);
+
+
+        foreach($hashs as $k =>$val){
+
+            $hash =$val['hash'];
+
+            $num = $k+1;
+
+            $insert ="INSERT INTO `new_bibi_car_selling_list_extra_info` VALUES ($num, '$hash', '0', '1', '0', '0', '0', '1', '0', '1', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '1', '1', '0', '0', '1', '1', '0', '0', '0', '0')";
+
+
+            $pdo->execute($insert);
+        }
+
     }
 
 

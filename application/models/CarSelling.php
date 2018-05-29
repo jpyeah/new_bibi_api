@@ -49,7 +49,6 @@ class CarSellingModel extends PdoDb
     public function GetCarInfoByHash($car_id)
     {
 
-
         $sql = '
             SELECT
             t1.*
@@ -81,6 +80,9 @@ class CarSellingModel extends PdoDb
         $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
         $car['model_detail']= $brandM->getModelDetail($car['model_id']);
 
+        $ExtraModel = new CarSellingExtraInfoModel();
+        $car['car_extra_info'] = $ExtraModel->getInfo($car['hash']);
+
         $images = unserialize($car['files']);
         $items = array();
 
@@ -104,7 +106,6 @@ class CarSellingModel extends PdoDb
         unset($car['id']);
         $car['car_id'] = $car['hash'];
         unset($car['hash']);
-
 
         $car['files'] = $items;
 

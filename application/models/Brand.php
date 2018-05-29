@@ -141,7 +141,8 @@ class BrandModel extends PdoDb{
         $sql = 'SELECT 
                `brand_series_id` AS `series_id`,
                `brand_series_name` AS `series_name`, 
-               `brand_series_video` AS `series_video`
+               `brand_series_video` AS `series_video`,
+               `brand_series_video_img` AS `series_video_img`
                 FROM `new_bibi_car_brand_series` 
           ';
 

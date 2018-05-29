@@ -17,7 +17,7 @@ class CarSellingExtraInfoModel extends PdoDb
     public function __construct()
     {
         parent::__construct();
-        self::$table = 'bibi_car_selling_list_extra_info';
+        self::$table = 'new_bibi_car_selling_list_extra_info';
     }
 
     public function getExtrainfolist(){
@@ -117,7 +117,7 @@ class CarSellingExtraInfoModel extends PdoDb
 
     public function getExtraInfo(){
 
-        $sql ="SELECT * FROM bibi_car_selling_list_extra_info_list";
+        $sql ="SELECT * FROM new_bibi_car_selling_list_extra_info_list";
 
         $sql .= $this->where;
 
@@ -129,7 +129,7 @@ class CarSellingExtraInfoModel extends PdoDb
 
     public function getExtra($hash){
 
-        $sql ="SELECT * FROM bibi_car_selling_list_extra_info WHERE hash ='".$hash."'";
+        $sql ="SELECT * FROM new_bibi_car_selling_list_extra_info WHERE hash ='".$hash."'";
 
         $res = $this->query($sql);
 
@@ -160,7 +160,7 @@ class CarSellingExtraInfoModel extends PdoDb
 
     public function getExtraInfoByIds($ids){
 
-        $sql ="SELECT * FROM bibi_car_selling_list_extra_info_list";
+        $sql ="SELECT * FROM new_bibi_car_selling_list_extra_info_list";
 
         $sql .= '  WHERE id in ('.$ids.')';
 
@@ -192,7 +192,7 @@ class CarSellingExtraInfoModel extends PdoDb
 
     public function getInfo($car_id){
 
-           $sql ="SELECT * FROM bibi_car_selling_list_info WHERE car_id=".$car_id;
+           $sql ="SELECT * FROM new_bibi_car_selling_list_extra_info WHERE hash ='".$car_id."'";
 
            $res = $this->query($sql);
 
@@ -201,7 +201,6 @@ class CarSellingExtraInfoModel extends PdoDb
            if($result){
 
                foreach($result as $k =>$val){
-
                       if($val){
                           $items[$k]=$val;
                       }
@@ -209,9 +208,7 @@ class CarSellingExtraInfoModel extends PdoDb
                 unset($items['id']);
                 unset($items['hash']);
                 unset($items['car_id']);
-
-               $sql= "SELECT * FROM bibi_car_selling_list_extra_info_list ";
-
+               $sql= "SELECT * FROM new_bibi_car_selling_list_extra_info_list ";
                $res = $this->query($sql);
                $list=array();
                foreach($items as $k =>$val){
@@ -221,15 +218,10 @@ class CarSellingExtraInfoModel extends PdoDb
                           }
                    }
                }
-
                return $list;
-
            }else{
-
                return array();
            }
-
-
     }
 
 
