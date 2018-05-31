@@ -43,7 +43,7 @@ class CarController extends ApiYafControllerAbstract
             $userId = 0;
         }
 
-        $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `new_bibi_car_brand_list`';
+        $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_new_car_brand_list`';
 
         $pdo = new PdoDb;
 
@@ -54,7 +54,7 @@ class CarController extends ApiYafControllerAbstract
 
             if($userId){
 
-            $focus = 'SELECT `brand_id` FROM `new_bibi_car_focus` WHERE user_id='.$userId.' AND brand_id='.$val['brand_id'];
+            $focus = 'SELECT `brand_id` FROM `bibi_new_car_focus` WHERE user_id='.$userId.' AND brand_id='.$val['brand_id'];
 
             $pdo = new PdoDb;
 
@@ -113,7 +113,7 @@ class CarController extends ApiYafControllerAbstract
 
         $pdo = new PdoDb;
 
-        $sql = 'SELECT * FROM `new_bibi_car_brand_list` WHERE `brand_id` = ' . $brand_id ;
+        $sql = 'SELECT * FROM `bibi_new_car_brand_list` WHERE `brand_id` = ' . $brand_id ;
 
         $brand = @$pdo->query($sql)[0];
 
@@ -121,7 +121,7 @@ class CarController extends ApiYafControllerAbstract
 
         $brandInfo['series'] = array();
 
-        $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name` ,`brand_series_url` AS `series_url`,`makename`,`series_info`,`max_power`  FROM `new_bibi_car_brand_series` WHERE `brand_id` = ' . $brand_id;
+        $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name` ,`brand_series_url` AS `series_url`,`makename`,`series_info`,`max_power`  FROM `bibi_new_car_brand_series` WHERE `brand_id` = ' . $brand_id;
 
         $series = $pdo->query($sql);
 
@@ -174,7 +174,7 @@ class CarController extends ApiYafControllerAbstract
 
         $series_id = $data['series_id'];
 
-        $sql = 'SELECT `model_id` , `model_name`, `model_url`,`interior`,`exterior`,`version`,`price`FROM `new_bibi_car_series_model` WHERE  `series_id` = '.$series_id.' ORDER BY `model_name` DESC';
+        $sql = 'SELECT `model_id` , `model_name`, `model_url`,`interior`,`exterior`,`version`,`price`FROM `bibi_new_car_series_model` WHERE  `series_id` = '.$series_id.' ORDER BY `model_name` DESC';
 
         $pdo = new PdoDb;
 
@@ -182,7 +182,7 @@ class CarController extends ApiYafControllerAbstract
 
         $models = $pdo->query($sql);
 
-        $serie = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name` ,`brand_series_url` AS `series_url`,`makename`,`series_info`,`max_power`  FROM `new_bibi_car_brand_series` WHERE `brand_series_id` = ' . $series_id;
+        $serie = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name` ,`brand_series_url` AS `series_url`,`makename`,`series_info`,`max_power`  FROM `bibi_new_car_brand_series` WHERE `brand_series_id` = ' . $series_id;
 
         $series = $pdo->query($serie)[0];
 

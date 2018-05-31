@@ -17,7 +17,7 @@ class CollectModel extends PdoDb{
     {
 
         parent::__construct();
-        self::$table = 'new_bibi_car_collect';
+        self::$table = 'bibi_new_car_collect';
     }
 
 
@@ -26,24 +26,32 @@ class CollectModel extends PdoDb{
         $sql = '
                 SELECT
                 t1.id as collect_id,
-                t1.user_id , t2.image, t2.car_name,t2.car_color
+                t1.user_id , t2.image, t2.car_name,t2.car_color,t2.price,t3.exterior,t3.interior,t3.version
                 FROM
-                `new_bibi_car_collect` AS t1
+                `bibi_new_car_collect` AS t1
                 LEFT JOIN
-                `new_bibi_car_selling_list` AS t2
+                `bibi_new_car_selling_list` AS t2
                 ON
                 t1.car_id = t2.hash
+                LEFT JOIN
+                `bibi_new_car_series_model` AS t3
+                ON
+                t2.model_id = t3.model_id
                 ';
 
             $sqlCnt = '
                 SELECT
                 COUNT(t1.id) AS total
                 FROM
-                `new_bibi_car_collect` AS t1
+                `bibi_new_car_collect` AS t1
                 LEFT JOIN
-                `new_bibi_car_selling_list` AS t2
+                `bibi_new_car_selling_list` AS t2
                 ON
                 t1.car_id = t2.hash
+                LEFT JOIN
+                `bibi_new_car_series_model` AS t3
+                ON
+                t2.model_id = t3.model_id
             ';
 
         $sql .= ' WHERE t1.user_id = '.$userId.' ';
@@ -84,7 +92,7 @@ class CollectModel extends PdoDb{
             $sql = 'SELECT
                   `id`
                 FROM
-                `new_bibi_car_collect`
+                `bibi_new_car_collect`
                 WHERE
                   `user_id` = '.$this->user_id.' AND `car_id` = "'.$this->car_id.'" ';
 

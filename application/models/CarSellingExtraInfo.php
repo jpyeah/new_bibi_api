@@ -160,7 +160,7 @@ class CarSellingExtraInfoModel extends PdoDb
 
     public function getExtraInfoByIds($ids){
 
-        $sql ="SELECT * FROM new_bibi_car_selling_list_extra_info_list";
+        $sql ="SELECT * FROM bibi_new_car_selling_list_extra_info_list";
 
         $sql .= '  WHERE id in ('.$ids.')';
 

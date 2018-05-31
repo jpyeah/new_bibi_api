@@ -17,13 +17,13 @@ class OrderModel extends PdoDb
     {
 
         parent::__construct();
-        self::$table = 'new_bibi_car_order';
+        self::$table = 'bibi_new_car_order';
     }
 
 
     public function getOrder($userId,$car_id){
 
-           $sql = "SELECT * FROM `new_bibi_car_order` 
+           $sql = "SELECT * FROM `bibi_new_car_order` 
            WHERE user_id = ".$userId.' AND 
            car_id = "' . $car_id . '"'
            ;
@@ -35,7 +35,7 @@ class OrderModel extends PdoDb
 
     public function getOrderInfo($id){
 
-        $sql = 'SELECT * FROM `new_bibi_car_order` 
+        $sql = 'SELECT * FROM `bibi_new_car_order` 
            WHERE order_id = '.$id;
         ;
         $order = $this->query($sql)[0];
@@ -65,7 +65,7 @@ class OrderModel extends PdoDb
 
     public function getOrderLog($id){
 
-        $sql = 'SELECT * FROM `new_bibi_car_order_log` 
+        $sql = 'SELECT * FROM `bibi_new_car_order_log` 
            WHERE order_id = '.$id;
         ;
         $log = $this->query($sql);
@@ -84,9 +84,9 @@ class OrderModel extends PdoDb
                 t1.order_id,t1.order_sn,t1.user_id,t1.order_amount,t1.sub_fee,  
                  t2.car_name, t2.image,t2.price
                 FROM
-                `new_bibi_car_order` AS t1
+                `bibi_new_car_order` AS t1
                 LEFT JOIN
-                `new_bibi_car_selling_list` AS t2
+                `bibi_new_car_selling_list` AS t2
                 ON
                 t1.car_id = t2.hash
                 ';
@@ -94,9 +94,9 @@ class OrderModel extends PdoDb
                 SELECT
                 COUNT(t1.order_id) AS total
                 FROM
-                `new_bibi_car_order` AS t1
+                `bibi_new_car_order` AS t1
                 LEFT JOIN
-                `new_bibi_car_selling_list` AS t2
+                `bibi_new_car_selling_list` AS t2
                 ON
                 t1.car_id = t2.hash
             ';

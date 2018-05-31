@@ -18,7 +18,7 @@ class CarSellingModel extends PdoDb
     {
 
         parent::__construct();
-        self::$table = 'new_bibi_car_selling_list';
+        self::$table = 'bibi_new_car_selling_list';
     }
 
     public function GetCarInfoById($model_id,$userId=0)
@@ -54,8 +54,7 @@ class CarSellingModel extends PdoDb
             t1.*
             FROM `' . self::$table . '`
             AS t1
-            WHERE t1.hash = "' . $car_id . '"  
-        Limit 1';
+            WHERE t1.hash = "' . $car_id . '"  ';
 
         $car = @$this->query($sql)[0];
 
@@ -81,7 +80,7 @@ class CarSellingModel extends PdoDb
         $car['model_detail']= $brandM->getModelDetail($car['model_id']);
 
         $ExtraModel = new CarSellingExtraInfoModel();
-        $car['car_extra_info'] = $ExtraModel->getInfo($car['hash']);
+        $car['car_extra_info'] = $ExtraModel->getExtraInfoByIds($car['extra_ids']);
 
         $images = unserialize($car['files']);
         $items = array();
@@ -161,13 +160,13 @@ class CarSellingModel extends PdoDb
         $sql = '
                 SELECT
                 *
-                FROM `new_bibi_car_series_model` 
+                FROM `bibi_new_car_series_model` 
                 ';
 
         $sqlCnt = '
                 SELECT
                 count(*) AS total
-                FROM `new_bibi_car_series_model` 
+                FROM `bibi_new_car_series_model` 
                 ';
 
         $sql .= $this->where;
@@ -204,7 +203,7 @@ class CarSellingModel extends PdoDb
         $sql = '
                 SELECT
                 *
-                FROM `new_bibi_car_series_model` 
+                FROM `bibi_new_car_series_model` 
                 ';
 
         $lists = @$this->query($sql);
@@ -215,20 +214,20 @@ class CarSellingModel extends PdoDb
             $se = '
                 SELECT
                 *
-                FROM `new_bibi_car_brand_series` 
+                FROM `bibi_new_car_brand_series` 
                 WHERE brand_series_id ='.$k['series_id'];
             $ses =$this->query($se)[0];
 
             $brand = '
                 SELECT
                 *
-                FROM `new_bibi_car_brand_list` 
+                FROM `bibi_new_car_brand_list` 
                 WHERE brand_id ='.$ses['brand_id'];
             $br =$this->query($brand)[0];
 
             $car_name = $br['brand_name']." ".$ses['brand_series_name']." ".$k['model_name'];
 
-            $up = 'UPDATE new_bibi_car_series_model SET car_name ='."'".$car_name."'".' WHERE model_id = '.$k['model_id'];
+            $up = 'UPDATE bibi_new_car_series_model SET car_name ='."'".$car_name."'".' WHERE model_id = '.$k['model_id'];
 
             $re = $this->execute($up);
 
