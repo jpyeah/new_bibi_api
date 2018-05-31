@@ -8,6 +8,7 @@
         "overtrue/wechat": "~3.1",
         "latrell/alipay": "dev-master",
         "riverslei/payment": "~3.1",
-        "chan/alipay": "dev-master"
+        "chan/alipay": "dev-master",
+        "jpush/jpush": "*"
     }
 }

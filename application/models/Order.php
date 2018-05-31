@@ -81,7 +81,7 @@ class OrderModel extends PdoDb
 
         $sql = '
                 SELECT
-                t1.order_id,t1.order_sn,t1.user_id,t1.order_amount,t1.sub_fee,  
+                t1.order_id,t1.order_sn,t1.user_id,t1.order_amount,t1.sub_fee,t1.order_status
                  t2.car_name, t2.image,t2.price
                 FROM
                 `bibi_new_car_order` AS t1
@@ -122,6 +122,11 @@ class OrderModel extends PdoDb
         $total = $this->query($sqlCnt)[0]['total'];
 
         $orders = $this->query($sql);
+
+        foreach($orders as $k =>$val){
+
+               $orders[$k]['order_log']=$this->getOrderLog($val['order_id']);
+        }
 
         $count = count($orders);
 

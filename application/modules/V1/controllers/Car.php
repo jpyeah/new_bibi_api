@@ -6,6 +6,8 @@
  * Date: 15/11/13
  * Time: 下午6:09
  */
+use JPush\Client as JPush;
+
 class CarController extends ApiYafControllerAbstract
 {
 
@@ -168,27 +170,16 @@ class CarController extends ApiYafControllerAbstract
 
     public function testAction(){
 
-        $carModel = new CarSellingModel();
+        $app_key="57d75d73a297c9fdcf879ecf";
+        $master_secret="803e5c8340117caec0bda2de";
 
-        $pdo = new PdoDb;
+        $client = new JPush($app_key, $master_secret);
 
-        $sql="select hash from new_bibi_car_selling_list";
-
-        $hashs =$pdo->query($sql);
-
-
-        foreach($hashs as $k =>$val){
-
-            $hash =$val['hash'];
-
-            $num = $k+1;
-
-            $insert ="INSERT INTO `new_bibi_car_selling_list_extra_info` VALUES ($num, '$hash', '0', '1', '0', '0', '0', '1', '0', '1', '0', '0', '0', '0', '0', '0', '1', '0', '1', '1', '0', '0', '0', '0', '0', '1', '1', '0', '0', '1', '1', '0', '0', '1', '1', '0', '0', '0', '0')";
-
-
-            $pdo->execute($insert);
-        }
-
+        $client->push()
+                ->setPlatform('all')
+                ->addAllAudience()
+                ->setNotificationAlert('Hello, JPush')
+                ->send();
     }
 
 

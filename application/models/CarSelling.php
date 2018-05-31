@@ -81,6 +81,7 @@ class CarSellingModel extends PdoDb
 
         $ExtraModel = new CarSellingExtraInfoModel();
         $car['car_extra_info'] = $ExtraModel->getExtraInfoByIds($car['extra_ids']);
+        unset($car['extra_ids']);
 
         $images = unserialize($car['files']);
         $items = array();
