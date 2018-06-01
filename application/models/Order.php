@@ -71,7 +71,7 @@ class OrderModel extends PdoDb
         $log = $this->query($sql);
 
         if(!$log){
-            return new stdClass();
+            return [];
         }
         return $log;
     }
