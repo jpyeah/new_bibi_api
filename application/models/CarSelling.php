@@ -36,19 +36,16 @@ class CarSellingModel extends PdoDb
 
         $items = array();
 
-        $brand_id ="";
-
         foreach($models as $k => $model){
            $images = unserialize($model['image']);
 
            $model['image']=$images['url'];
            $items[]  = $model;
-           $brand_id =$model['brand_id'];
         }
 
         $list['car_list'] = $items;
         $brandM = new BrandModel();
-        $list['series_info'] = $brandM->getSeriesModel($brand_id,$series_id);
+        $list['series_info'] = $brandM->getSeries($series_id);
 
         return $list;
     }
