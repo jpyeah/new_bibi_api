@@ -37,6 +37,9 @@ class CarSellingModel extends PdoDb
         $items = array();
 
         foreach($models as $k => $model){
+           $images = unserialize($model['image']);
+
+           $model['image']=$images['url'];
             $items[]  = $model;
         }
 
@@ -205,6 +208,10 @@ class CarSellingModel extends PdoDb
         $items = array();
 
         foreach($models as $k => $model){
+            $images = unserialize($model['image']);
+
+            $model['image']=$images['url'];
+            
             $items[]  = $model;
         }
 
