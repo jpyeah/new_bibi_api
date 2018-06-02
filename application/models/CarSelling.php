@@ -26,7 +26,7 @@ class CarSellingModel extends PdoDb
 
         $sql = '
                 SELECT
-                image,model_name,car_name,exterior,interior,version,price,hash as car_id
+                image,model_name,car_name,exterior,interior,version,price,hash as car_id,series_id,brand_id
                 FROM `bibi_new_car_selling_list` 
                 ';
 
@@ -36,14 +36,19 @@ class CarSellingModel extends PdoDb
 
         $items = array();
 
+        $brand_id ="";
+
         foreach($models as $k => $model){
            $images = unserialize($model['image']);
 
            $model['image']=$images['url'];
-            $items[]  = $model;
+           $items[]  = $model;
+           $brand_id =$model['brand_id'];
         }
 
         $list['car_list'] = $items;
+        $brandM = new BrandModel();
+        $list['series_info'] = $brandM->getSeriesModel($brand_id,$series_id);
 
         return $list;
     }
@@ -104,7 +109,7 @@ class CarSellingModel extends PdoDb
         $car['brand_info']  = $brandM->getBrandModel($car['brand_id']);
         $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);
         $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
-        $car['model_detail']= $brandM->getModelDetail($car['model_id']);
+        //$car['model_detail']= $brandM->getModelDetail($car['model_id']);
 
         $ExtraModel = new CarSellingExtraInfoModel();
         $car['car_extra_info'] = $ExtraModel->getExtraInfoByIds($car['extra_ids']);
@@ -211,7 +216,7 @@ class CarSellingModel extends PdoDb
             $images = unserialize($model['image']);
 
             $model['image']=$images['url'];
-            
+
             $items[]  = $model;
         }
 
