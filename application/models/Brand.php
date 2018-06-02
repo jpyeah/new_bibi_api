@@ -70,7 +70,7 @@ class BrandModel extends PdoDb{
     public function getSeriesModel($brandId, $seriesId){
 
 
-            $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name`  FROM `bibi_new_car_brand_series` WHERE `brand_id` = ' . $brandId . ' AND `brand_series_id` = '.$seriesId.' ';
+            $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name`,`series_info`,`brand_series_url`  FROM `bibi_new_car_brand_series` WHERE `brand_id` = ' . $brandId . ' AND `brand_series_id` = '.$seriesId.' ';
 
             $series = $this->query($sql);
 
