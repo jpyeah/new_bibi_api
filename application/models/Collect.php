@@ -26,17 +26,13 @@ class CollectModel extends PdoDb{
         $sql = '
                 SELECT
                 t1.id as collect_id,
-                t1.user_id ,t2.model_id,t2.image, t2.car_name,t2.car_color,t2.price,t3.exterior,t3.interior,t3.version
+                t1.user_id ,t2.model_id,t2.image, t2.car_name,t2.car_color,t2.price,t2.exterior,t2.interior,t2.version
                 FROM
                 `bibi_new_car_collect` AS t1
                 LEFT JOIN
                 `bibi_new_car_selling_list` AS t2
                 ON
                 t1.car_id = t2.hash
-                LEFT JOIN
-                `bibi_new_car_series_model` AS t3
-                ON
-                t2.model_id = t3.model_id
                 ';
 
             $sqlCnt = '
@@ -48,10 +44,6 @@ class CollectModel extends PdoDb{
                 `bibi_new_car_selling_list` AS t2
                 ON
                 t1.car_id = t2.hash
-                LEFT JOIN
-                `bibi_new_car_series_model` AS t3
-                ON
-                t2.model_id = t3.model_id
             ';
 
         $sql .= ' WHERE t1.user_id = '.$userId.' ';
