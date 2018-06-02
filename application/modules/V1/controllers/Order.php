@@ -129,6 +129,7 @@ class OrderController extends ApiYafControllerAbstract
         $properties['contact_phone']  = $data['contact_phone'];
         $properties['sub_fee']  = $data['sub_fee'];
         $properties['order_amount']  = $data['order_amount'];
+        $properties['order_sn']  = $this->createorder_sn();
         $created = time();
         $properties['created_at'] = $created;
 

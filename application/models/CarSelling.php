@@ -21,6 +21,30 @@ class CarSellingModel extends PdoDb
         self::$table = 'bibi_new_car_selling_list';
     }
 
+    public function getCarListBySeries($series_id)
+    {
+
+        $sql = '
+                SELECT
+                image,model_name,car_name,exterior,interior,version,price,hash as car_id
+                FROM `bibi_new_car_selling_list` 
+                ';
+
+        $sql .= $this->where;
+
+        $models = $this->query($sql);
+
+        $items = array();
+
+        foreach($models as $k => $model){
+            $items[]  = $model;
+        }
+
+        $list['car_list'] = $items;
+
+        return $list;
+    }
+
     public function GetCarInfoById($model_id,$userId=0)
     {
 
@@ -46,7 +70,7 @@ class CarSellingModel extends PdoDb
     }
 
 
-    public function GetCarInfoByHash($car_id)
+    public function GetCarInfoByHash($car_id,$userId=0)
     {
 
         $sql = '
@@ -62,7 +86,7 @@ class CarSellingModel extends PdoDb
             return array();
         }
 
-        $car = $this->handlerCar($car);
+        $car = $this->handlerCar($car,$userId);
 
         return $car;
 
@@ -160,14 +184,14 @@ class CarSellingModel extends PdoDb
 
         $sql = '
                 SELECT
-                *
-                FROM `bibi_new_car_series_model` 
+                image,model_name,car_name,exterior,interior,version,price,hash as car_id
+                FROM `bibi_new_car_selling_list`
                 ';
 
         $sqlCnt = '
                 SELECT
                 count(*) AS total
-                FROM `bibi_new_car_series_model` 
+                FROM `bibi_new_car_selling_list` 
                 ';
 
         $sql .= $this->where;

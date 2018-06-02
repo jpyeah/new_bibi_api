@@ -23,7 +23,7 @@ class CarController extends ApiYafControllerAbstract
      * @apiParam {string} page 页码 从0开始
      *
      * @apiParamExample {json} 请求样例
-     *    POST /v1/car/seires
+     *    POST /v1/car/series
      *   {
      *     "data": {
      *       "page":"",
@@ -47,6 +47,50 @@ class CarController extends ApiYafControllerAbstract
         $this->send($list);
     }
 
+
+    /**
+     * @api {POST} /v1/car/list 车辆列表
+     * @apiName car list
+     * @apiGroup Car
+     * @apiDescription 车辆列表
+     * @apiPermission anyone
+     * @apiSampleRequest http://new.bibicar.cn
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} series_id 系列ID
+     *
+     * @apiSuccess {string} model_name 车型
+     * @apiSuccess {string} exterior 外饰
+     * @apiSuccess {string} interior 内饰
+     * @apiSuccess {string} version 版本
+     * @apiSuccess {string} image 图片
+     * @apiSuccess {string} car_id 车辆id
+     *
+     *
+     * @apiParamExample {json} 请求样例
+     *    POST /v1/car/list
+     *   {
+     *     "data": {
+     *       "series_id":"",
+     *
+     *     }
+     *   }
+     *
+     */
+     public function  listAction(){
+
+        $this->required_fields = array_merge($this->required_fields, array('session_id', 'series_id'));
+
+        $data = $this->get_request_data();
+
+        $carM = new CarSellingModel();
+
+        $carM->where = " WHERE series_id =".$data['series_id'];
+
+        $list = $carM->getCarListBySeries($data['series_id']);
+
+        $this->send($list);
+    }
 
     /**
      * @api {POST} /v1/car/search 车辆搜索
@@ -103,23 +147,23 @@ class CarController extends ApiYafControllerAbstract
     }
 
     /**
-     * @api {POST} /v1/car/index 车型车辆详情
+     * @api {POST} /v1/car/index 车辆详情
      * @apiName car index
      * @apiGroup Car
-     * @apiDescription 车型车辆详情
+     * @apiDescription 车辆详情
      * @apiPermission anyone
      * @apiSampleRequest http://new.bibicar.cn
      * @apiVersion 1.0.0
      *
      * @apiParam {string} session_id session
-     * @apiParam {string} model_id 车型Id
+     * @apiParam {string} car_id 车辆Id
      *
      * @apiParamExample {json} 请求样例
      *    POST /v1/car/index
      *   {
      *     "data": {
      *       "session_id":"",
-     *       "model_id":"",
+     *       "car_id":"",
      *
      *     }
      *   }
@@ -128,7 +172,7 @@ class CarController extends ApiYafControllerAbstract
     public function indexAction()
     {
 
-        $this->required_fields = array_merge($this->required_fields, array('session_id', 'model_id'));
+        $this->required_fields = array_merge($this->required_fields, array('session_id', 'car_id'));
 
         $data = $this->get_request_data();
 
@@ -144,23 +188,11 @@ class CarController extends ApiYafControllerAbstract
 
         $carT = $carModel::$table;
 
-        $ModleId = $data['model_id'];
+        $carId = $data['car_id'];
 
-        $carInfo = $carModel->GetCarInfoById($ModleId,$userId);
+        $carInfo = $carModel->GetCarInfoByHash($carId,$userId);
 
         $response['car_info'] = $carInfo;
-
-//        $brandId = isset($carInfo['brand_info']['brand_id']) ? $carInfo['brand_info']['brand_id'] : 0;
-//
-//        $title = is_array($carInfo['user_info']) ?
-//                    $carInfo['user_info']['profile']['nickname'] . '的' . $carInfo['car_name']
-//                    : $carInfo['car_name'];
-//
-//        $response['share_title'] = $title;
-//        //http://m.bibicar.cn/post/index?device_identifier='.$data['device_identifier'].'&fcar_id='.$carId.'
-//        $response['share_url'] = 'http://wx.bibicar.cn/car/index/car_id/'.$carId.'';
-//        $response['share_txt'] = '更多精选二手车在bibi car,欢迎您来选购!';
-//        $response['share_img'] = isset($carInfo['files'][0]) ? $carInfo['files'][0]['file_url'] : '';
 
         $this->send($response);
 
@@ -170,8 +202,8 @@ class CarController extends ApiYafControllerAbstract
 
     public function testAction(){
 
-        $app_key="57d75d73a297c9fdcf879ecf";
-        $master_secret="803e5c8340117caec0bda2de";
+        $app_key="68b7d81675c93b86ec6a11ac";
+        $master_secret="81072e86bacd7dd98d4cd310";
 
         $client = new JPush($app_key, $master_secret);
 
