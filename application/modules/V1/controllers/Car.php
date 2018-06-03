@@ -207,12 +207,45 @@ class CarController extends ApiYafControllerAbstract
 
         $client = new JPush($app_key, $master_secret);
 
-        $client->push()
-                ->setPlatform('all')
-                ->addAllAudience()
-                ->setNotificationAlert('Hello, JPush')
-                ->send();
+        $cid =uniqid();
+
+        $response = $client->push()
+           // ->setCid($cid)
+            ->setPlatform(['ios', 'android'])
+            ->setAudience('all')
+            ->setNotificationAlert('车辆推送')
+            ->iosNotification('hello', [
+                'sound' => 'sound',
+                'badge' => '+1',
+                'extras' => [
+                    'type' => '1',
+                    'title' => '保时捷上新',
+                    'content' => '感谢你的关注，保时捷新款车上新,请点击此推送框，进入车辆详情页面',
+                    'from' => '保时捷',
+                    'image_url' => 'http://img.bibicar.cn/logo.png',
+                    'created_at' => date('y/m/d',time()),
+                    'related_id' => "5b123cfba370d",
+                ]
+            ])
+            ->androidNotification('车辆推送')
+            ->message('保时捷车辆推送', [
+                'title' => '车辆推送',
+                'content_type' => 'text',
+                'extras' => [
+                    'type' => '1',
+                    'title' => '保时捷上新',
+                    'content' => '感谢你的关注，保时捷新款车上新,请点击此推送框，进入车辆详情页面',
+                    'from' => '保时捷',
+                    'image_url' => 'http://img.bibicar.cn/logo.png',
+                    'created_at' => date('y/m/d',time()),
+                    'related_id' => "5b123cfba370d",
+                ]
+            ])
+            ->send();
+
+        print_r($response);exit;
     }
+
 
 
 

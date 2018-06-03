@@ -40,6 +40,8 @@ class UserController extends ApiYafControllerAbstract
 
         $data['username'] = $name;
 
+        $data['source_type']=2;
+
         $nickname = $data['nickname'];
         unset($data['nickname']);
 
@@ -502,6 +504,7 @@ class UserController extends ApiYafControllerAbstract
             $data['updated'] = $time;
             $data['username']= 'bibi_' . Common::randomkeys(6);
             $data['password']=md5('12345');
+            $data['source_type']=2;
             $device_identifier = $data['device_identifier'];
             unset($data['device_identifier']);
             $userId = $userModel->register($data);
@@ -601,7 +604,7 @@ class UserController extends ApiYafControllerAbstract
             $insert['username'] = $name;
             $insert['wx_open_id'] = $data['wx_open_id'];
             $insert['weibo_open_id'] = $data['weibo_open_id'];
-
+            $insert['source_type']=2;
             $userId = $userModel->register($insert);
             $profileInfo = array();
             $profileInfo['user_id'] = $userId;

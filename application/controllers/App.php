@@ -347,7 +347,7 @@ class AppController extends ApiYafControllerAbstract {
      * @apiParam {string} [mobile] 手机号码
      *
      * @apiParamExample {json} 请求样例
-     *   POST /v1/User/sendCode
+     *   POST /app/sendCode
      *   {
      *     "data": {
      *       "device_identifier":"",
@@ -381,6 +381,46 @@ class AppController extends ApiYafControllerAbstract {
 
         $this->send($response);
 
+    }
+
+    /**
+     * @api {POST} /app/pushlist 推送消息列表
+     * @apiName App pushlist
+     * @apiGroup App
+     * @apiDescription 推送消息列表
+     * @apiPermission anyone
+     * @apiSampleRequest http://new.bibicar.cn
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [page] 页码
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /app/pushlist
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "page":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+
+    public function pushlistAction(){
+
+        $this->required_fields = array_merge($this->required_fields, array('page'));
+
+        $data = $this->get_request_data();
+
+        $data['page']     = $data['page'] ? ($data['page']+1) : 1;
+
+        $push= new PushModel();
+
+        $list =$push->getPushs($data['page']);
+
+        return $list;
     }
 
 
