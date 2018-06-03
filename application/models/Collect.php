@@ -25,7 +25,7 @@ class CollectModel extends PdoDb{
 
         $sql = '
                 SELECT
-                t1.id as collect_id,
+                t1.id as collect_id,t1.car_id,
                 t1.user_id ,t2.model_id,t2.image, t2.car_name,t2.car_color,t2.price,t2.exterior,t2.interior,t2.version
                 FROM
                 `bibi_new_car_collect` AS t1
