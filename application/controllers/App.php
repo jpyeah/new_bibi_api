@@ -420,7 +420,7 @@ class AppController extends ApiYafControllerAbstract {
 
         $list =$push->getPushs($data['page']);
 
-        return $list;
+        $this->send($list);
     }
 
 

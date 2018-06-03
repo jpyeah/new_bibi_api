@@ -24,7 +24,7 @@ class PushModel extends PdoDb
 
         $sql = '
                 SELECT
-                title,content,created_at,image_url,from,type,related_id
+                `title`,`content`,`created_at`,`image_url`,`from`,`type`,`related_id`
                 FROM
                 `bibi_push_list`
                 ';
