@@ -60,6 +60,11 @@ class CollectModel extends PdoDb{
 
         $collect = $this->query($sql);
 
+        foreach($collect as $k =>$val){
+            $image= unserialize($val['image']);
+            $collect[$k]['image']=$image['url'];
+        }
+
         $count = count($collect);
 
         $list['list'] = $collect;

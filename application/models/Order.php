@@ -125,6 +125,9 @@ class OrderModel extends PdoDb
 
         foreach($orders as $k =>$val){
                $orders[$k]['order_log']=$this->getOrderLog($val['order_id']);
+
+              $image= unserialize($val['image']);
+              $orders[$k]['image']=$image['url'];
         }
 
         $count = count($orders);
