@@ -214,7 +214,7 @@ class CarController extends ApiYafControllerAbstract
             ->setPlatform(['ios', 'android'])
             ->setAudience('all')
             ->setNotificationAlert('车辆推送')
-            ->iosNotification('hello', [
+            ->iosNotification('保时捷车辆推送', [
                 'sound' => 'sound',
                 'badge' => '+1',
                 'extras' => [

@@ -112,21 +112,26 @@ class CarSellingModel extends PdoDb
         $car['car_extra_info'] = $ExtraModel->getExtraInfoByIds($car['extra_ids']);
         unset($car['extra_ids']);
 
-        $images = unserialize($car['files']);
+
         $items = array();
 
-        if(isset($images)){
-            foreach ($images as $k => $image) {
-                if ($image['key']) {
-                    $item = array();
-                    $item['file_id'] = $image['key'];
-                    $item['file_url'] = $image['url'];
-                    $item['file_type'] = 0;
-                    $items[] = $item;
-                }
+        if($car['files']){
+            $images = unserialize($car['files']);
+            if(isset($images)){
+                foreach ($images as $k => $image) {
+                    if ($image['key']) {
+                        $item = array();
+                        $item['file_id'] = $image['key'];
+                        $item['file_url'] = $image['url'];
+                        $item['file_type'] = 0;
+                        $items[] = $item;
+                    }
 
+                }
             }
+
         }
+
 
         unset($car['id']);
         $car['car_id'] = $car['hash'];
