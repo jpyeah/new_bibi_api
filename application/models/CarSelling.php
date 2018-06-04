@@ -80,10 +80,9 @@ class CarSellingModel extends PdoDb
 
         $sql = '
             SELECT
-            t1.*
+            *
             FROM `' . self::$table . '`
-            AS t1
-            WHERE t1.hash = "' . $car_id . '"  ';
+            WHERE hash = "' . $car_id . '"  ';
 
         $car = @$this->query($sql)[0];
 
@@ -126,10 +125,8 @@ class CarSellingModel extends PdoDb
                         $item['file_type'] = 0;
                         $items[] = $item;
                     }
-
                 }
             }
-
         }
 
 
