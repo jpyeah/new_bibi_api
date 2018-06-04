@@ -156,6 +156,8 @@ class BrandModel extends PdoDb{
     public function getSeries($page=1){
 
         $sql = 'SELECT 
+               `brand_series_url1`,
+               `brand_series_url2`,
                `brand_series_id` AS `series_id`,
                `brand_series_name` AS `series_name`, 
                `brand_series_video` AS `series_video`,
