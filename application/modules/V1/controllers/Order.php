@@ -36,7 +36,6 @@ class OrderController extends ApiYafControllerAbstract
      */
     public function indexAction()
     {
-
         $this->required_fields = array_merge($this->required_fields, array('session_id', 'order_id'));
 
         $data = $this->get_request_data();
