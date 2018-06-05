@@ -46,6 +46,7 @@ class CarSellingModel extends PdoDb
         $list['car_list'] = $items;
         $brandM = new BrandModel();
         $list['series_info'] = $brandM->getSeriesInfo($series_id);
+        $list['brand_info'] = $brandM->getBrandInfo($list['series_info']['brand_id']);
 
         return $list;
     }
