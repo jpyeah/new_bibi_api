@@ -155,19 +155,43 @@ class BrandModel extends PdoDb{
                        $arr = explode('_',$k);
                        switch($arr[0]){
                            case "Base":
-                               $base[$k] =$val;
+                               if($val){
+                                   $base[$k] =$val;
+                               }else{
+                                   $base[$k] ="";
+
+                               }
                                break;
                            case "Car":
-                               $car[$k] =$val;
+                               if($val){
+                                   $car[$k] =$val;
+                               }else{
+                                   $car[$k] ="";
+                               }
                                break;
                            case "Engine":
-                               $Engine[$k] =$val;
+                               if($val){
+                                   $Engine[$k] =$val;
+                               }else{
+                                   $Engine[$k] ="";
+                               }
                                break;
                            case "Trans":
-                               $Trans[$k] =$val;
+                               if($val){
+                                   $Trans[$k] =$val;
+
+                               }else{
+                                   $Trans[$k] ="";
+
+                               }
                                break;
                            case "Other":
-                               $Other[$k] =$val;
+                               if($val){
+                                   $Other[$k] =$val;
+                               }else{
+                                   $Other[$k] ="";
+
+                               }
                                break;
                        }
                 }
