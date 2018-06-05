@@ -200,6 +200,20 @@ class CarController extends ApiYafControllerAbstract
     }
 
 
+    public function detailAction(){
+
+        $brandM = new BrandModel();
+
+        $model_id=123;
+
+        $car['model_detail']= $brandM->getModelDetail($model_id);
+
+        print_r($car);exit;
+
+
+    }
+
+
     public function testAction(){
 
         $app_key="68b7d81675c93b86ec6a11ac";

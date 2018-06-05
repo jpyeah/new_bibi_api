@@ -99,21 +99,17 @@ class CarSellingModel extends PdoDb
 
     public function handlerCar($car,$userId=0){
 
-
         $brandM = new BrandModel();
-
         $car['brand_info']  = $brandM->getBrandModel($car['brand_id']);
         $car['series_info'] = $brandM->getSeriesModel($car['brand_id'],$car['series_id']);
         $car['model_info']  = $brandM->getModelModel($car['series_id'], $car['model_id']);
-        //$car['model_detail']= $brandM->getModelDetail($car['model_id']);
+        $car['model_detail']= $brandM->getModelDetail($car['model_id']);
 
         $ExtraModel = new CarSellingExtraInfoModel();
         $car['car_extra_info'] = $ExtraModel->getExtraInfoByIds($car['extra_ids']);
         unset($car['extra_ids']);
 
-
         $items = array();
-
         if($car['files']){
             $images = unserialize($car['files']);
             if(isset($images)){

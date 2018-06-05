@@ -70,7 +70,7 @@ class BrandModel extends PdoDb{
     public function getSeriesModel($brandId, $seriesId){
 
 
-            $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name`,`series_info`,`brand_series_url1`,`brand_series_url2` ,`brand_series_video` FROM `bibi_new_car_brand_series` WHERE `brand_id` = ' . $brandId . ' AND `brand_series_id` = '.$seriesId.' ';
+            $sql = 'SELECT `brand_series_id` AS `series_id`, `brand_series_name` AS `series_name`,`series_info`,`brand_series_url1`,`brand_series_url2` ,`brand_series_video`,`max_power` FROM `bibi_new_car_brand_series` WHERE `brand_id` = ' . $brandId . ' AND `brand_series_id` = '.$seriesId.' ';
 
             $series = $this->query($sql);
 
@@ -144,7 +144,42 @@ class BrandModel extends PdoDb{
 
                 $info = $model[0];
 
-                return $info;
+                $base=[];
+                $car=[];
+                $Engine=[];
+                $Trans=[];
+                $Other=[];
+
+                foreach($info as $k =>$val){
+
+                       $arr = explode('_',$k);
+                       switch($arr[0]){
+                           case "Base":
+                               $base[$k] =$val;
+                               break;
+                           case "Car":
+                               $car[$k] =$val;
+                               break;
+                           case "Engine":
+                               $Engine[$k] =$val;
+                               break;
+                           case "Trans":
+                               $Trans[$k] =$val;
+                               break;
+                           case "Other":
+                               $Other[$k] =$val;
+                               break;
+                       }
+                }
+
+                $infos['Car']=$car;
+                $infos['Base']=$base;
+                $infos['Engine']=$Engine;
+                $infos['Trans']=$Trans;
+                $infos['Other']=$Other;
+                $infos['model_id']=$info['model_id'];
+
+                return $infos;
             }
             else{
 
