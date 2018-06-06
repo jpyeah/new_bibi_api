@@ -88,8 +88,7 @@ class PdoDb
         self::$pdo || self::instance();
         Common::globalLogRecord('sql:' , $sql);
         $stmt = self::$pdo->prepare($sql);
-        $stmt->execute($parameters);
-
+        $stat =$stmt->execute($parameters);
         $tmp = array();
         while($row = $stmt->fetch($option))
         {

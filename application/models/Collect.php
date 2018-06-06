@@ -64,7 +64,6 @@ class CollectModel extends PdoDb{
             $image= unserialize($val['image']);
             $collect[$k]['image']=$image['url'];
         }
-
         $count = count($collect);
 
         $list['list'] = $collect;
