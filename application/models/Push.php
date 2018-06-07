@@ -24,27 +24,26 @@ class PushModel extends PdoDb
 
         $sql = '
                 SELECT
-                `title`,`content`,`created_at`,`image_url`,`from`,`type`,`related_id`
+                `title`,`content`,`created_at`,`image_url`,`from`,`type`,`related_id`,`user_id`
                 FROM
-                `bibi_push_list`
+                `bibi_new_push_list`
                 ';
 
         $sqlCnt = '
                 SELECT
                 COUNT(id) AS total
                 FROM
-                `bibi_push_list` 
+                `bibi_new_push_list` 
             ';
         if($userId){
 
             $sql .= " WHERE type = 1 OR ( type = 2  AND  user_id = ".$userId." )";
-            $sqlCnt .= " WHERE type = 1 OR ( type = 2 AND user_id = ".$userId.")";
+            $sqlCnt .= " WHERE type = 1 OR ( type = 2 AND user_id = ".$userId." )";
         }else{
 
             $sql .= " WHERE type = 1";
             $sqlCnt .= " WHERE type = 1 ";
         }
-        print_r($sql);exit;
         $pageSize = 10;
 
         $number = ($page - 1) * $pageSize;
