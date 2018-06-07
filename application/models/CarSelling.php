@@ -110,8 +110,6 @@ class CarSellingModel extends PdoDb
 
         $car['model_detail']= $brandM->getModelDetail($car['model_id']);
 
-
-
         $ExtraModel = new CarSellingExtraInfoModel();
         $car['car_extra_info'] = $car['extra_ids'] ?$ExtraModel->getExtraInfoByIds($car['extra_ids']):array();
 

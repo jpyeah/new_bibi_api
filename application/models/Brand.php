@@ -51,7 +51,7 @@ class BrandModel extends PdoDb{
     public function getBrandModel($brandId){
 
 
-            $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_new_car_brand_list` WHERE `brand_id` = "'.$brandId.'" ';
+            $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_new_car_brand_list` WHERE is_hot = 1 AND `brand_id` = "'.$brandId.'" ';
 
             $brandM = $this->query($sql);
 
@@ -222,12 +222,16 @@ class BrandModel extends PdoDb{
                `brand_series_name` AS `series_name`, 
                `brand_series_video` AS `series_video`,
                `brand_series_video_img` AS `series_video_img`
-                FROM `bibi_new_car_brand_series` 
+                FROM `bibi_new_car_brand_series` WHERE brand_id in(
+                SELECT brand_id FROM `bibi_new_car_brand_list` WHERE is_hot = 1
+                )
           ';
 
         $sqlCnt = 'SELECT 
                    count(*) as total 
-                   FROM `bibi_new_car_brand_series` 
+                   FROM `bibi_new_car_brand_series` WHERE brand_id in (
+                SELECT brand_id FROM `bibi_new_car_brand_list` WHERE is_hot = 1
+                )
         ';
 
         $pageSize = 10;
