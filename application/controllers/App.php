@@ -393,6 +393,7 @@ class AppController extends ApiYafControllerAbstract {
      * @apiVersion 1.0.0
      *
      * @apiParam {string} [device_identifier] 设备唯一标识
+     * @apiParam {string} [session_id] session_id
      * @apiParam {string} [page] 页码
      *
      * @apiParamExample {json} 请求样例
@@ -414,11 +415,19 @@ class AppController extends ApiYafControllerAbstract {
 
         $data = $this->get_request_data();
 
+        if($data['session_id']){
+
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }else{
+            $userId = 0;
+        }
+
         $data['page']     = $data['page'] ? ($data['page']+1) : 1;
 
         $push= new PushModel();
 
-        $list =$push->getPushs($data['page']);
+        $list =$push->getPushs($data['page'],$userId);
 
         $this->send($list);
     }

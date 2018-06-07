@@ -54,8 +54,6 @@ class OrderModel extends PdoDb
 
          $data['car_info']=$CarSellingModel->GetCarInfoByHash($order['car_id']);
 
-         $CarSellingModel = new CarSellingModel();
-
         $data['order_log']= $this->getOrderLog($order['order_id']);
 
          return $data;
@@ -66,7 +64,7 @@ class OrderModel extends PdoDb
     public function getOrderLog($id){
 
         $sql = 'SELECT * FROM `bibi_new_car_order_log` 
-           WHERE order_id = '.$id;
+           WHERE order_id = '.$id." ORDER BY id DESC";
         ;
         $log = $this->query($sql);
 

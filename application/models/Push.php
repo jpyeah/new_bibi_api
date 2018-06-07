@@ -17,10 +17,10 @@ class PushModel extends PdoDb
     {
 
         parent::__construct();
-        self::$table = 'bibi_push_list';
+        self::$table = 'bibi_new_push_list';
     }
 
-    public function getPushs($page=1){
+    public function getPushs($page=1,$userId=0){
 
         $sql = '
                 SELECT
@@ -28,14 +28,23 @@ class PushModel extends PdoDb
                 FROM
                 `bibi_push_list`
                 ';
+
         $sqlCnt = '
                 SELECT
                 COUNT(id) AS total
                 FROM
                 `bibi_push_list` 
             ';
+        if($userId){
 
+            $sql .= " WHERE type = 1 OR ( type = 2  AND  user_id = ".$userId." )";
+            $sqlCnt .= " WHERE type = 1 OR ( type = 2 AND user_id = ".$userId.")";
+        }else{
 
+            $sql .= " WHERE type = 1";
+            $sqlCnt .= " WHERE type = 1 ";
+        }
+        print_r($sql);exit;
         $pageSize = 10;
 
         $number = ($page - 1) * $pageSize;
@@ -43,6 +52,7 @@ class PushModel extends PdoDb
         $sql .= '  LIMIT ' . $number . ' , ' . $pageSize . ' ';
 
         $total = $this->query($sqlCnt)[0]['total'];
+
 
         $lists = $this->query($sql);
 

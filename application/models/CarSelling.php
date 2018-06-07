@@ -120,12 +120,17 @@ class CarSellingModel extends PdoDb
             $images = unserialize($car['files']);
             if(isset($images)){
                 foreach ($images as $k => $image) {
+
                     if ($image['key']) {
                         $item = array();
                         $item['file_id'] = $image['key'];
                         $item['file_url'] = $image['url'];
                         $item['file_type'] = 0;
                         $items[] = $item;
+
+                        if($k == 0){
+                            $image_url = $image['url'];
+                        }
                     }
                 }
             }
@@ -150,7 +155,7 @@ class CarSellingModel extends PdoDb
         unset($car['type']);
 
         $image= unserialize($car['image']);
-        $car['image']=$image['url'];
+        $car['image']=$image_url;
 
         //print_r($car);exit;
         //可优化查询

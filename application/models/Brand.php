@@ -51,7 +51,7 @@ class BrandModel extends PdoDb{
     public function getBrandModel($brandId){
 
 
-            $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_new_car_brand_list` WHERE is_hot = 1 AND `brand_id` = "'.$brandId.'" ';
+            $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url`,`brand_url2` FROM `bibi_new_car_brand_list` WHERE is_hot = 1 AND `brand_id` = "'.$brandId.'" ';
 
             $brandM = $this->query($sql);
 

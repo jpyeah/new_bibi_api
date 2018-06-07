@@ -26,7 +26,7 @@ class CollectModel extends PdoDb{
         $sql = '
                 SELECT
                 t1.id as collect_id,t1.car_id,
-                t1.user_id ,t2.model_id,t2.image, t2.car_name,t2.car_color,t2.price,t2.exterior,t2.interior,t2.version
+                t1.user_id ,t2.model_id,t2.image,t2.files, t2.car_name,t2.car_color,t2.price,t2.exterior,t2.interior,t2.version
                 FROM
                 `bibi_new_car_collect` AS t1
                 LEFT JOIN
@@ -60,9 +60,25 @@ class CollectModel extends PdoDb{
 
         $collect = $this->query($sql);
 
+
+
         foreach($collect as $k =>$val){
-            $image= unserialize($val['image']);
-            $collect[$k]['image']=$image['url'];
+//            $image= unserialize($val['image']);
+//            $collect[$k]['image']=$image['url'];
+
+            if($val['files']){
+                $images = unserialize($val['files']);
+                if(isset($images)){
+                    foreach ($images as $k => $image) {
+                        if ($image['key']) {
+                            if($k == 0){
+                                $collect[$k]['image']=$image['url'];
+                            }
+                        }
+                    }
+                }
+            }
+
         }
         $count = count($collect);
 
