@@ -433,4 +433,80 @@ class AppController extends ApiYafControllerAbstract {
     }
 
 
+    /**
+     * @api {POST} /app/pushtoken 推送token
+     * @apiName App pushtoken
+     * @apiGroup App
+     * @apiDescription 推送token
+     * @apiPermission anyone
+     * @apiSampleRequest http://new.bibicar.cn
+     * @apiVersion 1.0.0
+     *
+     * @apiParam {string} device_identifier 设备唯一标识
+     * @apiParam {string} session_id session_id
+     * @apiParam {string} token token
+     *
+     * @apiParamExample {json} 请求样例
+     *   POST /app/pushtoken
+     *   {
+     *     "data": {
+     *       "device_identifier":"",
+     *       "token":"",
+     *
+     *
+     *     }
+     *   }
+     *
+     */
+
+    public function pushTokenAction(){
+
+        $this->required_fields = array_merge($this->required_fields, array('token','session_id'));
+
+        $data = $this->get_request_data();
+
+        if($data['session_id']){
+
+            $sess = new SessionModel();
+            $userId = $sess->Get($data);
+        }else{
+            $userId = 0;
+        }
+
+        $push= new PushTokenModel();
+
+        $res= $push->gettoken($userId);
+
+        if($res){
+
+            $res = $push->updateByPrimaryKey('bibi_new_push_token',['id'=>$res[0]['id']],['device_token'=>$data['token']]);
+
+            if($res){
+                return $this->send(['更新成功']);
+
+            }
+
+
+        }else{
+            $properties['created']=time();
+            $properties['user_id']=$userId;
+            $properties['device_token']=$data['token'];
+            $push->properties=$properties;
+            $id = $push->CreateM();
+            if($id){
+                return $this->send(['提交成功']);
+            }
+
+
+        }
+
+
+
+
+
+
+
+    }
+
+
 }
