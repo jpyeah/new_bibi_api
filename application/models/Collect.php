@@ -60,7 +60,6 @@ class CollectModel extends PdoDb{
 
         $collect = $this->query($sql);
 
-
         foreach($collect as $k =>$val){
 //            $image= unserialize($val['image']);
 //            $collect[$k]['image']=$image['url'];
@@ -68,18 +67,18 @@ class CollectModel extends PdoDb{
             if($val['files']){
                 $images = unserialize($val['files']);
                 if(isset($images)){
-                    foreach ($images as $k => $image) {
+                    foreach ($images as $j => $image) {
                         if ($image['key']) {
-                                $collect[$k]['image']=$image['url'];
+                                if($j == 0){
+                                    $collect[$k]['image']=$image['url'];
+                                }
                         }
                     }
                 }
             }else{
                 $collect[$k]['image']="";
-
             }
             $collect[$k]['files']="";
-
         }
         $count = count($collect);
 
