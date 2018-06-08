@@ -74,6 +74,9 @@ class CollectModel extends PdoDb{
                         }
                     }
                 }
+            }else{
+                $collect[$k]['image']="";
+
             }
             $collect[$k]['files']="";
 

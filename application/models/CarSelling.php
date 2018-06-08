@@ -232,10 +232,10 @@ class CarSellingModel extends PdoDb
                         }
                     }
                 }
+            }else{
+                $model['image'] = "";
             }
-
-
-
+            unset($model['files']);
             $items[]  = $model;
         }
 
