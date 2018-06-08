@@ -613,9 +613,9 @@ class UserController extends ApiYafControllerAbstract
 
             $userModel->update(array('user_id'=>$userId),$update);
 
-            $updateProfile['nickname'] = $data['nickname'];
+          //  $updateProfile['nickname'] = $data['nickname'];
 
-            $updateProfile['avatar']   = $data['avatar'];
+          //  $updateProfile['avatar']   = $data['avatar'];
 
             $updateProfile['current_version'] = isset($data['current_version'])?$data['current_version']:1;
 
