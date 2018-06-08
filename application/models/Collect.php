@@ -70,14 +70,12 @@ class CollectModel extends PdoDb{
                 if(isset($images)){
                     foreach ($images as $k => $image) {
                         if ($image['key']) {
-                            if($k == 0){
                                 $collect[$k]['image']=$image['url'];
-                            }
                         }
                     }
                 }
             }
-            unset($val['files']);
+            $collect[$k]['files']="";
 
         }
         $count = count($collect);
