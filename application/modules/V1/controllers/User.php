@@ -371,18 +371,6 @@ class UserController extends ApiYafControllerAbstract
 
         $response['user_info'] = $userInfo;
 
-        $car = new CarSellingModel();
-
-        $response['car_info'] = $car->getUserCar($userId);
-
-        $friendShipM = new FriendShipModel();
-
-        $friendShipM->currentUser = $userId;
-
-        $response['friend_num'] = $friendShipM->friendNumCnt();
-
-        $response['fans_num']   = $friendShipM->fansNumCnt();
-
         $this->send($response);
 
     }
