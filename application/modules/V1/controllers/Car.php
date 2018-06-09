@@ -89,6 +89,12 @@ class CarController extends ApiYafControllerAbstract
 
         $list = $carM->getCarListBySeries($data['series_id']);
 
+         $list['share_title'] = "更多精选豪车在bibicar,欢迎您来选购";
+         //http://m.bibicar.cn/post/index?device_identifier='.$data['device_identifier'].'&fcar_id='.$carId.'
+         $list['share_url'] = 'http://www.bibicars.com/recommend.html?id='.$data['series_id'];
+         $list['share_txt'] = '更多精选豪车在bibicar,欢迎您来选购!';
+         $list['share_img'] = "http://img.bibicar.cn/bibilogo.png";
+
         $this->send($list);
     }
 
@@ -193,6 +199,12 @@ class CarController extends ApiYafControllerAbstract
         $carInfo = $carModel->GetCarInfoByHash($carId,$userId);
 
         $response['car_info'] = $carInfo;
+
+        $response['share_title'] = $carInfo['car_name'];
+        //http://m.bibicar.cn/post/index?device_identifier='.$data['device_identifier'].'&fcar_id='.$carId.'
+        $response['share_url'] = 'http://www.bibicars.com/detail.html?id='.$data['car_id'];
+        $response['share_txt'] = '更多精选豪车在bibicar,欢迎您来选购!';
+        $response['share_img'] = $carInfo['image'];
 
         $this->send($response);
 

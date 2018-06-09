@@ -177,7 +177,7 @@ class CollectController extends ApiYafControllerAbstract{
 
         //$data['page']     = $data['page'] ? ($data['page']+1) : 1;
 
-        $page = $data['page'];
+       // $page = $data['page'];
 
         $userId = $this->userAuth($data);
 
