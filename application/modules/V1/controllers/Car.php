@@ -34,15 +34,15 @@ class CarController extends ApiYafControllerAbstract
      */
     public function seriesAction(){
 
-        $this->required_fields = array_merge(array('page'));
+       // $this->required_fields = array_merge($this->required_fields,array('session_id'));
 
         $data = $this->get_request_data();
 
-        $data['page']     = $data['page'] ? ($data['page']+1) : 1;
+      //  $data['page']     = $data['page'] ? ($data['page']+1) : 1;
 
         $BrandM = new BrandModel();
 
-        $list = $BrandM->getSeries($data['page']);
+        $list = $BrandM->getSeries();
 
         $this->send($list);
     }

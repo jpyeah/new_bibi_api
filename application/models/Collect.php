@@ -50,11 +50,11 @@ class CollectModel extends PdoDb{
 
         $sqlCnt .= ' WHERE t1.user_id = '.$userId.' ';
 
-        $pageSize = 10;
+       // $pageSize = 10;
 
-        $number = ($page - 1) * $pageSize;
+        //$number = ($page - 1) * $pageSize;
 
-        $sql .= '  LIMIT ' . $number . ' , ' . $pageSize . ' ';
+       // $sql .= '  LIMIT ' . $number . ' , ' . $pageSize . ' ';
 
         $total = $this->query($sqlCnt)[0]['total'];
 
@@ -83,7 +83,7 @@ class CollectModel extends PdoDb{
         $count = count($collect);
 
         $list['list'] = $collect;
-        $list['has_more'] = (($number + $count) < $total) ? 1 : 2;
+        $list['has_more'] = 2;
         $list['total'] = $total;
 
         return $list;

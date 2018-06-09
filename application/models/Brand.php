@@ -213,7 +213,7 @@ class BrandModel extends PdoDb{
     }
 
 
-    public function getSeries($page=1){
+    public function getSeries(){
 
         $sql = 'SELECT 
                `brand_series_url1`,
@@ -234,21 +234,20 @@ class BrandModel extends PdoDb{
                 )
         ';
 
-        $pageSize = 10;
+     //   $pageSize = 10;
 
-        $number = ($page - 1) * $pageSize;
+       // $number = ($page - 1) * $pageSize;
 
-        $sql .= '  LIMIT ' . $number . ' , ' . $pageSize . ' ';
+       // $sql .= '  LIMIT ' . $number . ' , ' . $pageSize . ' ';
 
         $total = $this->query($sqlCnt)[0]['total'];
 
         $series = $this->query($sql);
 
-
         $count = count($series);
 
         $list['list'] = $series;
-        $list['has_more'] = (($number + $count) < $total) ? 1 : 2;
+        $list['has_more'] =  2;
         $list['total'] = $total;
 
         return $list;

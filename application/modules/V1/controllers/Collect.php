@@ -169,19 +169,19 @@ class CollectController extends ApiYafControllerAbstract{
      */
     public function listAction(){
 
-        $this->required_fields = array_merge($this->required_fields,array('session_id','page'));
+        $this->required_fields = array_merge($this->required_fields,array('session_id'));
 
         $CollectM = new CollectModel();
 
         $data = $this->get_request_data();
 
-        $data['page']     = $data['page'] ? ($data['page']+1) : 1;
+        //$data['page']     = $data['page'] ? ($data['page']+1) : 1;
 
         $page = $data['page'];
 
         $userId = $this->userAuth($data);
 
-        $list   =$CollectM->getCollect($userId,$page);
+        $list   =$CollectM->getCollect($userId);
 
         $response = $list;
 
