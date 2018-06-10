@@ -225,7 +225,7 @@ class CarSellingModel extends PdoDb
 
             if(isset($model['files'])){
                 $images = unserialize($model['files']);
-                if(isset($images)){
+                if($images && $images != ""){
                     foreach ($images as $j => $image) {
                         if ($image['key']) {
                                 if($j == 0){
