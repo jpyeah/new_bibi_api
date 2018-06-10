@@ -24,6 +24,7 @@ define('METHOD_NOT_ALLOWED', 40006);
 define('APP_NOT_AUTHORIZED', 40007);
 define('SYSTEM_FAIL', 40008);
 define('HAS_EXSIT', 40009);
+define('ORDER_HAS_EXSIT', 40010);
 
 
 //app 注册

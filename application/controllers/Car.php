@@ -43,7 +43,7 @@ class CarController extends ApiYafControllerAbstract
             $userId = 0;
         }
 
-        $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_new_car_brand_list`';
+        $sql = 'SELECT `brand_id`, `brand_name`, `abbre`, `brand_url` FROM `bibi_new_car_brand_list` WHERE is_hot = 1';
 
         $pdo = new PdoDb;
 

@@ -20,7 +20,7 @@ class FocusModel extends PdoDb
 
         $sql = '
                 SELECT
-                t1.id as focus_id,t2.brand_id,t2.brand_name,t2.brand_url
+                t1.id as focus_id,t2.brand_id,t2.brand_name,t2.brand_url,t2.brand_url2
                 FROM
                 `bibi_new_car_focus` AS t1
                 LEFT JOIN
