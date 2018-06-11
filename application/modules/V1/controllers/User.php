@@ -371,6 +371,12 @@ class UserController extends ApiYafControllerAbstract
 
         $response['user_info'] = $userInfo;
 
+        $pushToken= new PushTokenModel();
+
+        $res= $pushToken->gettoken($userId);
+
+        $response['is_close'] = $res ? $res[0]['is_close'] : 2;
+
         $this->send($response);
 
     }
@@ -422,6 +428,12 @@ class UserController extends ApiYafControllerAbstract
         $userInfo['profile'] = $profile;
 
         $response['user_info'] =$userInfo;
+
+        $pushToken= new PushTokenModel();
+
+        $res= $pushToken->gettoken($userId);
+
+        $response['is_close'] = $res ? $res[0]['is_close'] : 2;
 
         $this->send($response);
     }
