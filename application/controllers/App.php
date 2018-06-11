@@ -418,7 +418,7 @@ class AppController extends ApiYafControllerAbstract {
 
         $data = $this->get_request_data();
 
-        if($data['session_id']){
+        if(isset($data['session_id'])){
 
             $sess = new SessionModel();
             $userId = $sess->Get($data);
