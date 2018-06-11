@@ -433,7 +433,6 @@ class AppController extends ApiYafControllerAbstract {
 
         $res= $pushToken->gettoken($userId);
 
-        print_r($res);exit;
 
         $list['is_close'] = $res ? $res[0]['is_close'] : 2;
 
