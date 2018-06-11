@@ -429,6 +429,12 @@ class AppController extends ApiYafControllerAbstract {
 
         $list =$push->getPushs($data['page'],$userId);
 
+        $pushToken= new PushTokenModel();
+
+        $res= $pushToken->gettoken($userId);
+
+        $list['is_close'] = $res && $res[0]['is_close'] ? $res[0]['is_close']:2;
+
         $this->send($list);
     }
 
@@ -500,13 +506,85 @@ class AppController extends ApiYafControllerAbstract {
 
         }
 
-
-
-
-
-
-
     }
+
+
+        /**
+         * @api {POST} /v1/user/push  是否推送
+         * @apiName User  push
+         * @apiGroup User
+         * @apiDescription  是否推送
+         * @apiPermission anyone
+         * @apiSampleRequest http://new.bibicar.cn
+         * @apiVersion 1.0.0
+         * @apiParam {string} device_identifier device_identifier
+         * @apiParam {string} session_id session_id
+         * @apiParam {number} is_close  是否推送 1:开启推送 2:关闭推送
+         *
+         * @apiParamExample {json} 请求样例
+         *   POST /v1/user/push
+         *   {
+         *     "data": {
+         *       "device_identifier":"",
+         *       "session_id":"",
+         *       "is_close":"",
+         *
+         *     }
+         *   }
+         *
+         */
+        public function PushAction(){
+
+            $this->required_fields = array_merge($this->required_fields, array('is_close','session_id'));
+
+            $data = $this->get_request_data();
+
+            if($data['session_id']){
+
+                $sess = new SessionModel();
+                $userId = $sess->Get($data);
+            }else{
+                $userId = 0;
+            }
+
+            $push= new PushTokenModel();
+
+            $res= $push->gettoken($userId);
+
+
+            if($res){
+
+                $res = $push->updateByPrimaryKey('bibi_new_push_token',['id'=>$res[0]['id']],['is_close'=>$data['is_close']]);
+
+                if($res){
+                    return $this->send(['更新成功']);
+
+                }
+
+
+            }else{
+                $properties['created']=time();
+                $properties['user_id']=$userId;
+                $properties['is_close']=$data['is_close'];
+                $push->properties=$properties;
+                $id = $push->CreateM();
+                if($id){
+                    return $this->send(['提交成功']);
+                }
+
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
 
 
 }

@@ -52,7 +52,6 @@ class PushModel extends PdoDb
 
         $total = $this->query($sqlCnt)[0]['total'];
 
-
         $lists = $this->query($sql);
 
         $count = count($lists);
