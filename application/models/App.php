@@ -82,7 +82,7 @@ class AppModel extends PdoDb{
 
     public function getAppVersion($type){
 
-        $sql = "SELECT * FROM bibi_version WHERE  type =".$type;
+        $sql = "SELECT * FROM bibi_new_version WHERE  type =".$type;
 
         $result = $this->query($sql);
 
@@ -96,7 +96,7 @@ class AppModel extends PdoDb{
 
     public function getStartImg(){
 
-        $sql="SELECT * FROM bibi_app_start_img WHERE `status` = 1";
+        $sql="SELECT * FROM bibi_new_app_start_img WHERE `status` = 1";
 
         $result = $this->query($sql);
 

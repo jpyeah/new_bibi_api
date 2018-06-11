@@ -419,8 +419,6 @@ class UserController extends ApiYafControllerAbstract
 
         }
 
-        $carM = new CarSellingV1Model();
-
         $userInfo['profile'] = $profile;
 
         $response['user_info'] =$userInfo;
