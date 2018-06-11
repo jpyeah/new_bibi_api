@@ -197,7 +197,7 @@ class CarSellingModel extends PdoDb
 
         $sql = '
                 SELECT
-                image,model_name,car_name,exterior,interior,version,price,files,hash as car_id,files
+                image,model_name,car_name,exterior,interior,version,price,hash as car_id,files
                 FROM `bibi_new_car_selling_list`
                 ';
 
@@ -219,25 +219,25 @@ class CarSellingModel extends PdoDb
 
         foreach($models as $k => $model){
 
-//            $images = unserialize($model['image']);
-//
-//            $model['image']=$images['url'];
+            $images = unserialize($model['image']);
 
-            if($model['files'] != ""){
-                $images = unserialize($model['files']);
-                if($images){
-                    foreach ($images as $j => $image) {
-                        if ($image['key']) {
-                                if($j == 0){
-                                    $model['image'] = $image['url'];
-                                }
-                        }
-                    }
-                }
-            }else{
-                $model['image'] = "";
-            }
-            unset($model['files']);
+            $model['image']=$images['url'];
+
+//            if($model['files'] != ""){
+//                $images = unserialize($model['files']);
+//                if($images){
+//                    foreach ($images as $j => $image) {
+//                        if ($image['key']) {
+//                                if($j == 0){
+//                                    $model['image'] = $image['url'];
+//                                }
+//                        }
+//                    }
+//                }
+//            }else{
+//                $model['image'] = "";
+//            }
+//            unset($model['files']);
             $items[]  = $model;
         }
 
