@@ -118,7 +118,7 @@ class OrderController extends ApiYafControllerAbstract
         $order = $OrderModel->getOrder($userId,$data['car_id']);
 
         if($order){
-            return $this->send_error(HAS_EXSIT);
+            return $this->send_error(ORDER_HAS_EXSIT);
         }
 
         $properties = array();
