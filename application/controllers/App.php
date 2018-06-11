@@ -396,6 +396,9 @@ class AppController extends ApiYafControllerAbstract {
      * @apiParam {string} [session_id] session_id
      * @apiParam {string} [page] 页码
      *
+     * @apiSuccess {number} type 1:车辆 2:订单
+     * @apiSuccess {number} related_id 车辆id\订单id
+     *
      * @apiParamExample {json} 请求样例
      *   POST /app/pushlist
      *   {
