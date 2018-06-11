@@ -273,6 +273,100 @@ class CarController extends ApiYafControllerAbstract
     }
 
 
+    public function push1Action(){
+
+        $app_key="68b7d81675c93b86ec6a11ac";
+        $master_secret="81072e86bacd7dd98d4cd310";
+
+        $client = new JPush($app_key, $master_secret);
+
+        $cid =uniqid();
+
+        $response = $client->push()
+            // ->setCid($cid)
+            ->setPlatform(['ios', 'android'])
+            ->setAudience('all')
+            ->setNotificationAlert('车辆推送')
+            ->iosNotification('保时捷车辆推送', [
+                'sound' => 'sound',
+                'badge' => '+1',
+                'extras' => [
+                    'type' => '1',
+                    'title' => '保时捷上新',
+                    'content' => '感谢你的关注，保时捷新款车上新,请点击此推送框，进入车辆详情页面',
+                    'from' => '保时捷',
+                    'image_url' => 'http://img.bibicar.cn/logo.png',
+                    'created_at' => date('y/m/d',time()),
+                    'related_id' => "5b123cfba370d",
+                ]
+            ])
+            ->androidNotification('车辆推送')
+            ->message('保时捷车辆推送', [
+                'title' => '车辆推送',
+                'content_type' => 'text',
+                'extras' => [
+                    'type' => '1',
+                    'title' => '保时捷上新',
+                    'content' => '感谢你的关注，保时捷新款车上新,请点击此推送框，进入车辆详情页面',
+                    'from' => '保时捷',
+                    'image_url' => 'http://img.bibicar.cn/logo.png',
+                    'created_at' => date('y/m/d',time()),
+                    'related_id' => "5b123cfba370d",
+                ]
+            ])
+            ->send();
+
+        print_r($response);exit;
+    }
+
+
+    public function push2Action(){
+
+        $app_key="68b7d81675c93b86ec6a11ac";
+        $master_secret="81072e86bacd7dd98d4cd310";
+
+        $client = new JPush($app_key, $master_secret);
+
+        $cid =uniqid();
+
+        $response = $client->push()
+            // ->setCid($cid)
+            ->setPlatform(['ios', 'android'])
+            ->setAudience('all')
+            ->setNotificationAlert('订单推送')
+            ->iosNotification('订单状态推送', [
+                'sound' => 'sound',
+                'badge' => '+1',
+                'extras' => [
+                    'type' => '1',
+                    'title' => '订单已经更新',
+                    'content' => '你的订单车辆已打包装箱',
+                    'from' => '吡吡',
+                    'image_url' => 'http://img.bibicar.cn/logo.png',
+                    'created_at' => date('y/m/d',time()),
+                    'related_id' => "27",
+                ]
+            ])
+            ->androidNotification('订单推送')
+            ->message('订单状态推送', [
+                'title' => '订单推送',
+                'content_type' => 'text',
+                'extras' => [
+                    'type' => '1',
+                    'title' => '订单已经更新',
+                    'content' => '你的订单车辆已打包装箱',
+                    'from' => '保时捷',
+                    'image_url' => 'http://img.bibicar.cn/logo.png',
+                    'created_at' => date('y/m/d',time()),
+                    'related_id' => "27",
+                ]
+            ])
+            ->send();
+
+        print_r($response);exit;
+    }
+
+
 
 
 
