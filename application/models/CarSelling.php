@@ -155,7 +155,7 @@ class CarSellingModel extends PdoDb
         unset($car['type']);
 
         $image= unserialize($car['image']);
-        $car['image']=$image['image_url'];
+        $car['image']=$image['url'];
 
         //print_r($car);exit;
         //可优化查询
