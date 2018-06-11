@@ -510,7 +510,7 @@ class AppController extends ApiYafControllerAbstract {
 
 
         /**
-         * @api {POST} /v1/user/push  是否推送
+         * @api {POST} /app/push  是否推送
          * @apiName App  push
          * @apiGroup App
          * @apiDescription  是否推送
@@ -522,7 +522,7 @@ class AppController extends ApiYafControllerAbstract {
          * @apiParam {number} is_close  是否推送 1:开启推送 2:关闭推送
          *
          * @apiParamExample {json} 请求样例
-         *   POST /v1/user/push
+         *   POST /app/push
          *   {
          *     "data": {
          *       "device_identifier":"",
