@@ -197,7 +197,7 @@ class CarSellingModel extends PdoDb
 
         $sql = '
                 SELECT
-                image,model_name,car_name,exterior,interior,version,price,hash as car_id,files
+                image,model_name,car_name,exterior,interior,version,price,hash,files as car_id,files
                 FROM `bibi_new_car_selling_list`
                 ';
 
