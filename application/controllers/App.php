@@ -511,8 +511,8 @@ class AppController extends ApiYafControllerAbstract {
 
         /**
          * @api {POST} /v1/user/push  是否推送
-         * @apiName User  push
-         * @apiGroup User
+         * @apiName App  push
+         * @apiGroup App
          * @apiDescription  是否推送
          * @apiPermission anyone
          * @apiSampleRequest http://new.bibicar.cn
