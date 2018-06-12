@@ -273,7 +273,7 @@ class CarController extends ApiYafControllerAbstract
     }
 
 
-    public function push1Action(){
+    public function pushtAction(){
 
         $app_key="68b7d81675c93b86ec6a11ac";
         $master_secret="81072e86bacd7dd98d4cd310";
@@ -282,10 +282,13 @@ class CarController extends ApiYafControllerAbstract
 
         $cid =uniqid();
 
+        $regId = array('540834f42c6ff2bf89744fb863b52a9e817dcd0c93ee7df296ffe8ec9db0f918');
+
         $response = $client->push()
             // ->setCid($cid)
             ->setPlatform(['ios', 'android'])
-            ->setAudience('all')
+           // ->setAudience('all')
+            ->addRegistrationId($regId)
             ->setNotificationAlert('车辆推送')
             ->iosNotification('保时捷车辆推送', [
                 'sound' => 'sound',

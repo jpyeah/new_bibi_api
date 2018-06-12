@@ -77,4 +77,12 @@ class SessionModel extends PdoDb{
         return $user_id;
 
     }
+
+    public function Delete($userId){
+
+        $id = $this->deleteByPrimaryKey(self::$table,['user_id'=>$userId]);
+
+        return $id;
+
+    }
 }
