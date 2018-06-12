@@ -491,8 +491,9 @@ class AppController extends ApiYafControllerAbstract {
             $res = $push->updateByPrimaryKey('bibi_new_push_token',['id'=>$res[0]['id']],['device_token'=>$data['token']]);
 
             if($res){
-                return $this->send(['更新成功']);
 
+                $response['msg']="更新成功";
+                $this->send($response);
             }
 
 
@@ -503,8 +504,9 @@ class AppController extends ApiYafControllerAbstract {
             $push->properties=$properties;
             $id = $push->CreateM();
             if($id){
-                return $this->send(['提交成功']);
-            }
+
+                $response['msg']="更新成功";
+                $this->send($response);            }
 
 
         }
@@ -559,7 +561,8 @@ class AppController extends ApiYafControllerAbstract {
 
                 $res = $push->updateByPrimaryKey('bibi_new_push_token',['id'=>$res[0]['id']],['is_close'=>$data['is_close']]);
 
-                return $this->send(['更新成功']);
+                $response['msg']="更新成功";
+                $this->send($response);
 
 
             }else{
@@ -570,8 +573,9 @@ class AppController extends ApiYafControllerAbstract {
                 $id = $push->CreateM();
 
                 if($id){
-                    return $this->send(['提交成功']);
-                }
+
+                    $response['msg']="更新成功";
+                    $this->send($response);                }
 
 
             }
