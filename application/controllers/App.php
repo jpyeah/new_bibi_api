@@ -559,10 +559,7 @@ class AppController extends ApiYafControllerAbstract {
 
                 $res = $push->updateByPrimaryKey('bibi_new_push_token',['id'=>$res[0]['id']],['is_close'=>$data['is_close']]);
 
-                if($res){
-                    return $this->send(['更新成功']);
-
-                }
+                return $this->send(['更新成功']);
 
 
             }else{
@@ -571,6 +568,7 @@ class AppController extends ApiYafControllerAbstract {
                 $properties['is_close']=$data['is_close'];
                 $push->properties=$properties;
                 $id = $push->CreateM();
+
                 if($id){
                     return $this->send(['提交成功']);
                 }
