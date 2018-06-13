@@ -474,7 +474,7 @@ class UserController extends ApiYafControllerAbstract
         $code = RedisDb::getValue($key);
 
 
-        if($data['mobile'] == '10000000018'){
+        if($data['mobile'] == '13218029707'){
             RedisDb::setValue($key,'1234');
             $code = RedisDb::getValue($key);
         }
@@ -582,7 +582,7 @@ class UserController extends ApiYafControllerAbstract
             $keyToUser = $data['device_identifier'].'_'.$data['session_id'];
 
             RedisDb::delValue($keyToUser);
-            
+
             $push= new PushTokenModel();
 
             $res = $push->updateByPrimaryKey('bibi_new_push_token',['user_id'=>$userId],['device_token'=>""]);
