@@ -478,6 +478,7 @@ class UserController extends ApiYafControllerAbstract
             RedisDb::setValue($key,'1234');
             $code = RedisDb::getValue($key);
         }
+
         if($code != $data['code']){
               $this->send_error(USER_CODE_ERROR);
         }
@@ -581,8 +582,7 @@ class UserController extends ApiYafControllerAbstract
             $keyToUser = $data['device_identifier'].'_'.$data['session_id'];
 
             RedisDb::delValue($keyToUser);
-
-
+            
             $push= new PushTokenModel();
 
             $res = $push->updateByPrimaryKey('bibi_new_push_token',['user_id'=>$userId],['device_token'=>""]);
@@ -592,12 +592,6 @@ class UserController extends ApiYafControllerAbstract
             $this->send($response);
 
         }
-
-
-
-
-
-
 
     }
 

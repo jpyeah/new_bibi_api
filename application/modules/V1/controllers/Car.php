@@ -282,7 +282,7 @@ class CarController extends ApiYafControllerAbstract
 
         $cid =uniqid();
 
-        $regId = array('540834f42c6ff2bf89744fb863b52a9e817dcd0c93ee7df296ffe8ec9db0f918');
+        $regId = array('1114a89792fad3cb19e');
 
         $response = $client->push()
             // ->setCid($cid)
@@ -332,10 +332,12 @@ class CarController extends ApiYafControllerAbstract
 
         $cid =uniqid();
 
+        $regId = array('1114a89792fad3cb19e');
+
         $response = $client->push()
             // ->setCid($cid)
             ->setPlatform(['ios', 'android'])
-            ->setAudience('all')
+            ->addRegistrationId($regId)
             ->setNotificationAlert('订单推送')
             ->iosNotification('订单状态推送', [
                 'sound' => 'sound',
