@@ -573,19 +573,11 @@ class UserController extends ApiYafControllerAbstract
 
         $userId = $this->userAuth($data);
 
-        $sess = new SessionModel();
+        $push= new PushTokenModel();
 
-        $id = $sess->Delete($userId);
+        $res = $push->updateByPrimaryKey('bibi_new_push_token',['user_id'=>$userId],['device_token'=>""]);
 
-        if($id){
-
-            $keyToUser = $data['device_identifier'].'_'.$data['session_id'];
-
-            RedisDb::delValue($keyToUser);
-
-            $push= new PushTokenModel();
-
-            $res = $push->updateByPrimaryKey('bibi_new_push_token',['user_id'=>$userId],['device_token'=>""]);
+        if($res){
 
             $response['msg']="成功登出";
 

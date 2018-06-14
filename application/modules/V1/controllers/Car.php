@@ -332,7 +332,7 @@ class CarController extends ApiYafControllerAbstract
 
         $cid =uniqid();
 
-        $regId = array('1114a89792fad3cb19e');
+        $regId = array('171976fa8ad3f8fbecd');
 
         $response = $client->push()
             // ->setCid($cid)
