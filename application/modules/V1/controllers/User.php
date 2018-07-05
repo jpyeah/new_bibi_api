@@ -431,9 +431,28 @@ class UserController extends ApiYafControllerAbstract
 
         $pushToken= new PushTokenModel();
 
+        $push= new PushModel();
+
+        $push_time = $push->getPushLastTime($userId);
+
+        $key = 'user_push_time_' .$userId . '';
+
+        $time = RedisDb::getValue($key);
+
+        if($time <$push_time){
+
+            $response['has_read']= 1;
+
+        }else{
+
+            $response['has_read']= 2;
+        }
+
         $res= $pushToken->gettoken($userId);
 
         $response['is_close'] = $res ? $res[0]['is_close'] : 2;
+
+
 
         $this->send($response);
     }

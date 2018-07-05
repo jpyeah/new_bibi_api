@@ -438,6 +438,10 @@ class AppController extends ApiYafControllerAbstract {
 
         $list['is_close'] = $res ? $res[0]['is_close'] : 2;
 
+        $key = 'user_push_time_' .$userId . '';
+
+        $time = RedisDb::setValue($key,time());
+
         $this->send($list);
     }
 

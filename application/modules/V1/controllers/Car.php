@@ -198,15 +198,24 @@ class CarController extends ApiYafControllerAbstract
 
         $carInfo = $carModel->GetCarInfoByHash($carId,$userId);
 
-        $response['car_info'] = $carInfo;
+        if($carInfo){
 
-        $response['share_title'] = $carInfo['car_name'];
-        //http://m.bibicar.cn/post/index?device_identifier='.$data['device_identifier'].'&fcar_id='.$carId.'
-        $response['share_url'] = 'http://www.bibicars.com/detail.html?id='.$data['car_id'];
-        $response['share_txt'] = '更多精选豪车在bibicar,欢迎您来选购!';
-        $response['share_img'] = $carInfo['image'];
+            $response['car_info'] = $carInfo;
 
-        $this->send($response);
+            $response['share_title'] = @$carInfo['car_name'];
+            //http://m.bibicar.cn/post/index?device_identifier='.$data['device_identifier'].'&fcar_id='.$carId.'
+            $response['share_url'] = 'http://www.bibicars.com/detail.html?id='.$data['car_id'];
+            $response['share_txt'] = '更多精选豪车在bibicar,欢迎您来选购!';
+            $response['share_img'] = @$carInfo['image'];
+
+            $this->send($response);
+        }else{
+
+            $this->send_error(CAR_NOT_EXIST);
+
+        }
+
+
 
 
     }

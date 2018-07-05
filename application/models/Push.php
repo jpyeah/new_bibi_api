@@ -37,8 +37,8 @@ class PushModel extends PdoDb
             ';
         if($userId){
 
-            $sql .= " WHERE type = 1 OR ( type = 2  AND  user_id = ".$userId." )";
-            $sqlCnt .= " WHERE type = 1 OR ( type = 2 AND user_id = ".$userId." )";
+            $sql .= " WHERE type = 1 OR ( type = 2  AND  user_id = ".$userId." ) ";
+            $sqlCnt .= " WHERE type = 1 OR ( type = 2 AND user_id = ".$userId." ) ";
         }else{
 
             $sql .= " WHERE type = 1";
@@ -62,6 +62,27 @@ class PushModel extends PdoDb
 
         return $list;
 
+
+    }
+
+    public function getPushLastTime($userId){
+
+        $sql = '
+                SELECT
+                `title`,`content`,`created_at`,`image_url`,`from`,`type`,`related_id`,`user_id`
+                FROM
+                `bibi_new_push_list`
+                ';
+
+        $sql .=" WHERE type = 1 OR ( type = 2  AND  user_id = ".$userId." ) ORDER BY created_at DESC  Limit 1";
+
+        $res = $this->query($sql);
+
+        if($res){
+            return $res[0]['created_at'];
+        }else{
+            return 0;
+        }
 
     }
 
