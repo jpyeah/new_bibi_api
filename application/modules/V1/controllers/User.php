@@ -452,8 +452,7 @@ class UserController extends ApiYafControllerAbstract
 
         $response['is_close'] = $res ? $res[0]['is_close'] : 2;
 
-
-
+        
         $this->send($response);
     }
 

@@ -48,7 +48,7 @@ class PushModel extends PdoDb
 
         $number = ($page - 1) * $pageSize;
 
-        $sql .= '  LIMIT ' . $number . ' , ' . $pageSize . ' ';
+        $sql .= ' ORDER BY created_at DESC  LIMIT ' . $number . ' , ' . $pageSize . ' ';
 
         $total = $this->query($sqlCnt)[0]['total'];
 
